@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METEL: Дуэль</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Special Elite', 'Courier New', monospace;
+            background: linear-gradient(-45deg, #0b1a30, #1b0a20, #2b0a1a, #0a2b20);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #game-container {
+            position: relative;
+            z-index: 1;
+            width: 900px;
+            height: 600px;
+            border: 2px solid #b31b1b;
+            box-shadow: 0 0 50px rgba(179, 27, 27, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #ui-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3d2b2b;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .player-stats {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hp-bar {
+            width: 150px;
+            height: 10px;
+            background: #333;
+            border: 1px solid #4a3f36;
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .hp-fill {
+            height: 100%;
+            width: 100%;
+            transition: width 0.1s;
+        }
+
+        .hp-blue { background: #4169E1; }
+        .hp-red { background: #b31b1b; }
+
+        /* Индикатор перезарядки */
+        #reload-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffaa44;
+            font-size: 1rem;
+            background: rgba(0,0,0,0.6);
+            padding: 5px 15px;
+            border-radius: 15px;
+            border: 1px solid #ffaa44;
+            display: none;
+            pointer-events: none;
+        }
+
+        .controls-info {
+            color: #4a3f36;
+            font-size: 0.8rem;
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            text-align: center;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #canvas-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        /* --- МЕНЮ (цветное и стильное) --- */
+        #menu-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a0b2e, #0b1a30, #1b0a20);
+            z-index: 20;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #menu-screen h1 {
+            color: #ff6b6b;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+
+        #menu-screen p {
+            color: #c2b7a9;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .menu-btn {
+            margin: 8px;
+            width: 280px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #b31b1b, #ff6b6b);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(179, 27, 27, 0.4);
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(179, 27, 27, 0.7);
+        }
+
+        .menu-btn.back-btn {
+            background: linear-gradient(90deg, #4a3f36, #7a6f66);
+            box-shadow: 0 4px 15px rgba(74, 63, 54, 0.4);
+        }
+
+        .menu-btn.back-btn:hover {
+            box-shadow: 0 6px 25px rgba(74, 63, 54, 0.7);
+        }
+
+        .menu-btn.store-btn {
+            background: linear-gradient(90deg, #f7971e, #ffd200);
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.4);
+            color: #000;
+        }
+
+        .menu-btn.store-btn:hover {
+            box-shadow: 0 6px 25px rgba(247, 151, 30, 0.7);
+        }
+
+        #mode-select, #difficulty-select, #map-select, #store-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        #difficulty-select, #map-select, #store-screen { display: none; }
+
+        /* --- МЕНЮ КАРТ --- */
+        #map-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            max-width: 800px;
+        }
+        .map-option {
+            width: 120px;
+            height: 100px;
+            background: #1a1612;
+            border: 2px solid #4a3f36;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #b8a994;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        .map-option:hover {
+            border-color: #b8a994;
+            transform: scale(1.05);
+        }
+        .map-option.selected {
+            border-color: #b31b1b;
+            box-shadow: 0 0 20px rgba(179, 27, 27, 0.6);
+        }
+        .map-option span {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        /* --- МАГАЗИН (3 ВКЛАДКИ) --- */
+        #store-screen h2 {
+            color: #ffd700;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            margin-bottom: 10px;
+        }
+        #store-screen p {
+            color: #c2b7a9;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .store-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: 2px solid #4a3f36;
+            color: #b8a994;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tab-btn:hover {
+            border-color: #b8a994;
+            color: #fff;
+        }
+        .tab-btn.active {
+            border-color: #ffd700;
+            color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .store-grid-container {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            max-width: 750px;
+        }
+        .store-grid-container.active {
+            display: flex;
+        }
+
+        .store-item {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #4a3f36;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 0.8rem;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+            position: relative;
+        }
+        .store-item:hover {
+            transform: scale(1.1);
+            border-color: #b8a994;
+        }
+        .store-item.selected {
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+        }
+        .store-item .item-name {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.7rem;
+            color: #c2b7a9;
+            white-space: nowrap;
+        }
+        .store-item .price-tag {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 1px solid #b8860b;
+        }
+        .store-item .lock-icon {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 0.8rem;
+            color: #ff5555;
+        }
+
+        /* Всплывающая подсказка для оружия */
+        .store-item .weapon-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            border: 1px solid #4a3f36;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .store-item:hover .weapon-tooltip {
+            display: block;
+        }
+
+        /* Экран окончания игры */
+        #game-over-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10;
+        }
+        #game-over-screen h1 {
+            color: #b31b1b;
+            text-shadow: 0 0 30px rgba(179, 27, 27, 0.8);
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        #game-over-screen p {
+            color: #c2b7a9;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        button.restart-btn {
+            border: none;
+            border-radius: 30px;
+            padding: 12px 40px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(90deg, #b31b1b, #ff6b6b);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(179, 27, 27, 0.4);
+        }
+        button.restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(179, 27, 27, 0.7);
+        }
+
+        /* Анимация взрыва при поражении */
+        .explosion {
+            position: absolute;
+            pointer-events: none;
+            animation: explode 0.5s ease-out forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- Меню выбора -->
+        <div id="menu-screen">
+            <!-- Шаг 1: Режим -->
+            <div id="mode-select">
+                <h1>METEL: Дуэль</h1>
+                <p>Выберите режим игры</p>
+                <button class="menu-btn" onclick="selectMode(1)">1 Игрок (Против Бота)</button>
+                <button class="menu-btn" onclick="selectMode(2)">2 Игрока (PvP)</button>
+                <button class="menu-btn store-btn" onclick="openStore()">🛒 Магазин</button>
+            </div>
+
+            <!-- Шаг 2: Сложность -->
+            <div id="difficulty-select">
+                <h1 style="font-size: 2.5rem;">Уровень сложности</h1>
+                <p>Влияет на скорость боя и реакцию противника</p>
+                <button class="menu-btn" onclick="openMapSelect('easy')">Легкий 🟢</button>
+                <button class="menu-btn" onclick="openMapSelect('medium')">Средний 🟡</button>
+                <button class="menu-btn" onclick="openMapSelect('hard')">Сложный 🔴</button>
+                <button class="menu-btn" onclick="openMapSelect('impossible')">Невозможный 💀</button>
+                <button class="menu-btn back-btn" onclick="goBackMode()">Назад</button>
+            </div>
+
+            <!-- Шаг 3: Выбор карты -->
+            <div id="map-select">
+                <h1 style="font-size: 2rem;">Выберите карту</h1>
+                <p>Всего 30 карт</p>
+                <div id="map-grid">
+                    <!-- Карты будут сгенерированы JS -->
+                </div>
+                <button class="menu-btn back-btn" onclick="goBackDifficulty()">Назад</button>
+            </div>
+
+            <!-- Экран магазина (Скины, Шляпы, Оружие) -->
+            <div id="store-screen">
+                <h2>🛒 Магазин</h2>
+                <p id="store-coins">Монет: 0</p>
+                
+                <div class="store-tabs">
+                    <button class="tab-btn active" id="tab-skins" onclick="switchStoreTab('skins')">Скины</button>
+                    <button class="tab-btn" id="tab-hats" onclick="switchStoreTab('hats')">Шляпы</button>
+                    <button class="tab-btn" id="tab-weapons" onclick="switchStoreTab('weapons')">Оружие</button>
+                </div>
+
+                <div id="store-grid-skins" class="store-grid-container active"></div>
+                <div id="store-grid-hats" class="store-grid-container"></div>
+                <div id="store-grid-weapons" class="store-grid-container"></div>
+                
+                <button class="menu-btn back-btn" onclick="closeStore()">Назад</button>
+            </div>
+        </div>
+
+        <div id="ui-header">
+            <div class="player-stats" style="color: #4169E1;">
+                Синий (WASD)
+                <div class="hp-bar"><div id="hp1" class="hp-fill hp-blue" style="width: 100%;"></div></div>
+            </div>
+            
+            <div style="color: #4a3f36; font-size: 1.2rem;">⚔️</div>
+
+            <div class="player-stats" style="color: #b31b1b;">
+                <div class="hp-bar"><div id="hp2" class="hp-fill hp-red" style="width: 100%;"></div></div>
+                Красный (Стрелки)
+            </div>
+        </div>
+
+        <div id="canvas-container">
+            <!-- Индикатор перезарядки -->
+            <div id="reload-indicator">⏳ Перезарядка...</div>
+            <canvas id="gameCanvas" width="900" height="530"></canvas>
+            <div id="game-over-screen">
+                <h1 id="winner-text">Игрок Синий победил!</h1>
+                <p id="winner-subtext">В метели выживает сильнейший.</p>
+                <button class="restart-btn" onclick="backToMenu()">Вернуться в меню</button>
+            </div>
+            <div class="controls-info" id="ui-hint">Наведи мышь и стреляй ЛКМ!</div>
+        </div>
+    </div>
+
+<script>
+    // --- ДАННЫЕ ПЕРСОНАЖЕЙ (15 скинов) ---
+    const SKINS = [
+        { name: 'Призрак', primary: '#4169E1', secondary: '#1e3a8a', eye: '#fff', pupil: '#000' },
+        { name: 'Демон', primary: '#b31b1b', secondary: '#7f1d1d', eye: '#fff', pupil: '#b31b1b' },
+        { name: 'Сталкер', primary: '#2e8b57', secondary: '#14532d', eye: '#fbbf24', pupil: '#000' },
+        { name: 'Некромант', primary: '#6b21a5', secondary: '#2e1065', eye: '#c084fc', pupil: '#000' },
+        { name: 'Палач', primary: '#4a4a4a', secondary: '#1c1c1c', eye: '#fff', pupil: '#ff0000' },
+        { name: 'Киберпанк', primary: '#00ffff', secondary: '#0066cc', eye: '#00ff00', pupil: '#000' },
+        { name: 'Ледяной', primary: '#a0e6ff', secondary: '#0077aa', eye: '#ffffff', pupil: '#336699' },
+        { name: 'Огненный', primary: '#ff6600', secondary: '#cc3300', eye: '#ffff00', pupil: '#ff0000' },
+        { name: 'Теневой', primary: '#1a1a1a', secondary: '#4a0072', eye: '#cc00ff', pupil: '#000' },
+        { name: 'Золотой', primary: '#ffd700', secondary: '#b8860b', eye: '#fff', pupil: '#b8860b' },
+        // Новые скины
+        { name: 'Космос', primary: '#2a0a4a', secondary: '#ff44aa', eye: '#ff88ff', pupil: '#000' },
+        { name: 'Рыцарь', primary: '#808080', secondary: '#c0c0c0', eye: '#fff', pupil: '#000' },
+        { name: 'Ниндзя', primary: '#111111', secondary: '#333333', eye: '#ff0000', pupil: '#000' },
+        { name: 'Панк', primary: '#ff69b4', secondary: '#000000', eye: '#fff', pupil: '#000' },
+        { name: 'Робот', primary: '#888888', secondary: '#00ffff', eye: '#00ffff', pupil: '#000' }
+    ];
+
+    // --- ДАННЫЕ ШЛЯП (12 шляп) ---
+    const HATS = [
+        { name: 'Без шляпы', primary: 'transparent', secondary: 'transparent' },
+        { name: 'Волшебная', primary: '#6a0dad', secondary: '#ffd700' },
+        { name: 'Пиратская', primary: '#1a1a1a', secondary: '#f5c518' },
+        { name: 'Ковбойская', primary: '#8b5a2b', secondary: '#d2b48c' },
+        { name: 'Цилиндр', primary: '#2c3e50', secondary: '#e74c3c' },
+        { name: 'Ушанка', primary: '#ecf0f1', secondary: '#c0392b' },
+        { name: 'Шляпа-гриб', primary: '#e74c3c', secondary: '#ffffff' },
+        // Новые шляпы
+        { name: 'Корона', primary: '#ffd700', secondary: '#ffaa00' },
+        { name: 'Федора', primary: '#4a2f1a', secondary: '#2a1a0a' },
+        { name: 'Берет', primary: '#c0392b', secondary: '#e74c3c' },
+        { name: 'Каска', primary: '#7f8c8d', secondary: '#bdc3c7' },
+        { name: 'Тюрбан', primary: '#2ecc71', secondary: '#27ae60' }
+    ];
+
+    // --- ДАННЫЕ ОРУЖИЯ (10 видов) ---
+    const WEAPONS = [
+        { name: 'Пистолет', damage: 1, color: '#ffaa44', speed: 1.0, fireRate: 1.0, size: 6 },
+        { name: 'Магнум', damage: 3, color: '#ff5555', speed: 1.2, fireRate: 1.5, size: 8 },
+        { name: 'Дробовик', damage: 1, color: '#ffaa00', speed: 0.9, fireRate: 1.2, size: 4, bulletCount: 3, spread: 0.25 },
+        { name: 'Снайпер', damage: 5, color: '#8888ff', speed: 2.0, fireRate: 2.5, size: 10 },
+        { name: 'Автомат', damage: 1, color: '#aa88ff', speed: 1.0, fireRate: 0.6, size: 6 },
+        { name: 'Кислотный', damage: 2, color: '#88ff88', speed: 1.1, fireRate: 1.2, size: 7 },
+        { name: 'Плазма', damage: 4, color: '#ff66ff', speed: 0.8, fireRate: 1.8, size: 12 },
+        { name: 'Бластер', damage: 2, color: '#44aaff', speed: 1.0, fireRate: 0.9, size: 8 },
+        { name: 'Ракетница', damage: 6, color: '#ff8800', speed: 0.6, fireRate: 3.0, size: 14 },
+        { name: 'Лазерный нож', damage: 3, color: '#00ffff', speed: 1.5, fireRate: 1.5, size: 10 }
+    ];
+
+    // --- ДАННЫЕ КАРТ (30 карт) ---
+    const MAPS = [
+        // 0-9: исходные 10 карт
+        {
+            id: 0,
+            name: 'Крест',
+            emoji: '✚',
+            blocks: [
+                {x: 300, y: 230, w: 300, h: 40},
+                {x: 420, y: 150, w: 40, h: 230},
+                {x: 80, y: 150, w: 40, h: 40},
+                {x: 80, y: 340, w: 40, h: 40},
+                {x: 780, y: 150, w: 40, h: 40},
+                {x: 780, y: 340, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 1,
+            name: 'Зигзаг',
+            emoji: '〰️',
+            blocks: [
+                {x: 150, y: 100, w: 60, h: 40},
+                {x: 300, y: 150, w: 40, h: 60},
+                {x: 450, y: 200, w: 60, h: 40},
+                {x: 600, y: 150, w: 40, h: 60},
+                {x: 750, y: 100, w: 60, h: 40},
+                {x: 150, y: 390, w: 60, h: 40},
+                {x: 300, y: 320, w: 40, h: 60},
+                {x: 450, y: 290, w: 60, h: 40},
+                {x: 600, y: 320, w: 40, h: 60},
+                {x: 750, y: 390, w: 60, h: 40}
+            ]
+        },
+        {
+            id: 2,
+            name: 'Лабиринт',
+            emoji: '🌀',
+            blocks: [
+                {x: 20, y: 20, w: 40, h: 490},
+                {x: 840, y: 20, w: 40, h: 490},
+                {x: 20, y: 20, w: 860, h: 40},
+                {x: 20, y: 470, w: 860, h: 40},
+                {x: 200, y: 80, w: 40, h: 150},
+                {x: 400, y: 300, w: 40, h: 150},
+                {x: 600, y: 80, w: 40, h: 150},
+                {x: 100, y: 250, w: 150, h: 40},
+                {x: 300, y: 150, w: 150, h: 40},
+                {x: 500, y: 250, w: 150, h: 40},
+                {x: 700, y: 150, w: 150, h: 40},
+                {x: 200, y: 390, w: 40, h: 60},
+                {x: 500, y: 390, w: 40, h: 60}
+            ]
+        },
+        {
+            id: 3,
+            name: 'Колонны',
+            emoji: '🏛️',
+            blocks: [
+                {x: 150, y: 100, w: 60, h: 60},
+                {x: 350, y: 100, w: 60, h: 60},
+                {x: 550, y: 100, w: 60, h: 60},
+                {x: 750, y: 100, w: 60, h: 60},
+                {x: 150, y: 370, w: 60, h: 60},
+                {x: 350, y: 370, w: 60, h: 60},
+                {x: 550, y: 370, w: 60, h: 60},
+                {x: 750, y: 370, w: 60, h: 60},
+                {x: 250, y: 230, w: 60, h: 60},
+                {x: 450, y: 230, w: 60, h: 60},
+                {x: 650, y: 230, w: 60, h: 60}
+            ]
+        },
+        {
+            id: 4,
+            name: 'Случайный',
+            emoji: '🎲',
+            blocks: [
+                {x: 80, y: 80, w: 50, h: 50},
+                {x: 300, y: 50, w: 50, h: 50},
+                {x: 550, y: 80, w: 50, h: 50},
+                {x: 750, y: 50, w: 50, h: 50},
+                {x: 120, y: 330, w: 50, h: 50},
+                {x: 380, y: 380, w: 50, h: 50},
+                {x: 620, y: 330, w: 50, h: 50},
+                {x: 780, y: 380, w: 50, h: 50},
+                {x: 200, y: 180, w: 50, h: 50},
+                {x: 450, y: 180, w: 50, h: 50},
+                {x: 680, y: 180, w: 50, h: 50},
+                {x: 200, y: 300, w: 50, h: 50},
+                {x: 450, y: 300, w: 50, h: 50},
+                {x: 680, y: 300, w: 50, h: 50}
+            ]
+        },
+        {
+            id: 5,
+            name: 'Спираль',
+            emoji: '🌀',
+            blocks: [
+                {x: 350, y: 350, w: 200, h: 40},
+                {x: 350, y: 140, w: 200, h: 40},
+                {x: 140, y: 250, w: 40, h: 200},
+                {x: 720, y: 250, w: 40, h: 200},
+                {x: 250, y: 250, w: 40, h: 40},
+                {x: 610, y: 250, w: 40, h: 40},
+                {x: 400, y: 200, w: 100, h: 40},
+                {x: 400, y: 300, w: 100, h: 40}
+            ]
+        },
+        {
+            id: 6,
+            name: 'Шахматка',
+            emoji: '♟️',
+            blocks: (function() {
+                const blocks = [];
+                for (let i = 0; i < 900; i += 60) {
+                    for (let j = 0; j < 530; j += 60) {
+                        if ((Math.floor(i/60) + Math.floor(j/60)) % 2 === 0) {
+                            blocks.push({x: i, y: j, w: 30, h: 30});
+                        }
+                    }
+                }
+                return blocks;
+            })()
+        },
+        {
+            id: 7,
+            name: 'Туннель',
+            emoji: '🚇',
+            blocks: [
+                {x: 20, y: 20, w: 40, h: 490},
+                {x: 840, y: 20, w: 40, h: 490},
+                {x: 20, y: 20, w: 860, h: 40},
+                {x: 20, y: 470, w: 860, h: 40},
+                {x: 200, y: 120, w: 40, h: 100},
+                {x: 350, y: 120, w: 40, h: 100},
+                {x: 500, y: 120, w: 40, h: 100},
+                {x: 650, y: 120, w: 40, h: 100},
+                {x: 200, y: 310, w: 40, h: 100},
+                {x: 350, y: 310, w: 40, h: 100},
+                {x: 500, y: 310, w: 40, h: 100},
+                {x: 650, y: 310, w: 40, h: 100},
+                {x: 100, y: 230, w: 150, h: 40},
+                {x: 300, y: 230, w: 150, h: 40},
+                {x: 500, y: 230, w: 150, h: 40},
+                {x: 700, y: 230, w: 150, h: 40}
+            ]
+        },
+        {
+            id: 8,
+            name: 'Звезда',
+            emoji: '⭐',
+            blocks: [
+                {x: 350, y: 230, w: 200, h: 40},
+                {x: 420, y: 100, w: 40, h: 200},
+                {x: 420, y: 230, w: 40, h: 200},
+                {x: 250, y: 150, w: 40, h: 40},
+                {x: 610, y: 150, w: 40, h: 40},
+                {x: 250, y: 340, w: 40, h: 40},
+                {x: 610, y: 340, w: 40, h: 40},
+                {x: 150, y: 200, w: 40, h: 40},
+                {x: 710, y: 200, w: 40, h: 40},
+                {x: 150, y: 290, w: 40, h: 40},
+                {x: 710, y: 290, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 9,
+            name: 'Разрушенный',
+            emoji: '🏚️',
+            blocks: [
+                {x: 100, y: 60, w: 80, h: 60},
+                {x: 300, y: 100, w: 60, h: 80},
+                {x: 550, y: 50, w: 100, h: 50},
+                {x: 750, y: 80, w: 80, h: 80},
+                {x: 50, y: 300, w: 100, h: 60},
+                {x: 250, y: 320, w: 80, h: 80},
+                {x: 450, y: 280, w: 60, h: 100},
+                {x: 650, y: 320, w: 100, h: 60},
+                {x: 780, y: 280, w: 60, h: 100},
+                {x: 200, y: 180, w: 60, h: 40},
+                {x: 400, y: 160, w: 40, h: 60},
+                {x: 600, y: 180, w: 60, h: 40},
+                {x: 350, y: 380, w: 80, h: 50},
+                {x: 550, y: 390, w: 80, h: 50}
+            ]
+        },
+        // 10-29: 20 новых карт (оставляем как есть)
+        {
+            id: 10,
+            name: 'Молот',
+            emoji: '🔨',
+            blocks: [
+                {x: 350, y: 230, w: 40, h: 60},
+                {x: 420, y: 150, w: 60, h: 40},
+                {x: 420, y: 330, w: 60, h: 40},
+                {x: 150, y: 200, w: 60, h: 40},
+                {x: 690, y: 200, w: 60, h: 40},
+                {x: 150, y: 290, w: 60, h: 40},
+                {x: 690, y: 290, w: 60, h: 40}
+            ]
+        },
+        {
+            id: 11,
+            name: 'Перекресток',
+            emoji: '➕',
+            blocks: [
+                {x: 300, y: 230, w: 300, h: 40},
+                {x: 420, y: 150, w: 40, h: 230},
+                {x: 150, y: 100, w: 40, h: 40},
+                {x: 710, y: 100, w: 40, h: 40},
+                {x: 150, y: 390, w: 40, h: 40},
+                {x: 710, y: 390, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 12,
+            name: 'Соты',
+            emoji: '🔶',
+            blocks: (function() {
+                const blocks = [];
+                for (let i = 0; i < 900; i += 80) {
+                    for (let j = 0; j < 530; j += 60) {
+                        const offset = (Math.floor(i/80) % 2) * 30;
+                        blocks.push({x: i+10, y: j+offset, w: 40, h: 40});
+                    }
+                }
+                return blocks;
+            })()
+        },
+        {
+            id: 13,
+            name: 'Четыре угла',
+            emoji: '◻️',
+            blocks: [
+                {x: 40, y: 40, w: 100, h: 100},
+                {x: 760, y: 40, w: 100, h: 100},
+                {x: 40, y: 390, w: 100, h: 100},
+                {x: 760, y: 390, w: 100, h: 100}
+            ]
+        },
+        {
+            id: 14,
+            name: 'Волна',
+            emoji: '🌊',
+            blocks: [
+                {x: 100, y: 100, w: 40, h: 80},
+                {x: 300, y: 150, w: 40, h: 80},
+                {x: 500, y: 100, w: 40, h: 80},
+                {x: 700, y: 150, w: 40, h: 80},
+                {x: 100, y: 300, w: 40, h: 80},
+                {x: 300, y: 350, w: 40, h: 80},
+                {x: 500, y: 300, w: 40, h: 80},
+                {x: 700, y: 350, w: 40, h: 80}
+            ]
+        },
+        {
+            id: 15,
+            name: 'Квадрат',
+            emoji: '⬜',
+            blocks: [
+                {x: 250, y: 150, w: 400, h: 40},
+                {x: 250, y: 150, w: 40, h: 230},
+                {x: 610, y: 150, w: 40, h: 230},
+                {x: 250, y: 340, w: 400, h: 40}
+            ]
+        },
+        {
+            id: 16,
+            name: 'Ромб',
+            emoji: '🔷',
+            blocks: [
+                {x: 380, y: 60, w: 40, h: 40},
+                {x: 440, y: 100, w: 40, h: 40},
+                {x: 500, y: 140, w: 40, h: 40},
+                {x: 380, y: 180, w: 40, h: 40},
+                {x: 440, y: 180, w: 40, h: 40},
+                {x: 500, y: 180, w: 40, h: 40},
+                {x: 320, y: 180, w: 40, h: 40},
+                {x: 560, y: 180, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 17,
+            name: 'Три линии',
+            emoji: '〰️',
+            blocks: [
+                {x: 100, y: 80, w: 200, h: 40},
+                {x: 400, y: 80, w: 200, h: 40},
+                {x: 700, y: 80, w: 200, h: 40},
+                {x: 100, y: 240, w: 200, h: 40},
+                {x: 400, y: 240, w: 200, h: 40},
+                {x: 700, y: 240, w: 200, h: 40},
+                {x: 100, y: 400, w: 200, h: 40},
+                {x: 400, y: 400, w: 200, h: 40},
+                {x: 700, y: 400, w: 200, h: 40}
+            ]
+        },
+        {
+            id: 18,
+            name: 'Барьер',
+            emoji: '🧱',
+            blocks: [
+                {x: 200, y: 150, w: 40, h: 200},
+                {x: 400, y: 150, w: 40, h: 200},
+                {x: 600, y: 150, w: 40, h: 200}
+            ]
+        },
+        {
+            id: 19,
+            name: 'Песочные часы',
+            emoji: '⏳',
+            blocks: [
+                {x: 350, y: 150, w: 200, h: 40},
+                {x: 350, y: 340, w: 200, h: 40},
+                {x: 420, y: 200, w: 40, h: 100},
+                {x: 440, y: 200, w: 40, h: 100}
+            ]
+        },
+        {
+            id: 20,
+            name: 'Уголки',
+            emoji: '🔺',
+            blocks: [
+                {x: 100, y: 100, w: 150, h: 40},
+                {x: 100, y: 100, w: 40, h: 150},
+                {x: 760, y: 100, w: 40, h: 150},
+                {x: 610, y: 100, w: 150, h: 40},
+                {x: 100, y: 390, w: 150, h: 40},
+                {x: 100, y: 390, w: 40, h: 40},
+                {x: 760, y: 390, w: 40, h: 40},
+                {x: 610, y: 390, w: 150, h: 40},
+                {x: 760, y: 390, w: 40, h: 150}
+            ]
+        },
+        {
+            id: 21,
+            name: 'Вихрь',
+            emoji: '🌀',
+            blocks: [
+                {x: 400, y: 200, w: 100, h: 40},
+                {x: 400, y: 300, w: 100, h: 40},
+                {x: 350, y: 250, w: 40, h: 100},
+                {x: 510, y: 250, w: 40, h: 100},
+                {x: 450, y: 230, w: 40, h: 40},
+                {x: 450, y: 290, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 22,
+            name: 'Пирамида',
+            emoji: '🔻',
+            blocks: [
+                {x: 350, y: 100, w: 200, h: 40},
+                {x: 300, y: 180, w: 300, h: 40},
+                {x: 250, y: 260, w: 400, h: 40},
+                {x: 200, y: 340, w: 500, h: 40}
+            ]
+        },
+        {
+            id: 23,
+            name: 'Диагонали',
+            emoji: '↘️',
+            blocks: [
+                {x: 100, y: 100, w: 80, h: 40},
+                {x: 300, y: 200, w: 80, h: 40},
+                {x: 500, y: 100, w: 80, h: 40},
+                {x: 700, y: 200, w: 80, h: 40},
+                {x: 100, y: 300, w: 80, h: 40},
+                {x: 300, y: 400, w: 80, h: 40},
+                {x: 500, y: 300, w: 80, h: 40},
+                {x: 700, y: 400, w: 80, h: 40}
+            ]
+        },
+        {
+            id: 24,
+            name: 'Перегородки',
+            emoji: '🚧',
+            blocks: [
+                {x: 150, y: 100, w: 20, h: 330},
+                {x: 350, y: 100, w: 20, h: 330},
+                {x: 550, y: 100, w: 20, h: 330},
+                {x: 750, y: 100, w: 20, h: 330}
+            ]
+        },
+        {
+            id: 25,
+            name: 'Сетка',
+            emoji: '🔲',
+            blocks: (function() {
+                const blocks = [];
+                for (let i = 100; i < 800; i += 100) {
+                    for (let j = 100; j < 430; j += 100) {
+                        blocks.push({x: i, y: j, w: 40, h: 40});
+                    }
+                }
+                return blocks;
+            })()
+        },
+        {
+            id: 26,
+            name: 'Круги',
+            emoji: '⭕',
+            blocks: [
+                {x: 250, y: 100, w: 40, h: 40},
+                {x: 450, y: 100, w: 40, h: 40},
+                {x: 650, y: 100, w: 40, h: 40},
+                {x: 250, y: 390, w: 40, h: 40},
+                {x: 450, y: 390, w: 40, h: 40},
+                {x: 650, y: 390, w: 40, h: 40},
+                {x: 150, y: 250, w: 40, h: 40},
+                {x: 750, y: 250, w: 40, h: 40}
+            ]
+        },
+        {
+            id: 27,
+            name: 'Клин',
+            emoji: '🔻',
+            blocks: [
+                {x: 300, y: 150, w: 300, h: 40},
+                {x: 350, y: 250, w: 200, h: 40},
+                {x: 400, y: 350, w: 100, h: 40}
+            ]
+        },
+        {
+            id: 28,
+            name: 'Разброс',
+            emoji: '💥',
+            blocks: [
+                {x: 100, y: 100, w: 50, h: 50},
+                {x: 750, y: 100, w: 50, h: 50},
+                {x: 100, y: 380, w: 50, h: 50},
+                {x: 750, y: 380, w: 50, h: 50},
+                {x: 400, y: 250, w: 100, h: 40}
+            ]
+        },
+        {
+            id: 29,
+            name: 'Финал',
+            emoji: '🏁',
+            blocks: [
+                {x: 200, y: 120, w: 40, h: 40},
+                {x: 300, y: 200, w: 40, h: 40},
+                {x: 400, y: 280, w: 40, h: 40},
+                {x: 500, y: 360, w: 40, h: 40},
+                {x: 600, y: 200, w: 40, h: 40},
+                {x: 700, y: 120, w: 40, h: 40},
+                {x: 700, y: 360, w: 40, h: 40}
+            ]
+        }
+    ];
+
+    // --- НАСТРОЙКИ ИГРЫ ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const hp1Bar = document.getElementById('hp1');
+    const hp2Bar = document.getElementById('hp2');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const winnerText = document.getElementById('winner-text');
+    const winnerSubtext = document.getElementById('winner-subtext');
+    const menuScreen = document.getElementById('menu-screen');
+    const modeSelect = document.getElementById('mode-select');
+    const difficultySelect = document.getElementById('difficulty-select');
+    const mapSelect = document.getElementById('map-select');
+    const storeScreen = document.getElementById('store-screen');
+    const storeGridSkins = document.getElementById('store-grid-skins');
+    const storeGridHats = document.getElementById('store-grid-hats');
+    const storeGridWeapons = document.getElementById('store-grid-weapons');
+    const mapGrid = document.getElementById('map-grid');
+    const uiHint = document.getElementById('ui-hint');
+    const reloadIndicator = document.getElementById('reload-indicator');
+    const storeCoinsDisplay = document.getElementById('store-coins');
+
+    const PLAYER_SIZE = 30;
+    const BASE_PLAYER_SPEED = 4.5;
+    const MAX_HP = 50;
+    const BASE_FIRE_COOLDOWN = 150; // Базовая перезарядка (в мс)
+
+    let gameMode = null;
+    let selectedDifficulty = 'medium';
+    let selectedMap = 0;
+    let gameActive = false;
+    let playerSpeed = BASE_PLAYER_SPEED;
+    let bulletSpeed = 8;
+    let blocks = [];
+    let botHP = 40;
+    
+    let mouseX = 0;
+    let mouseY = 0;
+    let isMouseDown = false;
+
+    // --- МОНЕТЫ И ПОКУПКИ ---
+    let coins = 0;
+    let purchasedSkins = new Array(SKINS.length).fill(false);
+    let purchasedHats = new Array(HATS.length).fill(false);
+    let purchasedWeapons = new Array(WEAPONS.length).fill(false);
+    // Бесплатные предметы (индекс 0)
+    purchasedSkins[0] = true;
+    purchasedHats[0] = true;
+    purchasedWeapons[0] = true;
+
+    let p1SkinId = 0;
+    let p1HatId = 0;
+    let p1WeaponId = 0; // Выбранное оружие
+    let p2SkinId = 1;
+    let p2WeaponId = 0; // Оружие противника
+
+    let player1 = {
+        x: 100, y: 250, w: PLAYER_SIZE, h: PLAYER_SIZE,
+        hp: MAX_HP, maxHp: MAX_HP, color: '#4169E1', lastShot: 0, direction: { dx: 0, dy: -1 },
+        lastDamageTime: 0, // время последнего получения урона
+        regenActive: false,
+        lastRegenTime: 0
+    };
+
+    let player2 = {
+        x: 770, y: 250, w: PLAYER_SIZE, h: PLAYER_SIZE,
+        hp: MAX_HP, maxHp: MAX_HP, color: '#b31b1b', lastShot: 0, direction: { dx: 0, dy: -1 },
+        lastDamageTime: 0,
+        regenActive: false,
+        lastRegenTime: 0
+    };
+
+    let bullets = [];
+    let keys = {};
+
+    let botSpeedModifier = 0.85;
+    let botFireCooldown = 150;
+
+    // --- СИСТЕМА ЧАСТИЦ ДЛЯ ЭФФЕКТОВ ---
+    let particles = [];
+
+    function addParticles(x, y, color, count = 20) {
+        for (let i = 0; i < count; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1 + Math.random() * 3;
+            particles.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 20 + Math.random() * 20,
+                maxLife: 40,
+                size: 2 + Math.random() * 4,
+                color: color,
+                decay: 0.95
+            });
+        }
+    }
+
+    // --- НАВИГАЦИЯ ПО МЕНЮ ---
+    function selectMode(count) {
+        gameMode = count;
+        modeSelect.style.display = 'none';
+        difficultySelect.style.display = 'flex';
+    }
+
+    function goBackMode() {
+        modeSelect.style.display = 'flex';
+        difficultySelect.style.display = 'none';
+        mapSelect.style.display = 'none';
+        storeScreen.style.display = 'none';
+    }
+
+    function goBackDifficulty() {
+        difficultySelect.style.display = 'flex';
+        mapSelect.style.display = 'none';
+    }
+
+    // --- МАГАЗИН (3 вкладки) ---
+    function openStore() {
+        modeSelect.style.display = 'none';
+        storeScreen.style.display = 'flex';
+        updateCoinsDisplay();
+        switchStoreTab('skins');
+    }
+
+    function closeStore() {
+        storeScreen.style.display = 'none';
+        modeSelect.style.display = 'flex';
+    }
+
+    function switchStoreTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        storeGridSkins.classList.remove('active');
+        storeGridHats.classList.remove('active');
+        storeGridWeapons.classList.remove('active');
+        if (tab === 'skins') {
+            storeGridSkins.classList.add('active');
+            renderStoreItems(storeGridSkins, SKINS, p1SkinId, 'skin');
+        } else if (tab === 'hats') {
+            storeGridHats.classList.add('active');
+            renderStoreItems(storeGridHats, HATS, p1HatId, 'hat');
+        } else if (tab === 'weapons') {
+            storeGridWeapons.classList.add('active');
+            renderStoreItems(storeGridWeapons, WEAPONS, p1WeaponId, 'weapon');
+        }
+    }
+
+    function renderStoreItems(container, items, selectedId, type) {
+        container.innerHTML = '';
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            const isOwned = (type === 'skin' ? purchasedSkins[index] : (type === 'hat' ? purchasedHats[index] : purchasedWeapons[index]));
+            const isSelected = (index === selectedId);
+            div.className = 'store-item' + (isSelected ? ' selected' : '');
+            if (type === 'skin') {
+                div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
+            } else if (type === 'hat') {
+                div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
+            } else if (type === 'weapon') {
+                div.style.background = `radial-gradient(circle at 50% 50%, ${item.color} 30%, #111 70%)`;
+            }
+            // Название
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'item-name';
+            nameSpan.textContent = item.name;
+            div.appendChild(nameSpan);
+            
+            // Цена (кроме бесплатного)
+            if (index !== 0) {
+                const priceTag = document.createElement('div');
+                priceTag.className = 'price-tag';
+                priceTag.textContent = '100';
+                div.appendChild(priceTag);
+            }
+            
+            // Замок, если не куплено
+            if (!isOwned) {
+                const lock = document.createElement('div');
+                lock.className = 'lock-icon';
+                lock.textContent = '🔒';
+                div.appendChild(lock);
+            }
+            
+            // Подсказка для оружия
+            if (type === 'weapon') {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'weapon-tooltip';
+                tooltip.textContent = `Урон: ${item.damage} | Скорость: ${item.speed}x | Перезарядка: ${item.fireRate}x`;
+                div.appendChild(tooltip);
+            }
+            
+            div.onclick = () => {
+                if (isOwned) {
+                    // Просто выбираем
+                    document.querySelectorAll(`#${container.id} .store-item`).forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                    if (type === 'skin') p1SkinId = index;
+                    else if (type === 'hat') p1HatId = index;
+                    else if (type === 'weapon') p1WeaponId = index;
+                } else {
+                    // Покупаем, если хватает монет
+                    if (coins >= 100) {
+                        coins -= 100;
+                        if (type === 'skin') purchasedSkins[index] = true;
+                        else if (type === 'hat') purchasedHats[index] = true;
+                        else if (type === 'weapon') purchasedWeapons[index] = true;
+                        updateCoinsDisplay();
+                        renderStoreItems(container, items, selectedId, type); // перерисовываем
+                    } else {
+                        alert('Недостаточно монет! Нужно 100 монет.');
+                    }
+                }
+            };
+            container.appendChild(div);
+        });
+    }
+
+    function updateCoinsDisplay() {
+        storeCoinsDisplay.textContent = 'Монет: ' + coins;
+    }
+
+    // --- ОТКРЫТИЕ ВЫБОРА КАРТЫ ---
+    function openMapSelect(difficulty) {
+        selectedDifficulty = difficulty;
+        difficultySelect.style.display = 'none';
+        mapSelect.style.display = 'flex';
+        renderMapOptions();
+    }
+
+    function renderMapOptions() {
+        mapGrid.innerHTML = '';
+        MAPS.forEach((map, index) => {
+            const div = document.createElement('div');
+            div.className = 'map-option' + (index === selectedMap ? ' selected' : '');
+            div.innerHTML = `<span>${map.emoji}</span>${map.name}`;
+            div.onclick = () => {
+                document.querySelectorAll('.map-option').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedMap = index;
+                launchGame();
+            };
+            mapGrid.appendChild(div);
+        });
+    }
+
+    // --- ФУНКЦИЯ ПРОВЕРКИ КОЛЛИЗИИ ТОЧКИ С БЛОКАМИ ---
+    function pointCollidesWithBlocks(px, py, size) {
+        const rect = {x: px, y: py, w: size, h: size};
+        for (let b of blocks) {
+            if (rect.x < b.x + b.w &&
+                rect.x + rect.w > b.x &&
+                rect.y < b.y + b.h &&
+                rect.y + rect.h > b.y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // --- ФУНКЦИЯ ОЧИСТКИ ВВОДА ---
+    function clearInputState() {
+        keys = {};
+        isMouseDown = false;
+    }
+
+    // --- ФУНКЦИЯ СБРОСА ---
+    function resetGameState() {
+        blocks = MAPS[selectedMap].blocks.map(b => ({...b}));
+        
+        player1.hp = MAX_HP;
+        player1.maxHp = MAX_HP;
+        player1.lastDamageTime = Date.now();
+        player1.regenActive = false;
+        player1.lastRegenTime = 0;
+        if (gameMode === 1) {
+            player2.hp = botHP;
+            player2.maxHp = botHP;
+        } else {
+            player2.hp = MAX_HP;
+            player2.maxHp = MAX_HP;
+        }
+        player2.lastDamageTime = Date.now();
+        player2.regenActive = false;
+        player2.lastRegenTime = 0;
+
+        player1.color = SKINS[p1SkinId].primary;
+        p2SkinId = Math.floor(Math.random() * SKINS.length);
+        while (p2SkinId === p1SkinId && SKINS.length > 1) {
+            p2SkinId = Math.floor(Math.random() * SKINS.length);
+        }
+        player2.color = SKINS[p2SkinId].primary;
+
+        p2WeaponId = Math.floor(Math.random() * WEAPONS.length);
+
+        let startX1 = 100, startY1 = 250;
+        let startX2 = 770, startY2 = 250;
+        
+        while (pointCollidesWithBlocks(startX1, startY1, PLAYER_SIZE)) {
+            startX1 += 10;
+            if (startX1 > canvas.width - PLAYER_SIZE) startX1 = 10;
+        }
+        while (pointCollidesWithBlocks(startX2, startY2, PLAYER_SIZE)) {
+            startX2 -= 10;
+            if (startX2 < 0) startX2 = canvas.width - PLAYER_SIZE - 10;
+        }
+
+        player1.x = startX1; player1.y = startY1;
+        player2.x = startX2; player2.y = startY2;
+        player1.direction = { dx: 0, dy: -1 };
+        player2.direction = { dx: 0, dy: -1 };
+        player1.lastShot = 0; player2.lastShot = 0;
+        player2.w = PLAYER_SIZE; player2.h = PLAYER_SIZE;
+
+        bullets = [];
+        particles = [];
+        clearInputState();
+        gameActive = true;
+        updateUI();
+    }
+
+    // --- ЗАПУСК ИГРЫ ---
+    function launchGame() {
+        gameActive = false;
+        clearInputState();
+        bullets = [];
+        particles = [];
+        
+        menuScreen.style.display = 'none';
+        gameOverScreen.style.display = 'none';
+        applyDifficulty(selectedDifficulty);
+
+        if(gameMode === 1) {
+            uiHint.textContent = "Наведи мышь и стреляй ЛКМ!";
+        } else {
+            uiHint.textContent = "Синий: ЛКМ по курсору. Красный: 0.";
+        }
+
+        resetGameState();
+
+        // Небольшая задержка перед стартом, чтобы браузер перерисовался
+        setTimeout(() => {
+            gameActive = true;
+        }, 100);
+    }
+
+    function applyDifficulty(difficulty) {
+        if (difficulty === 'easy') {
+            bulletSpeed = 10;
+            botSpeedModifier = 0.7;
+            botFireCooldown = 175;
+            botHP = 60;
+        } else if (difficulty === 'medium') {
+            bulletSpeed = 12;
+            botSpeedModifier = 0.9;
+            botFireCooldown = 125;
+            botHP = 80;
+        } else if (difficulty === 'hard') {
+            bulletSpeed = 16;
+            botSpeedModifier = 1.1;
+            botFireCooldown = 60;
+            botHP = 100;
+        } else if (difficulty === 'impossible') {
+            bulletSpeed = 20;
+            botSpeedModifier = 1.3;
+            botFireCooldown = 30;
+            botHP = 150;
+            // Дополнительно: бот наносит 5 урона
+        }
+    }
+
+    function updateUI() {
+        hp1Bar.style.width = (player1.hp / player1.maxHp * 100) + '%';
+        hp2Bar.style.width = (player2.hp / player2.maxHp * 100) + '%';
+    }
+
+    function endGame(winnerMessage) {
+        gameActive = false;
+        winnerText.textContent = winnerMessage;
+        winnerSubtext.textContent = "В метели выживает сильнейший.";
+        gameOverScreen.style.display = 'flex';
+        
+        // Начисление монет за убийство бота
+        if (gameMode === 1 && player2.hp <= 0) {
+            let reward = 0;
+            switch(selectedDifficulty) {
+                case 'easy': reward = 20; break;
+                case 'medium': reward = 50; break;
+                case 'hard': reward = 100; break;
+                case 'impossible': reward = 200; break;
+            }
+            coins += reward;
+            updateCoinsDisplay();
+        }
+    }
+
+    // --- МЯГКИЙ ВОЗВРАТ НА НАЧАЛЬНЫЙ ЭКРАН ---
+    function backToMenu() {
+        gameActive = false;
+        clearInputState();
+        bullets = [];
+        particles = [];
+
+        gameMode = null;
+        selectedDifficulty = 'medium';
+        selectedMap = 0;
+        botHP = 40;
+        botSpeedModifier = 0.85;
+        botFireCooldown = 150;
+
+        player1.hp = MAX_HP;
+        player2.hp = MAX_HP;
+        player1.x = 100; player1.y = 250;
+        player2.x = 770; player2.y = 250;
+        player1.direction = { dx: 0, dy: -1 };
+        player2.direction = { dx: 0, dy: -1 };
+        player1.lastShot = 0; player2.lastShot = 0;
+        player2.w = PLAYER_SIZE; player2.h = PLAYER_SIZE;
+
+        updateUI();
+
+        gameOverScreen.style.display = 'none';
+        menuScreen.style.display = 'flex';
+        modeSelect.style.display = 'flex';
+        difficultySelect.style.display = 'none';
+        mapSelect.style.display = 'none';
+        storeScreen.style.display = 'none';
+        reloadIndicator.style.display = 'none';
+    }
+
+    // --- УПРАВЛЕНИЕ ---
+    document.addEventListener('keydown', (e) => {
+        if (e.key.startsWith('Arrow') || e.key === ' ' || e.key === 'Space' || e.key === '0' || e.key === 'Enter') e.preventDefault();
+        keys[e.key] = true;
+        if (e.key === '0') {
+            if (gameMode === 2 && gameActive) {
+                shoot(player2, WEAPONS[p2WeaponId]);
+            }
+        }
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.key.startsWith('Arrow') || e.key === ' ' || e.key === 'Space' || e.key === '0' || e.key === 'Enter') e.preventDefault();
+        keys[e.key] = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        mouseX = (e.clientX - rect.left) * scaleX;
+        mouseY = (e.clientY - rect.top) * scaleY;
+    });
+
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // --- АВТОМАТИЧЕСКАЯ СТРЕЛЬБА ---
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.button === 0 && gameActive) {
+            isMouseDown = true;
+            shoot(player1, WEAPONS[p1WeaponId]);
+        }
+    });
+    canvas.addEventListener('mouseup', (e) => {
+        if (e.button === 0) {
+            isMouseDown = false;
+        }
+    });
+    canvas.addEventListener('mouseleave', () => {
+        isMouseDown = false;
+    });
+
+    // --- ОРУЖИЕ И ЛОГИКА ---
+    function shoot(player, weapon) {
+        if (!gameActive) return;
+        
+        const weaponFireDelay = weapon.fireRate || 1.0;
+        const currentCooldown = BASE_FIRE_COOLDOWN * weaponFireDelay;
+        const now = Date.now();
+        if (now - player.lastShot < currentCooldown) {
+            // Показываем индикатор перезарядки
+            reloadIndicator.style.display = 'block';
+            setTimeout(() => {
+                if (gameActive) reloadIndicator.style.display = 'none';
+            }, currentCooldown);
+            return;
+        }
+        player.lastShot = now;
+
+        let dx, dy;
+        const centerX = player.x + player.w / 2;
+        const centerY = player.y + player.h / 2;
+
+        if (player === player1) {
+            let diffX = mouseX - centerX, diffY = mouseY - centerY;
+            let len = Math.sqrt(diffX * diffX + diffY * diffY);
+            if (len < 1) { dx = 0; dy = -1; } 
+            else { dx = diffX / len; dy = diffY / len; }
+        } else {
+            let targetX = player1.x + player1.w / 2;
+            let targetY = player1.y + player1.h / 2;
+            let lead = 0.3;
+            let predictedX = targetX + player1.direction.dx * playerSpeed * lead;
+            let predictedY = targetY + player1.direction.dy * playerSpeed * lead;
+            let diffX = predictedX - centerX, diffY = predictedY - centerY;
+            let len = Math.sqrt(diffX * diffX + diffY * diffY);
+            if (len < 1) { dx = 0; dy = -1; }
+            else { dx = diffX / len; dy = diffY / len; }
+        }
+
+        const bulletDamage = weapon.damage || 1;
+        let finalDamage = bulletDamage;
+        if (player === player2 && selectedDifficulty === 'impossible') {
+            finalDamage = 5;
+        }
+
+        const bulletColor = weapon.color || '#ffaa44';
+        const bulletSize = weapon.size || 6;
+        const bulletSpeedMult = weapon.speed || 1.0;
+        const bulletCount = weapon.bulletCount || 1;
+        const spread = weapon.spread || 0;
+
+        // Добавляем дульную вспышку (частицы)
+        addParticles(centerX + dx * (player.w/2 + 5), centerY + dy * (player.h/2 + 5), bulletColor, 8);
+
+        for (let i = 0; i < bulletCount; i++) {
+            let bulletDx = dx;
+            let bulletDy = dy;
+            if (bulletCount > 1) {
+                let angle = Math.atan2(dy, dx);
+                let spreadAngle = angle + (Math.random() - 0.5) * spread * 2;
+                bulletDx = Math.cos(spreadAngle);
+                bulletDy = Math.sin(spreadAngle);
+            }
+
+            bullets.push({
+                x: centerX - bulletSize / 2, 
+                y: centerY - bulletSize / 2, 
+                w: bulletSize, h: bulletSize,
+                dx: bulletDx, dy: bulletDy,
+                owner: player === player1 ? 'p1' : 'p2',
+                speed: bulletSpeed * bulletSpeedMult,
+                damage: finalDamage,
+                color: bulletColor
+            });
+        }
+    }
+
+    // --- КОЛЛИЗИЯ С БЛОКАМИ ---
+    function rectCollide(r1, r2) {
+        return r1.x < r2.x + r2.w &&
+               r1.x + r1.w > r2.x &&
+               r1.y < r2.y + r2.h &&
+               r1.y + r1.h > r2.y;
+    }
+
+    function resolveCollision(entity, dx, dy) {
+        let testX = {x: entity.x + dx, y: entity.y, w: entity.w, h: entity.h};
+        let blockedX = false;
+        for (let b of blocks) {
+            if (rectCollide(testX, b)) {
+                blockedX = true;
+                break;
+            }
+        }
+        if (!blockedX) {
+            entity.x += dx;
+        }
+
+        let testY = {x: entity.x, y: entity.y + dy, w: entity.w, h: entity.h};
+        let blockedY = false;
+        for (let b of blocks) {
+            if (rectCollide(testY, b)) {
+                blockedY = true;
+                break;
+            }
+        }
+        if (!blockedY) {
+            entity.y += dy;
+        }
+    }
+
+    function bulletCollidesWithBlocks(bullet) {
+        for (let b of blocks) {
+            if (rectCollide(bullet, b)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // --- ИГРОВОЙ ЦИКЛ ---
+    function gameLoop() {
+        if (!gameActive) {
+            requestAnimationFrame(gameLoop);
+            return;
+        }
+
+        // Обновление частиц
+        particles = particles.filter(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+            p.vx *= p.decay;
+            p.vy *= p.decay;
+            return p.life > 0;
+        });
+
+        let dx1 = 0, dy1 = 0;
+        if (keys['w'] || keys['W'] || keys['ц'] || keys['Ц']) dy1 = -1;
+        if (keys['s'] || keys['S'] || keys['ы'] || keys['Ы']) dy1 = 1;
+        if (keys['a'] || keys['A'] || keys['ф'] || keys['Ф']) dx1 = -1;
+        if (keys['d'] || keys['D'] || keys['в'] || keys['В']) dx1 = 1;
+        
+        if (dx1 !== 0 || dy1 !== 0) {
+            player1.direction = { dx: dx1, dy: dy1 };
+            let len = Math.sqrt(dx1*dx1 + dy1*dy1);
+            let speedX = (dx1 / len) * playerSpeed;
+            let speedY = (dy1 / len) * playerSpeed;
+            resolveCollision(player1, speedX, speedY);
+        }
+
+        if (gameMode === 2) { 
+            let dx2 = 0, dy2 = 0;
+            if (keys['ArrowUp']) dy2 = -1; if (keys['ArrowDown']) dy2 = 1;
+            if (keys['ArrowLeft']) dx2 = -1; if (keys['ArrowRight']) dx2 = 1;
+            if (dx2 !== 0 || dy2 !== 0) {
+                player2.direction = { dx: dx2, dy: dy2 };
+                let len = Math.sqrt(dx2*dx2 + dy2*dy2);
+                let speedX = (dx2 / len) * playerSpeed;
+                let speedY = (dy2 / len) * playerSpeed;
+                resolveCollision(player2, speedX, speedY);
+            }
+        } else {
+            let targetX = player1.x + player1.w / 2;
+            let targetY = player1.y + player1.h / 2;
+            let botCX = player2.x + player2.w / 2, botCY = player2.y + player2.h / 2;
+            let dx = targetX - botCX, dy = targetY - botCY;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist > 1) {
+                let normX = dx / dist, normY = dy / dist;
+                if (dist > 200) {
+                    let speedX = normX * playerSpeed * botSpeedModifier;
+                    let speedY = normY * playerSpeed * botSpeedModifier;
+                    resolveCollision(player2, speedX, speedY);
+                    player2.direction = { dx: normX, dy: normY };
+                } else {
+                    let perpX = -normY, perpY = normX;
+                    let speedX = perpX * playerSpeed * botSpeedModifier * 0.9;
+                    let speedY = perpY * playerSpeed * botSpeedModifier * 0.9;
+                    resolveCollision(player2, speedX, speedY);
+                    player2.direction = { dx: normX, dy: normY };
+                }
+                if (dist < 550 && dist > 30 && (Date.now() - player2.lastShot > botFireCooldown)) {
+                    shoot(player2, WEAPONS[p2WeaponId]);
+                }
+            }
+        }
+
+        player1.x = Math.max(0, Math.min(canvas.width - player1.w, player1.x));
+        player1.y = Math.max(0, Math.min(canvas.height - player1.h, player1.y));
+        player2.x = Math.max(0, Math.min(canvas.width - player2.w, player2.x));
+        player2.y = Math.max(0, Math.min(canvas.height - player2.h, player2.y));
+
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            let b = bullets[i];
+            b.x += b.dx * b.speed;
+            b.y += b.dy * b.speed;
+            if (b.x < -20 || b.x > canvas.width + 20 || b.y < -20 || b.y > canvas.height + 20) {
+                bullets.splice(i, 1); continue;
+            }
+            if (bulletCollidesWithBlocks(b)) {
+                bullets.splice(i, 1); continue;
+            }
+            let hit = false;
+            if (b.owner === 'p2' && b.x < player1.x + player1.w && b.x + b.w > player1.x && b.y < player1.y + player1.h && b.y + b.h > player1.y) {
+                player1.hp -= b.damage;
+                player1.lastDamageTime = Date.now(); // обновляем время последнего урона
+                player1.regenActive = false; // сбрасываем регенерацию
+                hit = true;
+                addParticles(b.x + b.w/2, b.y + b.h/2, '#ff5555', 25); // эффект попадания
+                updateUI();
+                if (player1.hp <= 0) { endGame('Игрок Красный победил!'); return; }
+            }
+            if (b.owner === 'p1' && b.x < player2.x + player2.w && b.x + b.w > player2.x && b.y < player2.y + player2.h && b.y + b.h > player2.y) {
+                player2.hp -= b.damage;
+                player2.lastDamageTime = Date.now(); // обновляем время последнего урона
+                player2.regenActive = false; // сбрасываем регенерацию
+                hit = true;
+                addParticles(b.x + b.w/2, b.y + b.h/2, '#4169E1', 25); // эффект попадания
+                updateUI();
+                if (player2.hp <= 0) { endGame('Игрок Синий победил!'); return; }
+            }
+            if (hit) bullets.splice(i, 1);
+        }
+
+        // --- РЕГЕНЕРАЦИЯ ЗДОРОВЬЯ ---
+        const regenDelay = 5000; // 5 секунд без урона для начала регенерации
+        const regenInterval = 2000; // каждые 2 секунды восстанавливаем 10%
+        const regenPercent = 0.1; // 10%
+
+        // Игрок 1
+        if (player1.hp > 0 && player1.hp < player1.maxHp) {
+            if (!player1.regenActive && Date.now() - player1.lastDamageTime > regenDelay) {
+                player1.regenActive = true;
+                player1.lastRegenTime = Date.now();
+            }
+            if (player1.regenActive) {
+                if (Date.now() - player1.lastRegenTime >= regenInterval) {
+                    player1.hp = Math.min(player1.maxHp, player1.hp + player1.maxHp * regenPercent);
+                    player1.lastRegenTime = Date.now();
+                    updateUI();
+                    if (player1.hp >= player1.maxHp) {
+                        player1.regenActive = false;
+                    }
+                }
+            }
+        } else {
+            player1.regenActive = false;
+        }
+
+        // Игрок 2 (бот или игрок)
+        if (player2.hp > 0 && player2.hp < player2.maxHp) {
+            if (!player2.regenActive && Date.now() - player2.lastDamageTime > regenDelay) {
+                player2.regenActive = true;
+                player2.lastRegenTime = Date.now();
+            }
+            if (player2.regenActive) {
+                if (Date.now() - player2.lastRegenTime >= regenInterval) {
+                    player2.hp = Math.min(player2.maxHp, player2.hp + player2.maxHp * regenPercent);
+                    player2.lastRegenTime = Date.now();
+                    updateUI();
+                    if (player2.hp >= player2.maxHp) {
+                        player2.regenActive = false;
+                    }
+                }
+            }
+        } else {
+            player2.regenActive = false;
+        }
+
+        if (isMouseDown && gameActive) {
+            const now = Date.now();
+            const weapon = WEAPONS[p1WeaponId];
+            const weaponFireDelay = weapon.fireRate || 1.0;
+            const currentCooldown = BASE_FIRE_COOLDOWN * weaponFireDelay;
+            if (now - player1.lastShot >= currentCooldown) {
+                shoot(player1, weapon);
+            }
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 50, canvas.width/2, canvas.height/2, canvas.width/2);
+        gradient.addColorStop(0, '#2a1f3d');
+        gradient.addColorStop(1, '#0d0812'); 
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        const gridSize = 40;
+        for (let x = 0; x <= canvas.width; x += gridSize) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+        for (let y = 0; y <= canvas.height; y += gridSize) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+
+        ctx.fillStyle = '#1f1a16';
+        ctx.strokeStyle = '#3a2d24';
+        ctx.lineWidth = 2;
+        blocks.forEach(b => {
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.strokeRect(b.x, b.y, b.w, b.h);
+        });
+
+        // --- ОТРИСОВКА ПРИЦЕЛА ---
+        if (player1.x !== undefined && mouseX !== undefined) {
+            const cx = player1.x + player1.w / 2;
+            const cy = player1.y + player1.h / 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(mouseX, mouseY);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // --- ОТРИСОВКА ЧАСТИЦ ---
+        particles.forEach(p => {
+            const alpha = p.life / p.maxLife;
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+
+        // --- ОТРИСОВКА ПУЛЬ ---
+        bullets.forEach(b => { 
+            ctx.fillStyle = b.color || '#ffaa44';
+            ctx.shadowColor = b.color;
+            ctx.shadowBlur = 10;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.shadowBlur = 0;
+        });
+
+        // --- ОТРИСОВКА ИГРОКОВ ---
+        drawPlayer(ctx, player1, SKINS[p1SkinId], true, p1HatId, WEAPONS[p1WeaponId]); 
+        drawPlayer(ctx, player2, SKINS[p2SkinId], false, 0, WEAPONS[p2WeaponId]);
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // --- РИСОВАНИЕ ПЕРСОНАЖА ---
+    function drawPlayer(ctx, player, skin, isP1, hatId, weapon) {
+        const x = player.x + player.w / 2;
+        const y = player.y + player.h / 2;
+        const r = player.w / 2;
+
+        // Тень
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = skin.primary;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = skin.secondary;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.7, 0, Math.PI * 2);
+        ctx.fillStyle = skin.secondary;
+        ctx.fill();
+
+        let dirX = player.direction.dx;
+        let dirY = player.direction.dy;
+        
+        if (isP1) {
+            let dX = mouseX - x;
+            let dY = mouseY - y;
+            let len = Math.sqrt(dX*dX + dY*dY);
+            if (len > 1) { dirX = dX / len; dirY = dY / len; }
+            else if (len === 0) { dirX = 0; dirY = -1; }
+        } else {
+            if (dirX === 0 && dirY === 0) { dirX = 0; dirY = -1; }
+        }
+
+        let eyeOffX = dirX * 5;
+        let eyeOffY = dirY * 5;
+        let perpX = -dirY;
+        let perpY = dirX;
+
+        function drawEye(ox, oy) {
+            let ex = x + eyeOffX + ox;
+            let ey = y + eyeOffY + oy;
+            ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI*2); ctx.fillStyle = skin.eye; ctx.fill();
+            ctx.beginPath(); ctx.arc(ex + dirX*2.5, ey + dirY*2.5, 2, 0, Math.PI*2); ctx.fillStyle = skin.pupil; ctx.fill();
+        }
+
+        drawEye(perpX * 5, perpY * 5);
+        drawEye(-perpX * 5, -perpY * 5);
+
+        ctx.beginPath();
+        ctx.arc(x + dirX*5, y + dirY*8 + 4, 3, 0, Math.PI);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Шляпа
+        if (isP1 && hatId !== undefined && HATS[hatId] && HATS[hatId].name !== 'Без шляпы') {
+            const hat = HATS[hatId];
+            const hatY = y - r - 5;
+            ctx.fillStyle = hat.primary;
+            ctx.strokeStyle = hat.secondary;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x - 12, hatY);
+            ctx.lineTo(x, hatY - 18);
+            ctx.lineTo(x + 12, hatY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = hat.secondary;
+            ctx.fillRect(x - 15, hatY - 2, 30, 4);
+        }
+
+        // Оружие с эффектом свечения
+        if (weapon) {
+            const weaponX = x + dirX * (r + 2);
+            const weaponY = y + dirY * (r + 2);
+            ctx.shadowColor = weapon.color;
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.moveTo(x + dirX * (r - 4), y + dirY * (r - 4));
+            ctx.lineTo(weaponX, weaponY);
+            ctx.strokeStyle = weapon.color;
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(weaponX, weaponY, 3, 0, Math.PI * 2);
+            ctx.fillStyle = weapon.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    // --- ЗАПУСК ЦИКЛА ---
+    gameLoop();
+
+</script>
+</body>
+</html>
