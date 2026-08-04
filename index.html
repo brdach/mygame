@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METEL: Дуэль (Lite)</title>
+    <title>METEL: Дуэль • Gnomecore</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
@@ -17,7 +17,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Special Elite', 'Courier New', monospace;
-            background: #0a0f1a;
+            background: #0f0e12;
             overflow: hidden;
             user-select: none;
             position: relative;
@@ -28,50 +28,53 @@
             z-index: 1;
             width: 960px;
             height: 620px;
-            border: 2px solid rgba(80, 140, 255, 0.3);
-            box-shadow: 0 0 60px rgba(30, 60, 180, 0.2);
-            background: rgba(8, 12, 24, 0.95);
+            border: 2px solid rgba(200, 170, 120, 0.25);
+            box-shadow: 0 0 80px rgba(40, 30, 20, 0.6), inset 0 0 80px rgba(20, 15, 10, 0.3);
+            background: rgba(20, 18, 16, 0.85);
             display: flex;
             flex-direction: column;
-            border-radius: 24px;
+            border-radius: 40px;
             overflow: hidden;
+            backdrop-filter: blur(4px);
         }
 
         #ui-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
-            border-bottom: 2px solid rgba(65, 105, 225, 0.2);
-            background: rgba(0,0,0,0.7);
+            padding: 14px 28px;
+            border-bottom: 1px solid rgba(160, 130, 90, 0.15);
+            background: rgba(16, 14, 12, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 5;
         }
 
         .player-stats {
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            color: rgba(220, 230, 255, 0.95);
+            gap: 16px;
+            color: rgba(230, 215, 190, 0.9);
             font-weight: 600;
-            text-shadow: 0 0 10px rgba(65, 105, 225, 0.2);
+            text-shadow: 0 0 20px rgba(200, 160, 100, 0.05);
         }
 
         .hp-bar {
             width: 140px;
             height: 10px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(40, 32, 24, 0.8);
+            border: 1px solid rgba(180, 150, 110, 0.2);
             position: relative;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
         }
 
         .hp-fill {
             height: 100%;
             width: 100%;
-            transition: width 0.2s ease;
+            transition: width 0.25s ease;
             border-radius: 20px;
             position: relative;
         }
@@ -80,24 +83,25 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 70%);
+            background: linear-gradient(180deg, rgba(255, 250, 220, 0.25) 0%, transparent 70%);
             border-radius: 20px;
         }
 
-        .hp-blue { background: linear-gradient(90deg, #1e3a8a, #4f7cff); }
-        .hp-red { background: linear-gradient(90deg, #7f1d1d, #ff3b3b); }
+        .hp-blue { background: linear-gradient(90deg, #2d6a3d, #7ab88a); }
+        .hp-red { background: linear-gradient(90deg, #7a3a2a, #d06a4a); }
 
         .controls-info {
-            color: rgba(180, 200, 255, 0.3);
-            font-size: 0.75rem;
+            color: rgba(210, 190, 160, 0.2);
+            font-size: 0.7rem;
             position: absolute;
             width: 100%;
-            bottom: 14px;
+            bottom: 16px;
             text-align: center;
             pointer-events: none;
             z-index: 1;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(0,0,0,0.9);
+            font-family: 'Special Elite', cursive;
         }
 
         #canvas-container {
@@ -106,7 +110,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #080c1a;
+            background: #12100e;
         }
 
         canvas {
@@ -116,7 +120,7 @@
             background: transparent;
         }
 
-        /* ===== МЕНЮ — ТЕТРАДНЫЙ ЛИСТ В КЛЕТОЧКУ И РУЧКА ===== */
+        /* ===== МЕНЮ — ТЁПЛОЕ ДЕРЕВО И МХИ ===== */
         #menu-screen {
             position: absolute;
             top: 0; left: 0;
@@ -125,119 +129,121 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* Тетрадный фон в клеточку */
-            background-color: #f5f0e6;
+            background: #1f1c16;
             background-image: 
-                linear-gradient(to right, rgba(150, 180, 220, 0.15) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(150, 180, 220, 0.15) 1px, transparent 1px);
-            background-size: 20px 20px;
-            backdrop-filter: blur(0px);
+                radial-gradient(circle at 20% 30%, rgba(100, 80, 50, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(70, 100, 50, 0.1) 0%, transparent 40%),
+                repeating-linear-gradient(45deg, rgba(120, 100, 70, 0.02) 0px, rgba(120, 100, 70, 0.02) 2px, transparent 2px, transparent 8px);
+            backdrop-filter: blur(4px);
             z-index: 20;
             padding: 20px;
             box-sizing: border-box;
-            animation: menuFadeIn 0.5s ease-out;
-            box-shadow: inset 0 0 60px rgba(0,0,0,0.05);
+            animation: menuFadeIn 0.6s ease-out;
+            box-shadow: inset 0 0 100px rgba(20, 10, 5, 0.7);
+            border-radius: 40px;
         }
         @keyframes menuFadeIn {
-            0% { opacity: 0; transform: scale(0.95); }
+            0% { opacity: 0; transform: scale(0.96); }
             100% { opacity: 1; transform: scale(1); }
         }
 
         #menu-screen h1 {
-            color: #1a2a4a;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05), 0 0 20px rgba(26, 42, 74, 0.1);
-            font-size: 3.8rem;
-            margin-bottom: 6px;
-            letter-spacing: 6px;
+            color: #ecd8b4;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.5), 0 0 40px rgba(200, 160, 100, 0.1);
+            font-size: 4rem;
+            margin-bottom: 4px;
+            letter-spacing: 8px;
             font-family: 'Special Elite', cursive;
         }
 
         #menu-screen p {
-            color: #3a4a6a;
+            color: #b8a48a;
             font-size: 1.1rem;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             text-align: center;
             font-family: 'Special Elite', cursive;
+            letter-spacing: 2px;
         }
 
-        /* Кнопки в стиле «ручка на бумаге» */
         .menu-btn {
-            margin: 6px;
-            width: 260px;
-            padding: 14px 20px;
-            border: 2px solid #3a4a6a;
-            border-radius: 30px;
+            margin: 8px;
+            width: 280px;
+            padding: 16px 24px;
+            border: 2px solid #8a7a5a;
+            border-radius: 50px;
             font-size: 1.1rem;
             font-family: 'Special Elite', cursive;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            background: rgba(255, 255, 255, 0.6);
-            color: #1a2a4a;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            letter-spacing: 3px;
+            background: rgba(50, 45, 35, 0.6);
+            color: #ecd8b4;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
             font-weight: 600;
             position: relative;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
+            border-color: #7a6a4a;
         }
         .menu-btn:hover { 
-            transform: scale(1.02) translateY(-1px);
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
+            transform: scale(1.04) translateY(-3px);
+            background: rgba(80, 65, 45, 0.7);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.4);
+            border-color: #c8a86a;
         }
 
         .menu-btn.back-btn {
-            background: rgba(230, 235, 245, 0.7);
-            border-color: #4a5a7a;
-            color: #2a3a5a;
+            background: rgba(40, 35, 25, 0.6);
+            border-color: #5a4a3a;
+            color: #b8a48a;
         }
         .menu-btn.back-btn:hover {
-            background: rgba(240, 245, 255, 0.8);
+            background: rgba(60, 50, 35, 0.7);
         }
 
         .menu-btn.store-btn {
-            background: rgba(255, 215, 0, 0.2);
+            background: rgba(80, 70, 40, 0.3);
             border-color: #b8860b;
-            color: #5a4a1a;
+            color: #e6c87a;
         }
         .menu-btn.store-btn:hover {
-            background: rgba(255, 215, 0, 0.35);
+            background: rgba(120, 90, 50, 0.4);
         }
 
         .menu-btn.fullscreen-btn {
             background: transparent;
-            border: 2px dashed #6a7a9a;
-            color: #4a5a7a;
+            border: 2px dashed #6a5a4a;
+            color: #8a7a6a;
             width: auto;
-            padding: 8px 18px;
+            padding: 8px 24px;
             margin-top: 16px;
             box-shadow: none;
         }
         .menu-btn.fullscreen-btn:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #4a5a7a;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            background: rgba(80, 70, 50, 0.15);
+            border-color: #c8a86a;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
         }
 
         .menu-btn .tooltip {
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            bottom: calc(100% + 10px);
+            bottom: calc(100% + 12px);
             left: 50%;
-            transform: translateX(-50%) translateY(5px);
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #3a4a6a;
-            color: #1a2a4a;
-            padding: 6px 14px;
-            border-radius: 12px;
+            transform: translateX(-50%) translateY(6px);
+            background: rgba(30, 25, 18, 0.95);
+            border: 2px solid #8a7a5a;
+            color: #ecd8b4;
+            padding: 8px 18px;
+            border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 400;
             text-transform: none;
             letter-spacing: 1px;
             white-space: nowrap;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+            transition: all 0.25s ease;
             pointer-events: none;
             font-family: 'Special Elite', cursive;
         }
@@ -249,13 +255,13 @@
 
         .menu-btn .bonus-badge {
             display: inline-block;
-            background: rgba(255, 215, 0, 0.3);
-            border: 1px solid #b8860b;
-            border-radius: 20px;
-            padding: 2px 10px;
+            background: rgba(200, 160, 80, 0.15);
+            border: 1px solid #b89a6a;
+            border-radius: 30px;
+            padding: 2px 12px;
             font-size: 0.7rem;
-            color: #5a4a1a;
-            margin-left: 8px;
+            color: #e6c87a;
+            margin-left: 10px;
             text-transform: none;
             letter-spacing: 0.5px;
         }
@@ -268,142 +274,144 @@
         }
         #difficulty-select, #map-select, #store-screen { display: none; }
 
-        /* Промокоды — тоже в стиле ручки */
         #promo-toggle-btn {
             position: absolute;
-            top: 16px;
-            left: 16px;
+            top: 20px;
+            left: 20px;
             z-index: 25;
-            background: rgba(255, 255, 255, 0.7);
-            border: 2px solid #3a4a6a;
-            color: #1a2a4a;
-            padding: 8px 16px;
-            border-radius: 30px;
+            background: rgba(50, 45, 35, 0.5);
+            border: 2px solid #7a6a4a;
+            color: #ecd8b4;
+            padding: 10px 20px;
+            border-radius: 40px;
             font-family: 'Special Elite', cursive;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: block;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.15);
+            backdrop-filter: blur(4px);
         }
         #promo-toggle-btn:hover { 
-            background: rgba(255, 255, 255, 0.9);
-            transform: scale(1.02);
+            background: rgba(80, 65, 45, 0.7);
+            transform: scale(1.03);
+            border-color: #c8a86a;
         }
 
         #promo-panel {
             position: absolute;
-            top: 70px;
-            left: 16px;
+            top: 80px;
+            left: 20px;
             z-index: 25;
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #3a4a6a;
-            padding: 16px 20px;
-            border-radius: 16px;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            background: rgba(30, 25, 18, 0.95);
+            border: 2px solid #8a7a5a;
+            padding: 20px 24px;
+            border-radius: 30px;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
             display: none;
             flex-direction: column;
             align-items: flex-start;
-            gap: 10px;
-            min-width: 220px;
-            animation: panelSlideDown 0.2s ease-out;
+            gap: 12px;
+            min-width: 240px;
+            animation: panelSlideDown 0.25s ease-out;
+            backdrop-filter: blur(8px);
         }
         @keyframes panelSlideDown {
-            0% { opacity: 0; transform: translateY(-10px); }
+            0% { opacity: 0; transform: translateY(-12px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         #promo-panel label {
-            color: #1a2a4a;
+            color: #ecd8b4;
             font-size: 0.8rem;
             font-family: 'Special Elite', cursive;
+            letter-spacing: 1px;
         }
         #promo-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #6a7a9a;
-            border-radius: 10px;
-            padding: 8px 12px;
-            color: #1a2a4a;
+            background: rgba(60, 55, 40, 0.5);
+            border: 2px solid #6a5a4a;
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: #ecd8b4;
             font-family: 'Special Elite', cursive;
             font-size: 0.9rem;
             width: 100%;
             outline: none;
-            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.05);
+            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
         }
-        #promo-input:focus { border-color: #1a2a4a; }
+        #promo-input:focus { border-color: #c8a86a; }
         #promo-status {
             font-size: 0.8rem;
             min-height: 1.2em;
-            color: #4a5a7a;
+            color: #b8a48a;
             font-family: 'Special Elite', cursive;
         }
-        #promo-status.success { color: #2e7d32; }
-        #promo-status.error { color: #c62828; }
+        #promo-status.success { color: #a8d08a; }
+        #promo-status.error { color: #d08a6a; }
         .promo-btn {
-            background: rgba(255, 255, 255, 0.7);
-            border: 2px solid #3a4a6a;
-            border-radius: 10px;
-            padding: 6px 16px;
-            color: #1a2a4a;
+            background: rgba(70, 60, 45, 0.5);
+            border: 2px solid #7a6a4a;
+            border-radius: 20px;
+            padding: 8px 20px;
+            color: #ecd8b4;
             font-family: 'Special Elite', cursive;
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            margin-top: 2px;
+            margin-top: 4px;
             width: 100%;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
         }
-        .promo-btn:hover { background: rgba(255, 255, 255, 0.95); }
+        .promo-btn:hover { background: rgba(100, 80, 60, 0.6); border-color: #c8a86a; }
 
-        /* Карты */
         #map-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin: 16px 0;
+            gap: 12px;
+            margin: 20px 0;
             max-width: 800px;
         }
         .map-option {
             width: 100px;
             height: 80px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 2px solid #6a7a9a;
-            border-radius: 12px;
+            background: rgba(50, 45, 35, 0.5);
+            border: 2px solid #6a5a4a;
+            border-radius: 24px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #1a2a4a;
+            transition: all 0.25s ease;
+            color: #ecd8b4;
             font-family: 'Special Elite', cursive;
             font-size: 0.7rem;
             font-weight: 600;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.15);
+            backdrop-filter: blur(2px);
         }
         .map-option:hover {
-            border-color: #1a2a4a;
-            transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.8);
+            border-color: #c8a86a;
+            transform: scale(1.05);
+            background: rgba(80, 65, 45, 0.6);
         }
         .map-option.selected {
-            border-color: #b31b1b;
-            background: rgba(255, 200, 200, 0.4);
-            color: #7a1a1a;
-            box-shadow: 3px 3px 0px rgba(180, 30, 30, 0.15);
+            border-color: #d4b07a;
+            background: rgba(120, 90, 50, 0.5);
+            color: #f0d8b0;
+            box-shadow: 4px 4px 0px rgba(200, 160, 80, 0.15);
         }
-        .map-option span { font-size: 2.2rem; margin-bottom: 4px; }
+        .map-option span { font-size: 2.4rem; margin-bottom: 4px; }
 
-        /* Магазин — тетрадный стиль */
         #store-screen h2 {
-            color: #1a2a4a;
-            font-size: 2.2rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
-            margin-bottom: 6px;
+            color: #ecd8b4;
+            font-size: 2.4rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+            margin-bottom: 4px;
             font-family: 'Special Elite', cursive;
         }
         #store-screen p {
-            color: #3a4a6a;
+            color: #b8a48a;
             font-size: 1rem;
             margin-bottom: 16px;
             font-family: 'Special Elite', cursive;
@@ -411,83 +419,83 @@
 
         .store-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         .tab-btn {
-            background: rgba(255, 255, 255, 0.5);
-            border: 2px solid #6a7a9a;
-            color: #3a4a6a;
-            padding: 8px 20px;
-            border-radius: 30px;
+            background: rgba(50, 45, 35, 0.4);
+            border: 2px solid #6a5a4a;
+            color: #b8a48a;
+            padding: 10px 24px;
+            border-radius: 40px;
             font-family: 'Special Elite', cursive;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            transition: all 0.25s ease;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.15);
         }
         .tab-btn:hover { 
-            border-color: #3a4a6a;
-            background: rgba(255, 255, 255, 0.7);
+            border-color: #c8a86a;
+            background: rgba(70, 60, 45, 0.5);
         }
         .tab-btn.active {
-            border-color: #1a2a4a;
-            color: #1a2a4a;
-            background: rgba(255, 215, 0, 0.15);
+            border-color: #d4b07a;
+            color: #ecd8b4;
+            background: rgba(120, 90, 50, 0.4);
         }
 
         .store-grid-container {
             display: none;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 14px;
+            gap: 18px;
             margin: 12px 0;
             max-width: 680px;
         }
         .store-grid-container.active { display: flex; }
 
         .store-item {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            border: 3px solid #6a7a9a;
+            border: 3px solid #6a5a4a;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
             font-size: 0.7rem;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
             position: relative;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(60, 50, 40, 0.4);
         }
         .store-item:hover { 
-            transform: scale(1.05); 
-            border-color: #3a4a6a;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
+            transform: scale(1.06); 
+            border-color: #c8a86a;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
         }
         .store-item.selected {
-            border-color: #b8860b;
-            box-shadow: 4px 4px 0px rgba(184, 134, 11, 0.2);
+            border-color: #d4b07a;
+            box-shadow: 6px 6px 0px rgba(200, 160, 80, 0.2);
         }
         .store-item .item-name {
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             font-size: 0.6rem;
-            color: #3a4a6a;
+            color: #b8a48a;
             white-space: nowrap;
             font-family: 'Special Elite', cursive;
         }
         .store-item .price-tag {
             position: absolute;
-            top: -4px;
-            right: -4px;
-            background: rgba(255, 215, 0, 0.9);
-            border: 1px solid #b8860b;
-            color: #1a2a4a;
+            top: -6px;
+            right: -6px;
+            background: rgba(200, 160, 80, 0.9);
+            border: 1px solid #c8a86a;
+            color: #1f1c16;
             border-radius: 50%;
-            padding: 2px 6px;
+            padding: 2px 8px;
             font-size: 0.6rem;
             font-weight: bold;
             transition: opacity 0.2s ease;
@@ -496,14 +504,9 @@
             position: absolute;
             top: 4px;
             left: 4px;
-            font-size: 0.7rem;
-            color: #c62828;
+            font-size: 0.8rem;
+            color: #d08a6a;
             transition: opacity 0.2s ease;
-        }
-        /* Класс для скрытия элементов при покупке */
-        .store-item .hidden {
-            opacity: 0;
-            pointer-events: none;
         }
 
         #game-over-screen {
@@ -514,39 +517,41 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(12, 10, 8, 0.85);
+            backdrop-filter: blur(12px);
             z-index: 10;
-            animation: gameOverFade 0.4s ease-out;
+            animation: gameOverFade 0.5s ease-out;
+            border-radius: 40px;
         }
         @keyframes gameOverFade {
-            0% { opacity: 0; transform: scale(0.9); }
+            0% { opacity: 0; transform: scale(0.92); }
             100% { opacity: 1; transform: scale(1); }
         }
         #game-over-screen h1 {
-            color: #ff4b4b;
-            text-shadow: 0 0 40px rgba(255, 75, 75, 0.4);
-            font-size: 3rem;
+            color: #ecd8b4;
+            text-shadow: 0 0 60px rgba(200, 160, 100, 0.15);
+            font-size: 3.4rem;
             margin-bottom: 8px;
         }
         #game-over-screen p {
-            color: rgba(200, 215, 255, 0.7);
+            color: rgba(200, 190, 170, 0.6);
             font-size: 1rem;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
         button.restart-btn {
             border: none;
-            border-radius: 30px;
-            padding: 12px 36px;
+            border-radius: 50px;
+            padding: 14px 44px;
             font-size: 1rem;
             font-family: inherit;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: linear-gradient(135deg, rgba(180, 30, 30, 0.85), rgba(255, 80, 80, 0.6));
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(180, 30, 30, 0.2);
+            transition: all 0.25s ease;
+            background: linear-gradient(145deg, rgba(80, 60, 40, 0.9), rgba(140, 100, 60, 0.6));
+            color: #ecd8b4;
+            box-shadow: 0 8px 30px rgba(80, 60, 40, 0.3);
+            letter-spacing: 2px;
         }
-        button.restart-btn:hover { transform: scale(1.02); }
+        button.restart-btn:hover { transform: scale(1.03); }
 
         #pause-screen {
             position: absolute;
@@ -556,59 +561,62 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            background: rgba(12, 10, 8, 0.7);
+            backdrop-filter: blur(12px);
             z-index: 15;
             animation: pauseFade 0.2s ease-out;
+            border-radius: 40px;
         }
         @keyframes pauseFade {
             0% { opacity: 0; }
             100% { opacity: 1; }
         }
         #pause-screen h2 {
-            color: #ffd700;
-            font-size: 3rem;
-            margin-bottom: 16px;
+            color: #ecd8b4;
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(200, 160, 100, 0.05);
         }
         .pause-btn {
-            margin: 6px;
-            width: 200px;
-            padding: 12px 20px;
+            margin: 8px;
+            width: 220px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             font-size: 1rem;
             font-family: inherit;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, rgba(180, 30, 30, 0.85), rgba(255, 80, 80, 0.6));
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(180, 30, 30, 0.2);
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, rgba(80, 60, 40, 0.9), rgba(140, 100, 60, 0.6));
+            color: #ecd8b4;
+            box-shadow: 0 8px 30px rgba(80, 60, 40, 0.2);
         }
-        .pause-btn:hover { transform: scale(1.02); }
+        .pause-btn:hover { transform: scale(1.03); }
         .pause-btn.back-btn {
-            background: linear-gradient(135deg, rgba(40, 50, 70, 0.8), rgba(80, 90, 120, 0.6));
+            background: linear-gradient(145deg, rgba(40, 35, 25, 0.8), rgba(60, 50, 40, 0.6));
         }
 
         #fs-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 16px;
+            right: 16px;
             z-index: 6;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(60, 80, 140, 0.3);
-            color: rgba(180, 200, 255, 0.5);
-            padding: 6px 14px;
-            border-radius: 20px;
+            background: rgba(20, 18, 16, 0.4);
+            border: 1px solid rgba(160, 130, 90, 0.15);
+            color: rgba(200, 190, 170, 0.35);
+            padding: 6px 18px;
+            border-radius: 30px;
             cursor: pointer;
             font-family: inherit;
             font-size: 0.7rem;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(4px);
         }
         #fs-btn:hover {
-            background: rgba(255,255,255,0.03);
-            border-color: rgba(180, 200, 255, 0.4);
+            background: rgba(50, 45, 35, 0.3);
+            border-color: rgba(200, 180, 150, 0.25);
         }
     </style>
 </head>
@@ -616,7 +624,7 @@
 
     <div id="game-container">
         <div id="menu-screen">
-            <button id="promo-toggle-btn" onclick="togglePromoPanel()">🎫 Промокоды</button>
+            <button id="promo-toggle-btn" onclick="togglePromoPanel()">🍄 Промокоды</button>
             
             <div id="promo-panel">
                 <label for="promo-input">Введите промокод</label>
@@ -635,7 +643,7 @@
             </div>
 
             <div id="difficulty-select">
-                <h1 style="font-size: 2rem;">Уровень сложности</h1>
+                <h1 style="font-size: 2.2rem;">Уровень сложности</h1>
                 <p>Наведите курсор на кнопку, чтобы увидеть награду</p>
                 
                 <button class="menu-btn" onclick="openMapSelect('easy')">
@@ -662,7 +670,7 @@
             </div>
 
             <div id="map-select">
-                <h1 style="font-size: 1.6rem;">Выберите карту</h1>
+                <h1 style="font-size: 1.8rem;">Выберите карту</h1>
                 <p>Всего 30 карт</p>
                 <div id="map-grid"></div>
                 <button class="menu-btn back-btn" onclick="goBackDifficulty()">Назад</button>
@@ -684,22 +692,22 @@
         </div>
 
         <div id="ui-header">
-            <div class="player-stats" style="color: #4f7cff;">
-                Синий (WASD)
+            <div class="player-stats" style="color: #7ab88a;">
+                🌿 Лесной
                 <div class="hp-bar"><div id="hp1" class="hp-fill hp-blue" style="width: 100%;"></div></div>
             </div>
-            <div style="color: rgba(100, 120, 180, 0.3); font-size: 1.2rem;">⚔️</div>
-            <div class="player-stats" style="color: #ff3b3b;">
+            <div style="color: rgba(160, 130, 90, 0.15); font-size: 1.4rem;">⚔️</div>
+            <div class="player-stats" style="color: #d06a4a;">
                 <div class="hp-bar"><div id="hp2" class="hp-fill hp-red" style="width: 100%;"></div></div>
-                Красный (Стрелки)
+                🍂 Рыжий
             </div>
         </div>
 
         <div id="canvas-container">
             <canvas id="gameCanvas" width="960" height="540"></canvas>
             <div id="game-over-screen">
-                <h1 id="winner-text">Игрок Синий победил!</h1>
-                <p id="winner-subtext">В метели выживает сильнейший.</p>
+                <h1 id="winner-text">🌲 Победил Лесной!</h1>
+                <p id="winner-subtext">В чаще выживает уютный.</p>
                 <button class="restart-btn" onclick="backToMenu()">Вернуться в меню</button>
             </div>
             <div id="pause-screen">
@@ -716,25 +724,27 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     
-    // ========== СНЕЖИНКИ НА CANVAS ==========
+    // ========== СНЕЖИНКИ ==========
     let snowflakes = [];
-    function initSnowflakes(count = 60) {
+    let time = 0;
+    
+    function initSnowflakes(count = 55) {
         snowflakes = [];
         for (let i = 0; i < count; i++) {
             snowflakes.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 r: 1.5 + Math.random() * 3.5,
-                d: Math.random() * canvas.height,
-                speed: 0.5 + Math.random() * 1.8,
-                opacity: 0.3 + Math.random() * 0.5
+                speed: 0.3 + Math.random() * 1.4,
+                opacity: 0.2 + Math.random() * 0.5,
+                swayOffset: Math.random() * Math.PI * 2
             });
         }
     }
-    initSnowflakes(65);
+    initSnowflakes(55);
 
     function drawSnowflakes() {
-        ctx.fillStyle = 'rgba(200, 230, 255, 0.7)';
+        ctx.fillStyle = 'rgba(230, 240, 250, 0.6)';
         for (let s of snowflakes) {
             ctx.globalAlpha = s.opacity;
             ctx.beginPath();
@@ -744,12 +754,16 @@
         ctx.globalAlpha = 1;
         for (let s of snowflakes) {
             s.y += s.speed;
-            s.x += Math.sin(s.y / canvas.height * 8) * 0.3;
+            s.x += Math.sin(time * 0.02 + s.swayOffset) * 0.3;
             if (s.y > canvas.height + 10) {
                 s.y = -10;
                 s.x = Math.random() * canvas.width;
+                s.r = 1.5 + Math.random() * 3.5;
+                s.speed = 0.3 + Math.random() * 1.4;
+                s.opacity = 0.2 + Math.random() * 0.5;
             }
         }
+        time += 1;
     }
 
     function toggleFullscreen() {
@@ -765,49 +779,49 @@
     }
 
     const SKINS = [
-        { name: 'Призрак', primary: '#4169E1', secondary: '#1e3a8a', eye: '#fff', pupil: '#000' },
-        { name: 'Демон', primary: '#b31b1b', secondary: '#7f1d1d', eye: '#fff', pupil: '#b31b1b' },
-        { name: 'Сталкер', primary: '#2e8b57', secondary: '#14532d', eye: '#fbbf24', pupil: '#000' },
-        { name: 'Некромант', primary: '#6b21a5', secondary: '#2e1065', eye: '#c084fc', pupil: '#000' },
-        { name: 'Палач', primary: '#4a4a4a', secondary: '#1c1c1c', eye: '#fff', pupil: '#ff0000' },
-        { name: 'Киберпанк', primary: '#00ffff', secondary: '#0066cc', eye: '#00ff00', pupil: '#000' },
-        { name: 'Ледяной', primary: '#a0e6ff', secondary: '#0077aa', eye: '#ffffff', pupil: '#336699' },
-        { name: 'Огненный', primary: '#ff6600', secondary: '#cc3300', eye: '#ffff00', pupil: '#ff0000' },
-        { name: 'Теневой', primary: '#1a1a1a', secondary: '#4a0072', eye: '#cc00ff', pupil: '#000' },
-        { name: 'Золотой', primary: '#ffd700', secondary: '#b8860b', eye: '#fff', pupil: '#b8860b' },
-        { name: 'Космос', primary: '#2a0a4a', secondary: '#ff44aa', eye: '#ff88ff', pupil: '#000' },
-        { name: 'Рыцарь', primary: '#808080', secondary: '#c0c0c0', eye: '#fff', pupil: '#000' },
-        { name: 'Ниндзя', primary: '#111111', secondary: '#333333', eye: '#ff0000', pupil: '#000' },
-        { name: 'Панк', primary: '#ff69b4', secondary: '#000000', eye: '#fff', pupil: '#000' },
-        { name: 'Робот', primary: '#888888', secondary: '#00ffff', eye: '#00ffff', pupil: '#000' }
+        { name: 'Лесной', primary: '#3d6b4f', secondary: '#2a4a36', eye: '#e8d8b0', pupil: '#2a3a2a' },
+        { name: 'Грибной', primary: '#b85a3a', secondary: '#8a3a2a', eye: '#f0e0c0', pupil: '#4a2a1a' },
+        { name: 'Моховик', primary: '#5a7a4a', secondary: '#3a5a2a', eye: '#d0c8a0', pupil: '#2a3a1a' },
+        { name: 'Корень', primary: '#6a5a3a', secondary: '#4a3a2a', eye: '#e0d0b0', pupil: '#2a2a1a' },
+        { name: 'Жёлудь', primary: '#8a7a4a', secondary: '#5a4a2a', eye: '#f0e0c0', pupil: '#3a2a1a' },
+        { name: 'Светлячок', primary: '#c8b06a', secondary: '#a0884a', eye: '#f8f0d0', pupil: '#4a3a1a' },
+        { name: 'Тень', primary: '#3a3a3a', secondary: '#1a1a1a', eye: '#d0c8b0', pupil: '#1a1a1a' },
+        { name: 'Рыжик', primary: '#c87a3a', secondary: '#9a5a2a', eye: '#f0d8b0', pupil: '#3a1a0a' },
+        { name: 'Боровик', primary: '#6a4a2a', secondary: '#4a2a1a', eye: '#e0d0b0', pupil: '#2a1a0a' },
+        { name: 'Золотой', primary: '#d4b07a', secondary: '#b08a4a', eye: '#f8f0d0', pupil: '#4a3a1a' },
+        { name: 'Луговой', primary: '#7a9a5a', secondary: '#4a6a3a', eye: '#e8e0c0', pupil: '#2a3a1a' },
+        { name: 'Каменный', primary: '#7a7a6a', secondary: '#4a4a3a', eye: '#e0d8c0', pupil: '#2a2a2a' },
+        { name: 'Ночной', primary: '#2a3a4a', secondary: '#1a2a3a', eye: '#c8d0e0', pupil: '#1a2a3a' },
+        { name: 'Кора', primary: '#5a4a3a', secondary: '#3a2a1a', eye: '#e0d0b0', pupil: '#2a1a0a' },
+        { name: 'Папоротник', primary: '#4a7a3a', secondary: '#2a5a1a', eye: '#d0e0b0', pupil: '#1a2a0a' }
     ];
 
     const HATS = [
         { name: 'Без шляпы', primary: 'transparent', secondary: 'transparent' },
-        { name: 'Волшебная', primary: '#6a0dad', secondary: '#ffd700' },
-        { name: 'Пиратская', primary: '#1a1a1a', secondary: '#f5c518' },
-        { name: 'Ковбойская', primary: '#8b5a2b', secondary: '#d2b48c' },
-        { name: 'Цилиндр', primary: '#2c3e50', secondary: '#e74c3c' },
-        { name: 'Ушанка', primary: '#ecf0f1', secondary: '#c0392b' },
-        { name: 'Шляпа-гриб', primary: '#e74c3c', secondary: '#ffffff' },
-        { name: 'Корона', primary: '#ffd700', secondary: '#ffaa00' },
-        { name: 'Федора', primary: '#4a2f1a', secondary: '#2a1a0a' },
-        { name: 'Берет', primary: '#c0392b', secondary: '#e74c3c' },
-        { name: 'Каска', primary: '#7f8c8d', secondary: '#bdc3c7' },
-        { name: 'Тюрбан', primary: '#2ecc71', secondary: '#27ae60' }
+        { name: 'Грибная', primary: '#c87a3a', secondary: '#f0d8b0' },
+        { name: 'Колпак', primary: '#4a6a3a', secondary: '#2a4a1a' },
+        { name: 'Венок', primary: '#5a8a4a', secondary: '#c8b06a' },
+        { name: 'Цилиндр', primary: '#3a3a3a', secondary: '#6a5a4a' },
+        { name: 'Ушанка', primary: '#8a7a5a', secondary: '#4a3a2a' },
+        { name: 'Шляпа-мухомор', primary: '#c83a2a', secondary: '#f0e0c0' },
+        { name: 'Корона', primary: '#d4b07a', secondary: '#b08a4a' },
+        { name: 'Федора', primary: '#5a4a3a', secondary: '#3a2a1a' },
+        { name: 'Берет', primary: '#8a5a3a', secondary: '#6a3a2a' },
+        { name: 'Каска', primary: '#6a6a5a', secondary: '#8a8a7a' },
+        { name: 'Тюрбан', primary: '#3a6a4a', secondary: '#2a5a3a' }
     ];
 
     const WEAPONS = [
-        { name: 'Пистолет', damage: 1, color: '#ffaa44', speed: 1.0, fireRate: 1.0, size: 6 },
-        { name: 'Магнум', damage: 3, color: '#ff5555', speed: 1.2, fireRate: 1.5, size: 8 },
-        { name: 'Дробовик', damage: 1, color: '#ffaa00', speed: 0.9, fireRate: 1.2, size: 4, bulletCount: 3, spread: 0.25 },
-        { name: 'Снайпер', damage: 5, color: '#8888ff', speed: 2.0, fireRate: 2.5, size: 10 },
-        { name: 'Автомат', damage: 1, color: '#aa88ff', speed: 1.0, fireRate: 0.6, size: 6 },
-        { name: 'Кислотный', damage: 2, color: '#88ff88', speed: 1.1, fireRate: 1.2, size: 7 },
-        { name: 'Плазма', damage: 4, color: '#ff66ff', speed: 0.8, fireRate: 1.8, size: 12 },
-        { name: 'Бластер', damage: 2, color: '#44aaff', speed: 1.0, fireRate: 0.9, size: 8 },
-        { name: 'Ракетница', damage: 6, color: '#ff8800', speed: 0.6, fireRate: 3.0, size: 14 },
-        { name: 'Лазерный нож', damage: 3, color: '#00ffff', speed: 1.5, fireRate: 1.5, size: 10 }
+        { name: 'Пистолет', damage: 1, color: '#c8b06a', speed: 1.0, fireRate: 1.0, size: 6 },
+        { name: 'Магнум', damage: 3, color: '#b85a3a', speed: 1.2, fireRate: 1.5, size: 8 },
+        { name: 'Дробовик', damage: 1, color: '#c8a06a', speed: 0.9, fireRate: 1.2, size: 4, bulletCount: 3, spread: 0.25 },
+        { name: 'Снайпер', damage: 5, color: '#7a8a9a', speed: 2.0, fireRate: 2.5, size: 10 },
+        { name: 'Автомат', damage: 1, color: '#8a7a5a', speed: 1.0, fireRate: 0.6, size: 6 },
+        { name: 'Кислотный', damage: 2, color: '#5a9a4a', speed: 1.1, fireRate: 1.2, size: 7 },
+        { name: 'Плазма', damage: 4, color: '#c87ac8', speed: 0.8, fireRate: 1.8, size: 12 },
+        { name: 'Бластер', damage: 2, color: '#5a8ac8', speed: 1.0, fireRate: 0.9, size: 8 },
+        { name: 'Ракетница', damage: 6, color: '#c86a2a', speed: 0.6, fireRate: 3.0, size: 14 },
+        { name: 'Лазерный нож', damage: 3, color: '#6ac8c8', speed: 1.5, fireRate: 1.5, size: 10 }
     ];
 
     const MAPS = [
@@ -952,14 +966,14 @@
     }
 
     function addParticles(x, y, color, count = 20) {
-        while (particles.length > 50) particles.shift();
-        for (let i = 0; i < Math.min(count, 12); i++) {
+        while (particles.length > 80) particles.shift();
+        for (let i = 0; i < Math.min(count, 16); i++) {
             const angle = Math.random() * Math.PI * 2;
-            const speed = 1 + Math.random() * 2.5;
+            const speed = 1 + Math.random() * 3.5;
             particles.push({
                 x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
-                life: 15 + Math.random() * 20, maxLife: 35,
-                size: 2 + Math.random() * 4, color, decay: 0.92
+                life: 20 + Math.random() * 30, maxLife: 50,
+                size: 2 + Math.random() * 5, color, decay: 0.94
             });
         }
     }
@@ -1021,10 +1035,9 @@
             const isSelected = (index === selectedId);
             div.className = 'store-item' + (isSelected ? ' selected' : '');
             if (type === 'skin' || type === 'hat') div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
-            else div.style.background = `radial-gradient(circle at 50% 50%, ${item.color} 30%, #111 70%)`;
+            else div.style.background = `radial-gradient(circle at 50% 50%, ${item.color} 30%, #2a2a2a 70%)`;
             const nameSpan = document.createElement('span'); nameSpan.className = 'item-name'; nameSpan.textContent = item.name; div.appendChild(nameSpan);
             
-            // Ценник и замок (скрываем, если предмет уже куплен)
             if (index !== 0 && !isOwned) { 
                 const priceTag = document.createElement('div'); priceTag.className = 'price-tag'; priceTag.textContent = '100'; div.appendChild(priceTag); 
             }
@@ -1046,8 +1059,6 @@
                         else if (type === 'hat') purchasedHats[index] = true;
                         else if (type === 'weapon') purchasedWeapons[index] = true;
                         updateCoinsDisplay();
-                        // Перерисовываем только этот предмет (без перезагрузки всего магазина)
-                        // Но для простоты и надёжности перерисовываем всю вкладку
                         renderStoreItems(container, items, selectedId, type);
                     } else alert('Недостаточно монет! Нужно 100 монет.');
                 }
@@ -1178,13 +1189,13 @@
         let finalDamage = bulletDamage;
         if (player === player2 && selectedDifficulty === 'impossible') finalDamage = 5;
 
-        const bulletColor = weapon.color || '#ffaa44';
+        const bulletColor = weapon.color || '#c8b06a';
         const bulletSize = weapon.size || 6;
         const bulletSpeedMult = weapon.speed || 1.0;
         const bulletCount = weapon.bulletCount || 1;
         const spread = weapon.spread || 0;
 
-        addParticles(centerX + dx * (player.w/2 + 5), centerY + dy * (player.h/2 + 5), bulletColor, 8);
+        addParticles(centerX + dx * (player.w/2 + 5), centerY + dy * (player.h/2 + 5), bulletColor, 10);
 
         for (let i = 0; i < bulletCount; i++) {
             let bulletDx = dx, bulletDy = dy;
@@ -1204,6 +1215,69 @@
                 color: bulletColor
             });
         }
+    }
+
+    // ===== ГНОМЬИЙ ЛЕС =====
+    function drawGnomeForest() {
+        // Тёплый полумрак с градиентом
+        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        grad.addColorStop(0, '#141812');
+        grad.addColorStop(0.3, '#1e2218');
+        grad.addColorStop(0.6, '#2a2e1e');
+        grad.addColorStop(1, '#1e1c14');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Мшистые пятна
+        for (let i = 0; i < 60; i++) {
+            const x = Math.random() * canvas.width;
+            const y = canvas.height * 0.5 + Math.random() * canvas.height * 0.5;
+            const r = 30 + Math.random() * 80;
+            const grad2 = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad2.addColorStop(0, 'rgba(80, 100, 60, 0.12)');
+            grad2.addColorStop(1, 'rgba(40, 60, 30, 0)');
+            ctx.fillStyle = grad2;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Светящиеся грибы
+        const mushroomPos = [
+            {x: 40, y: 450}, {x: 120, y: 480}, {x: 200, y: 420}, {x: 300, y: 500},
+            {x: 420, y: 460}, {x: 550, y: 490}, {x: 680, y: 430}, {x: 780, y: 470},
+            {x: 860, y: 510}, {x: 920, y: 440}, {x: 60, y: 120}, {x: 880, y: 90}
+        ];
+        mushroomPos.forEach(m => {
+            ctx.fillStyle = 'rgba(200, 180, 140, 0.4)';
+            ctx.fillRect(m.x-3, m.y-15, 6, 20);
+            ctx.fillStyle = 'rgba(200, 100, 70, 0.5)';
+            ctx.beginPath();
+            ctx.ellipse(m.x, m.y-15, 18, 12, 0, 0, Math.PI*2);
+            ctx.fill();
+            const glow = ctx.createRadialGradient(m.x, m.y-15, 2, m.x, m.y-15, 35);
+            glow.addColorStop(0, 'rgba(255, 200, 150, 0.12)');
+            glow.addColorStop(1, 'rgba(255, 200, 150, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(m.x, m.y-15, 35, 0, Math.PI*2);
+            ctx.fill();
+        });
+
+        // Светлячки
+        for (let i = 0; i < 40; i++) {
+            const x = (Math.sin(i * 1.7 + time * 0.025) * 0.5 + 0.5) * canvas.width;
+            const y = (Math.cos(i * 2.3 + time * 0.02) * 0.5 + 0.5) * canvas.height * 0.55 + 80;
+            const r = 1.5 + Math.sin(time * 0.05 + i) * 1.2;
+            const alpha = 0.25 + Math.sin(time * 0.04 + i * 1.5) * 0.2;
+            ctx.fillStyle = `rgba(230, 255, 190, ${alpha})`;
+            ctx.shadowColor = 'rgba(230, 255, 190, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.shadowBlur = 0;
     }
 
     function update(deltaTime) {
@@ -1252,8 +1326,8 @@
                 const normX = dx / dist, normY = dy / dist;
                 let moveX = normX, moveY = normY;
 
-                if (Math.random() < 0.15) {
-                    let angle = Math.atan2(normY, normX) + (Math.random() - 0.5) * 0.6;
+                if (Math.random() < 0.12) {
+                    let angle = Math.atan2(normY, normX) + (Math.random() - 0.5) * 0.7;
                     moveX = Math.cos(angle);
                     moveY = Math.sin(angle);
                 }
@@ -1265,13 +1339,13 @@
                     player2.direction = { dx: moveX, dy: moveY };
                 } else if (dist > 40) {
                     let perpX = -moveY, perpY = moveX;
-                    let speedX = perpX * playerSpeed * botSpeedModifier * 0.6;
-                    let speedY = perpY * playerSpeed * botSpeedModifier * 0.6;
+                    let speedX = perpX * playerSpeed * botSpeedModifier * 0.5;
+                    let speedY = perpY * playerSpeed * botSpeedModifier * 0.5;
                     resolveCollision(player2, speedX, speedY);
                     player2.direction = { dx: moveX, dy: moveY };
                 }
 
-                if (dist < 450 && dist > 40 && (Date.now() - player2.lastShot > botFireCooldown + Math.random() * 250)) {
+                if (dist < 450 && dist > 40 && (Date.now() - player2.lastShot > botFireCooldown + Math.random() * 200)) {
                     shoot(player2, WEAPONS[p2WeaponId]);
                 }
             }
@@ -1294,18 +1368,18 @@
                 player1.lastDamageTime = Date.now();
                 player1.regenActive = false;
                 hit = true;
-                addParticles(b.x + b.w/2, b.y + b.h/2, '#ff5555', 15);
+                addParticles(b.x + b.w/2, b.y + b.h/2, '#d06a4a', 18);
                 updateUI();
-                if (player1.hp <= 0) { endGame('Игрок Красный победил!'); return; }
+                if (player1.hp <= 0) { endGame('🍂 Рыжий победил!'); return; }
             }
             if (b.owner === 'p1' && rectCollide(b, player2)) {
                 player2.hp -= b.damage;
                 player2.lastDamageTime = Date.now();
                 player2.regenActive = false;
                 hit = true;
-                addParticles(b.x + b.w/2, b.y + b.h/2, '#4169E1', 15);
+                addParticles(b.x + b.w/2, b.y + b.h/2, '#7ab88a', 18);
                 updateUI();
-                if (player2.hp <= 0) { endGame('Игрок Синий победил!'); return; }
+                if (player2.hp <= 0) { endGame('🌿 Лесной победил!'); return; }
             }
             if (hit) bullets.splice(i, 1);
         }
@@ -1339,69 +1413,54 @@
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#080c1a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+        drawGnomeForest();
         drawSnowflakes();
 
-        // Сетка
-        ctx.strokeStyle = 'rgba(60, 100, 200, 0.04)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x <= canvas.width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-        for (let y = 0; y <= canvas.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
-
-        // Блоки карты — текстурированные и видные
+        // Блоки с эффектом свечения
         blocks.forEach(b => { 
             const grad = ctx.createLinearGradient(b.x, b.y, b.x + b.w, b.y + b.h);
-            grad.addColorStop(0, 'rgba(20, 40, 80, 0.9)');
-            grad.addColorStop(1, 'rgba(40, 80, 160, 0.8)');
+            grad.addColorStop(0, 'rgba(70, 60, 45, 0.9)');
+            grad.addColorStop(1, 'rgba(45, 40, 30, 0.9)');
             ctx.fillStyle = grad;
-            ctx.shadowColor = 'rgba(65, 105, 225, 0.2)';
-            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(100, 80, 50, 0.25)';
+            ctx.shadowBlur = 20;
             ctx.fillRect(b.x, b.y, b.w, b.h);
             ctx.shadowBlur = 0;
             
-            ctx.strokeStyle = 'rgba(80, 180, 255, 0.7)';
+            ctx.strokeStyle = 'rgba(180, 150, 110, 0.3)';
             ctx.lineWidth = 2;
             ctx.strokeRect(b.x, b.y, b.w, b.h);
             
-            ctx.strokeStyle = 'rgba(200, 230, 255, 0.15)';
+            ctx.strokeStyle = 'rgba(220, 200, 160, 0.06)';
             ctx.lineWidth = 1;
-            ctx.strokeRect(b.x + 2, b.y + 2, b.w - 4, b.h - 4);
+            ctx.strokeRect(b.x + 4, b.y + 4, b.w - 8, b.h - 8);
         });
 
-        // ===== БЕЛАЯ НАВОДКА (ПРИЦЕЛ) =====
+        // Прицел
         if (player1.x !== undefined && mouseX !== undefined) {
             const cx = player1.x + player1.w / 2;
             const cy = player1.y + player1.h / 2;
             
-            // Белая линия с лёгким свечением (без теней, через прозрачность)
             ctx.beginPath();
             ctx.moveTo(cx, cy);
             ctx.lineTo(mouseX, mouseY);
             
-            // Основная линия (белая, яркая)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 8]);
+            ctx.strokeStyle = 'rgba(240, 230, 210, 0.25)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 10]);
+            ctx.shadowColor = 'rgba(240, 230, 210, 0.05)';
+            ctx.shadowBlur = 10;
             ctx.stroke();
-            
-            // Дополнительная тонкая линия для эффекта свечения
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 4;
-            ctx.setLineDash([6, 8]);
-            ctx.stroke();
-            
             ctx.setLineDash([]);
+            ctx.shadowBlur = 0;
         }
 
-        // Частицы
         particles.forEach(p => {
             const alpha = p.life / p.maxLife;
             ctx.globalAlpha = alpha;
             ctx.fillStyle = p.color;
             ctx.shadowColor = p.color;
-            ctx.shadowBlur = 8;
+            ctx.shadowBlur = 12;
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
             ctx.fill();
@@ -1409,11 +1468,10 @@
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
 
-        // Пули
         bullets.forEach(b => {
-            ctx.fillStyle = b.color || '#ffaa44';
+            ctx.fillStyle = b.color || '#c8b06a';
             ctx.shadowColor = b.color;
-            ctx.shadowBlur = 10;
+            ctx.shadowBlur = 14;
             ctx.beginPath();
             ctx.arc(b.x + b.w/2, b.y + b.h/2, b.w/2, 0, Math.PI * 2);
             ctx.fill();
@@ -1424,31 +1482,42 @@
         drawPlayer(ctx, player2, SKINS[p2SkinId], false, 0, WEAPONS[p2WeaponId]);
     }
 
+    // ===== НОВЫЕ ПЕРСОНАЖИ =====
     function drawPlayer(ctx, player, skin, isP1, hatId, weapon) {
         const x = player.x + player.w / 2;
         const y = player.y + player.h / 2;
         const r = player.w / 2;
 
-        // Текстурированный градиент
-        const grad = ctx.createRadialGradient(x - 5, y - 8, 2, x, y, r);
-        grad.addColorStop(0, lightenColor(skin.primary, 40));
-        grad.addColorStop(1, skin.primary);
+        // Тень
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 25;
+        ctx.shadowOffsetY = 5;
+
+        // Тело (овал)
+        const grad = ctx.createRadialGradient(x - 5, y - 8, 2, x, y + 4, r * 1.2);
+        grad.addColorStop(0, lightenColor(skin.primary, 60));
+        grad.addColorStop(0.6, skin.primary);
+        grad.addColorStop(1, skin.secondary);
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.ellipse(x, y + 2, r * 1.1, r * 1.25, 0, 0, Math.PI * 2);
         ctx.fillStyle = grad;
         ctx.fill();
         
-        // Контур
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
         ctx.strokeStyle = skin.secondary;
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Внутренний круг
+        // "Животик" (светлое пятно)
         ctx.beginPath();
-        ctx.arc(x, y, r * 0.7, 0, Math.PI * 2);
-        ctx.fillStyle = skin.secondary;
+        ctx.ellipse(x, y + 6, r * 0.5, r * 0.6, 0, 0, Math.PI * 2);
+        ctx.fillStyle = lightenColor(skin.primary, 80);
+        ctx.globalAlpha = 0.4;
         ctx.fill();
+        ctx.globalAlpha = 1;
 
+        // Глаза с бровями (выражение)
         let dirX = player.direction.dx;
         let dirY = player.direction.dy;
         if (isP1) {
@@ -1460,63 +1529,123 @@
             if (dirX === 0 && dirY === 0) { dirX = 0; dirY = -1; }
         }
 
-        let eyeOffX = dirX * 5, eyeOffY = dirY * 5;
+        let eyeOffX = dirX * 5, eyeOffY = dirY * 4;
         let perpX = -dirY, perpY = dirX;
 
         function drawEye(ox, oy) {
-            let ex = x + eyeOffX + ox, ey = y + eyeOffY + oy;
-            ctx.shadowColor = '#fff';
-            ctx.shadowBlur = 6;
-            ctx.beginPath(); ctx.arc(ex, ey, 4.5, 0, Math.PI*2); ctx.fillStyle = skin.eye; ctx.fill();
+            let ex = x + eyeOffX + ox, ey = y + eyeOffY + oy + 2;
+            // Белок
+            ctx.shadowColor = 'rgba(255, 240, 210, 0.15)';
+            ctx.shadowBlur = 10;
+            ctx.beginPath(); 
+            ctx.ellipse(ex, ey, 6, 7, 0, 0, Math.PI * 2); 
+            ctx.fillStyle = '#f5efe0'; 
+            ctx.fill();
             ctx.shadowBlur = 0;
-            ctx.beginPath(); ctx.arc(ex + dirX*2.8, ey + dirY*2.8, 2.2, 0, Math.PI*2); ctx.fillStyle = skin.pupil; ctx.fill();
+            // Радужка
+            ctx.beginPath(); 
+            ctx.arc(ex + dirX*2.5, ey + dirY*2.5, 3.8, 0, Math.PI * 2); 
+            ctx.fillStyle = skin.eye; 
+            ctx.fill();
+            // Зрачок
+            ctx.beginPath(); 
+            ctx.arc(ex + dirX*3.8, ey + dirY*3.8, 2.2, 0, Math.PI * 2); 
+            ctx.fillStyle = skin.pupil; 
+            ctx.fill();
+            // Блик
+            ctx.beginPath(); 
+            ctx.arc(ex + dirX*1.5 - 1.5, ey + dirY*1.5 - 2, 1.2, 0, Math.PI * 2); 
+            ctx.fillStyle = 'rgba(255,255,240,0.7)'; 
+            ctx.fill();
         }
-        drawEye(perpX * 5, perpY * 5);
-        drawEye(-perpX * 5, -perpY * 5);
+        drawEye(perpX * 6, perpY * 5);
+        drawEye(-perpX * 6, -perpY * 5);
 
-        // Улыбка / рот
+        // Рот (улыбка или серьёзность)
         ctx.beginPath();
-        ctx.arc(x + dirX*5, y + dirY*8 + 4, 3, 0, Math.PI);
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 1.5;
+        ctx.arc(x + dirX*3, y + dirY*6 + 8, 4, 0.1, Math.PI - 0.1);
+        ctx.strokeStyle = '#2a1a0a';
+        ctx.lineWidth = 1.8;
         ctx.stroke();
+
+        // Уши
+        ctx.fillStyle = skin.secondary;
+        ctx.beginPath();
+        ctx.ellipse(x - r * 0.8, y - 2, 4, 7, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(x + r * 0.8, y - 2, 4, 7, 0.2, 0, Math.PI * 2);
+        ctx.fill();
 
         // Шляпа
         if (isP1 && hatId !== undefined && HATS[hatId] && HATS[hatId].name !== 'Без шляпы') {
             const hat = HATS[hatId];
-            const hatY = y - r - 5;
+            const hatY = y - r - 2;
+            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowBlur = 15;
             ctx.fillStyle = hat.primary;
             ctx.strokeStyle = hat.secondary;
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(x - 12, hatY);
-            ctx.lineTo(x, hatY - 16);
-            ctx.lineTo(x + 12, hatY);
+            ctx.moveTo(x - 16, hatY + 2);
+            ctx.quadraticCurveTo(x - 20, hatY - 6, x, hatY - 22);
+            ctx.quadraticCurveTo(x + 20, hatY - 6, x + 16, hatY + 2);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
             ctx.fillStyle = hat.secondary;
-            ctx.fillRect(x - 14, hatY - 2, 28, 4);
+            ctx.fillRect(x - 18, hatY + 1, 36, 4);
+            ctx.shadowBlur = 0;
         }
 
-        // Оружие
+        // Оружие (в руке)
         if (weapon) {
-            const weaponX = x + dirX * (r + 2);
-            const weaponY = y + dirY * (r + 2);
+            const weaponX = x + dirX * (r + 6);
+            const weaponY = y + dirY * (r + 4);
             ctx.shadowColor = weapon.color;
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = 20;
+            // "Рука"
             ctx.beginPath();
-            ctx.moveTo(x + dirX * (r - 4), y + dirY * (r - 4));
+            ctx.moveTo(x + dirX * (r - 2), y + dirY * (r - 2) + 2);
+            ctx.lineTo(weaponX - dirX * 4, weaponY - dirY * 4);
+            ctx.strokeStyle = skin.secondary;
+            ctx.lineWidth = 5;
+            ctx.stroke();
+            // Оружие
+            ctx.beginPath();
+            ctx.moveTo(weaponX - dirX * 4, weaponY - dirY * 4);
             ctx.lineTo(weaponX, weaponY);
             ctx.strokeStyle = weapon.color;
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 5;
             ctx.stroke();
+            // Наконечник
             ctx.beginPath();
-            ctx.arc(weaponX, weaponY, 3, 0, Math.PI * 2);
+            ctx.arc(weaponX, weaponY, 4, 0, Math.PI * 2);
             ctx.fillStyle = weapon.color;
             ctx.fill();
             ctx.shadowBlur = 0;
         }
+
+        // Ножки (милые короткие)
+        ctx.strokeStyle = skin.secondary;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(x - 6, y + r * 1.1);
+        ctx.lineTo(x - 10, y + r * 1.5);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + 6, y + r * 1.1);
+        ctx.lineTo(x + 10, y + r * 1.5);
+        ctx.stroke();
+
+        // Лёгкое свечение вокруг персонажа
+        ctx.shadowColor = skin.primary;
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.02)';
+        ctx.fill();
+        ctx.shadowBlur = 0;
     }
 
     function lightenColor(hex, percent) {
@@ -1538,7 +1667,7 @@
         isPaused = false;
         pauseScreen.style.display = 'none';
         winnerText.textContent = winnerMessage;
-        winnerSubtext.textContent = "В метели выживает сильнейший.";
+        winnerSubtext.textContent = "в лесу всегда остается один....";
         gameOverScreen.style.display = 'flex';
         if (gameMode === 1 && player2.hp <= 0) {
             let reward = 0;
