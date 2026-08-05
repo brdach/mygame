@@ -72,7 +72,27 @@
         @keyframes menuFadeIn { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
         #menu-bg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; border-radius: 40px; }
         .menu-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: 100%; background: rgba(10, 9, 12, 0.5); backdrop-filter: blur(6px); padding: 20px 30px; border-radius: 40px; border: 1px solid rgba(200, 170, 120, 0.2); box-shadow: 0 0 80px rgba(0,0,0,0.7); }
-        #menu-screen h1 { color: #ecd8b4; text-shadow: 4px 4px 0px rgba(0,0,0,0.5), 0 0 40px rgba(200, 160, 100, 0.15); font-size: 4rem; margin-bottom: 4px; letter-spacing: 8px; font-family: 'Special Elite', cursive; }
+        #menu-screen h1 { color: #ecd8b4; text-shadow: 4px 4px 0px rgba(0,0,0,0.5), 0 0 40px rgba(200, 160, 100, 0.15); font-size: 4rem; margin-bottom: 4px; letter-spacing: 8px; font-family: 'Special Elite', cursive; position: relative; }
+        #menu-screen .reward-notification {
+            color: #ffd700;
+            font-size: 1.8rem;
+            font-family: 'Special Elite', cursive;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 215, 0, 0.2);
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s ease-out;
+            animation: rewardPop 0.5s ease-out forwards;
+        }
+        @keyframes rewardPop {
+            0% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #menu-screen .reward-notification.fade-out {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.9);
+            transition: all 0.6s ease-in;
+        }
         #menu-screen p { color: #b8a48a; font-size: 1.1rem; margin-bottom: 24px; text-align: center; font-family: 'Special Elite', cursive; letter-spacing: 2px; }
         .menu-btn {
             margin: 8px; width: 280px; padding: 16px 24px; border: 2px solid #8a7a5a; border-radius: 50px; font-size: 1.1rem; font-family: 'Special Elite', cursive; cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 3px; background: rgba(50, 45, 35, 0.7); color: #ecd8b4; box-shadow: 4px 4px 0px rgba(0,0,0,0.3); font-weight: 600; position: relative; backdrop-filter: blur(4px); border-color: #7a6a4a;
@@ -129,8 +149,10 @@
         .store-item .price-tag { position: absolute; top: -6px; right: -6px; background: rgba(200, 160, 80, 0.9); border: 1px solid #c8a86a; color: #1f1c16; border-radius: 50%; padding: 2px 8px; font-size: 0.6rem; font-weight: bold; transition: opacity 0.2s ease; }
         .store-item .lock-icon { position: absolute; top: 4px; left: 4px; font-size: 0.8rem; color: #d08a6a; transition: opacity 0.2s ease; }
         .store-item .secret-badge { position: absolute; bottom: -32px; font-size: 0.5rem; color: #d4b07a; background: rgba(40,35,25,0.8); padding: 1px 8px; border-radius: 10px; border: 1px solid #b89a6a; white-space: nowrap; }
+        .store-item .promo-only { position: absolute; bottom: -32px; font-size: 0.5rem; color: #ff8844; background: rgba(40,25,15,0.9); padding: 1px 8px; border-radius: 10px; border: 1px solid #ff8844; white-space: nowrap; }
+        .store-item .hidden-item { display: none; }
 
-        /* GAME OVER / PAUSE */
+        /* GAME OVER */
         #game-over-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center;
             background: rgba(12, 10, 8, 0.85); backdrop-filter: blur(12px); z-index: 10; animation: gameOverFade 0.5s ease-out; border-radius: 40px;
@@ -140,6 +162,39 @@
         #game-over-screen p { color: rgba(200, 190, 170, 0.6); font-size: 1rem; margin-bottom: 28px; }
         button.restart-btn { border: none; border-radius: 50px; padding: 14px 44px; font-size: 1rem; font-family: inherit; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(145deg, rgba(80, 60, 40, 0.9), rgba(140, 100, 60, 0.6)); color: #ecd8b4; box-shadow: 0 8px 30px rgba(80, 60, 40, 0.3); letter-spacing: 2px; }
         button.restart-btn:hover { transform: scale(1.03); }
+        #game-over-screen .reward-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 10px 0 20px 0;
+        }
+        #game-over-screen .reward-text {
+            color: #ecd8b4;
+            font-size: 1.4rem;
+            font-family: 'Special Elite', cursive;
+        }
+        #game-over-screen .reward-btn {
+            background: rgba(200, 180, 80, 0.25);
+            border: 2px solid #d4b07a;
+            color: #ecd8b4;
+            padding: 10px 30px;
+            border-radius: 40px;
+            font-family: 'Special Elite', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #game-over-screen .reward-btn:hover {
+            background: rgba(200, 180, 80, 0.4);
+            transform: scale(1.05);
+        }
+        #game-over-screen .reward-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* PAUSE */
         #pause-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center;
             background: rgba(12, 10, 8, 0.7); backdrop-filter: blur(12px); z-index: 15; animation: pauseFade 0.2s ease-out; border-radius: 40px;
@@ -179,6 +234,18 @@
         #settings-btn-menu { position: absolute; top: 20px; right: 20px; z-index: 25; background: rgba(50, 45, 35, 0.6); border: 2px solid #7a6a4a; color: #ecd8b4; padding: 8px 16px; border-radius: 40px; font-family: 'Special Elite', cursive; font-size: 0.8rem; cursor: pointer; transition: all 0.25s ease; backdrop-filter: blur(4px); }
         #settings-btn-menu:hover { background: rgba(80, 65, 45, 0.8); border-color: #c8a86a; }
 
+        /* COIN FLY ANIMATION */
+        .coin-fly {
+            position: fixed;
+            font-size: 28px;
+            pointer-events: none;
+            z-index: 100;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
         @media (max-width: 980px) {
             #game-container { width: 100vw; height: 100vh; border-radius: 0; border: none; }
             #menu-screen { border-radius: 0; }
@@ -199,6 +266,8 @@
             #settings-screen h2 { font-size: 2rem; }
             #store-screen h2 { font-size: 1.8rem; }
             #menu-screen h1 { font-size: 2.5rem; }
+            #game-over-screen .reward-row { flex-direction: column; gap: 10px; }
+            #menu-screen .reward-notification { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -217,6 +286,7 @@
                 <div id="promo-status"></div>
             </div>
             <div id="mode-select">
+                <div id="reward-notification" class="reward-notification" style="display:none;"></div>
                 <h1>METEL: Дуэль</h1>
                 <p>⚔️ Выберите режим</p>
                 <button class="menu-btn" onclick="playButtonClick(); selectMode(1)">1 Игрок (Против Бота)</button>
@@ -288,6 +358,12 @@
         <div id="game-over-screen">
             <h1 id="winner-text">🌲 Победил Лесной!</h1>
             <p id="winner-subtext">В чаще выживает уютный.</p>
+            <div id="reward-section" style="display: none;">
+                <div class="reward-row">
+                    <span class="reward-text" id="reward-text">💰 +0 монет</span>
+                    <button class="reward-btn" id="claim-btn" onclick="claimReward()">Забрать монеты</button>
+                </div>
+            </div>
             <button class="restart-btn" onclick="playButtonClick(); backToMenu()">Вернуться в меню</button>
         </div>
         <div id="pause-screen">
@@ -361,9 +437,9 @@
     let audioCtx = null;
     let masterGain = null;
     let menuMusicGain = null;
-    let forestAmbienceGain = null;
     let musicEnabled = true;
     let volumePercent = 60;
+    let isInGame = false;
 
     function initAudio() {
         if (!audioCtx) {
@@ -446,68 +522,101 @@
 
     // ========== MUSIC ==========
     let menuMusicActive = false;
-    let forestAmbienceActive = false;
     let musicTimeoutId = null;
 
     function startMenuMusic() {
         initAudio();
         if (!musicEnabled) return;
         if (menuMusicActive) return;
+        if (isInGame) return;
         menuMusicActive = true;
         menuMusicGain = audioCtx.createGain();
-        menuMusicGain.gain.setValueAtTime(0.08 * (volumePercent / 100), audioCtx.currentTime);
+        menuMusicGain.gain.setValueAtTime(0.15 * (volumePercent / 100), audioCtx.currentTime);
         menuMusicGain.connect(masterGain || audioCtx.destination);
 
-        const minorScale = [220, 246.94, 261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880];
+        // Грустная, меланхоличная музыка в меню (с использованием глюкофона)
+        const notes = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
+        const sadNotes = [0, 3, 5, 6, 8, 10, 12, 15];
+        const baseFreq = 220;
         let noteIndex = 0;
-        const bpm = 32;
+        const bpm = 60;
         const beatDuration = 60 / bpm;
 
-        function playSadNote() {
-            if (!menuMusicActive || !musicEnabled) return;
+        function playSadMelody() {
+            if (!menuMusicActive || !musicEnabled || isInGame) return;
+            
+            // Основная мелодия
             const osc = audioCtx.createOscillator();
             const noteGain = audioCtx.createGain();
-            osc.type = 'triangle';
-            const baseFreq = minorScale[noteIndex % minorScale.length];
-            osc.frequency.setValueAtTime(baseFreq + (Math.random() - 0.5) * 2, audioCtx.currentTime);
+            osc.type = 'sine';
+            const freq = baseFreq * Math.pow(2, sadNotes[noteIndex % sadNotes.length] / 12);
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(freq * 1.005, audioCtx.currentTime + beatDuration * 0.1);
+            osc.frequency.setValueAtTime(freq * 0.995, audioCtx.currentTime + beatDuration * 0.3);
+            
             noteGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            noteGain.gain.linearRampToValueAtTime(0.12 * (volumePercent / 100), audioCtx.currentTime + 0.5);
-            noteGain.gain.linearRampToValueAtTime(0.1 * (volumePercent / 100), audioCtx.currentTime + beatDuration * 0.6);
-            noteGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + beatDuration * 1.2);
+            noteGain.gain.linearRampToValueAtTime(0.08 * (volumePercent / 100), audioCtx.currentTime + 0.1);
+            noteGain.gain.linearRampToValueAtTime(0.06 * (volumePercent / 100), audioCtx.currentTime + beatDuration * 0.5);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + beatDuration * 0.9);
+            
             osc.connect(noteGain);
             noteGain.connect(menuMusicGain);
             osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + beatDuration * 1.3);
+            osc.stop(audioCtx.currentTime + beatDuration * 0.95);
+
+            // Второй голос (тихий, грустный)
+            if (noteIndex % 2 === 0) {
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sawtooth';
+                const freq2 = baseFreq * Math.pow(2, (sadNotes[noteIndex % sadNotes.length] + 7) / 12);
+                osc2.frequency.setValueAtTime(freq2, audioCtx.currentTime);
+                gain2.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain2.gain.linearRampToValueAtTime(0.03 * (volumePercent / 100), audioCtx.currentTime + 0.2);
+                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + beatDuration * 0.8);
+                osc2.connect(gain2);
+                gain2.connect(menuMusicGain);
+                osc2.start(audioCtx.currentTime);
+                osc2.stop(audioCtx.currentTime + beatDuration * 0.85);
+            }
+
             noteIndex++;
-            const pauseVariation = 0.8 + Math.random() * 1.2;
-            musicTimeoutId = setTimeout(playSadNote, beatDuration * 1000 * pauseVariation);
+            const pauseVariation = 0.9 + Math.random() * 0.4;
+            musicTimeoutId = setTimeout(playSadMelody, beatDuration * 1000 * pauseVariation);
         }
 
         function playSadChords() {
-            if (!menuMusicActive || !musicEnabled) return;
+            if (!menuMusicActive || !musicEnabled || isInGame) return;
             const chords = [
-                [220, 261.63, 329.63], [246.94, 293.66, 349.23], [261.63, 329.63, 392],
-                [293.66, 349.23, 440], [329.63, 392, 493.88], [349.23, 440, 523.25], [392, 493.88, 587.33]
+                [220, 261.63, 329.63],
+                [246.94, 293.66, 349.23],
+                [261.63, 329.63, 392],
+                [293.66, 349.23, 440],
+                [329.63, 392, 493.88],
+                [349.23, 440, 523.25],
+                [392, 493.88, 587.33]
             ];
             const chord = chords[Math.floor(Math.random() * chords.length)];
-            chord.forEach(freq => {
+            chord.forEach((freq, idx) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.02 * (volumePercent / 100), audioCtx.currentTime + 1);
-                gain.gain.linearRampToValueAtTime(0.015 * (volumePercent / 100), audioCtx.currentTime + 3);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 5);
+                const delay = idx * 0.15;
+                gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
+                gain.gain.linearRampToValueAtTime(0.025 * (volumePercent / 100), audioCtx.currentTime + delay + 0.3);
+                gain.gain.linearRampToValueAtTime(0.02 * (volumePercent / 100), audioCtx.currentTime + delay + 2.5);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + 4.5);
                 osc.connect(gain);
                 gain.connect(menuMusicGain);
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 5.5);
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + 5);
             });
-            setTimeout(playSadChords, 4000 + Math.random() * 3000);
+            setTimeout(playSadChords, 3500 + Math.random() * 2500);
         }
-        playSadNote();
-        playSadChords();
+
+        playSadMelody();
+        setTimeout(playSadChords, 1000);
     }
 
     function stopMenuMusic() {
@@ -519,71 +628,15 @@
         }
     }
 
-    function startForestAmbience() {
-        initAudio();
-        if (!musicEnabled) return;
-        if (forestAmbienceActive) return;
-        forestAmbienceActive = true;
-        forestAmbienceGain = audioCtx.createGain();
-        forestAmbienceGain.gain.setValueAtTime(0.03 * (volumePercent / 100), audioCtx.currentTime);
-        forestAmbienceGain.connect(masterGain || audioCtx.destination);
-
-        function createNoiseNode() {
-            const bufferSize = audioCtx.sampleRate * 2;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.15;
-            const source = audioCtx.createBufferSource();
-            source.buffer = buffer; source.loop = true;
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass'; filter.frequency.setValueAtTime(400, audioCtx.currentTime);
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.25 * (volumePercent / 100), audioCtx.currentTime);
-            source.connect(filter); filter.connect(gain); gain.connect(forestAmbienceGain);
-            source.start();
-            return { source, gain };
-        }
-        const noise1 = createNoiseNode();
-        const noise2 = createNoiseNode();
-        noise2.gain.gain.setValueAtTime(0.15 * (volumePercent / 100), audioCtx.currentTime);
-
-        function playBirdChirp() {
-            if (!forestAmbienceActive || !musicEnabled) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            const freq = 800 + Math.random() * 1200;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(freq * 1.2, audioCtx.currentTime + 0.15);
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.4 * (volumePercent / 100), audioCtx.currentTime + 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-            osc.connect(gain); gain.connect(forestAmbienceGain);
-            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.3);
-            setTimeout(playBirdChirp, 2000 + Math.random() * 6000);
-        }
-        playBirdChirp();
-    }
-
-    function stopForestAmbience() {
-        forestAmbienceActive = false;
-        if (forestAmbienceGain) {
-            forestAmbienceGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-            setTimeout(() => { if (forestAmbienceGain) { forestAmbienceGain.disconnect(); forestAmbienceGain = null; } }, 400);
-        }
-    }
-
     function toggleMusic() {
         musicEnabled = !musicEnabled;
         const btn = document.getElementById('music-toggle');
         btn.textContent = musicEnabled ? 'Вкл' : 'Выкл';
         btn.classList.toggle('active', musicEnabled);
-        if (musicEnabled) {
-            if (menuScreen.style.display !== 'none') startMenuMusic();
-            if (gameActive) startForestAmbience();
+        if (musicEnabled && !isInGame) {
+            startMenuMusic();
         } else {
             stopMenuMusic();
-            stopForestAmbience();
         }
     }
 
@@ -721,7 +774,6 @@
     }
 
     // ========== GAME DATA ==========
-    // Секретное оружие "Командный блок"
     const SECRET_WEAPON = { 
         name: 'Командный блок', 
         damage: 8, 
@@ -730,10 +782,22 @@
         fireRate: 1.2, 
         size: 14,
         secret: true,
+        promoOnly: true,
         emoji: '🔮'
     };
 
-    const SKINS = [
+    const SECRET_SKIN = {
+        name: 'Море',
+        primary: '#1a6a8a',
+        secondary: '#0a3a5a',
+        eye: '#80d0e0',
+        pupil: '#0a2a3a',
+        secret: true,
+        promoOnly: true,
+        emoji: '🌊'
+    };
+
+    const BASE_SKINS = [
         { name: 'Лесной', primary: '#3d6b4f', secondary: '#2a4a36', eye: '#e8d8b0', pupil: '#2a3a2a' },
         { name: 'Грибной', primary: '#b85a3a', secondary: '#8a3a2a', eye: '#f0e0c0', pupil: '#4a2a1a' },
         { name: 'Моховик', primary: '#5a7a4a', secondary: '#3a5a2a', eye: '#d0c8a0', pupil: '#2a3a1a' },
@@ -751,7 +815,10 @@
         { name: 'Папоротник', primary: '#4a7a3a', secondary: '#2a5a1a', eye: '#d0e0b0', pupil: '#1a2a0a' }
     ];
 
-    // Стандартное оружие + секретное (будет добавлено отдельно)
+    let SKINS = [...BASE_SKINS];
+    const SECRET_SKIN_INDEX = SKINS.length;
+    SKINS.push({ ...SECRET_SKIN });
+
     const BASE_WEAPONS = [
         { name: 'Пистолет', damage: 1, color: '#c8b06a', speed: 1.0, fireRate: 1.0, size: 6 },
         { name: 'Магнум', damage: 3, color: '#b85a3a', speed: 1.2, fireRate: 1.5, size: 8 },
@@ -765,9 +832,7 @@
         { name: 'Лазерный нож', damage: 3, color: '#6ac8c8', speed: 1.5, fireRate: 1.5, size: 10 }
     ];
 
-    // Все оружие включает секретное
     let WEAPONS = [...BASE_WEAPONS];
-    // Секретное оружие добавляется в конец списка
     const SECRET_WEAPON_INDEX = WEAPONS.length;
     WEAPONS.push({ ...SECRET_WEAPON });
 
@@ -811,15 +876,18 @@
     const storeGridSkins = document.getElementById('store-grid-skins'), storeGridWeapons = document.getElementById('store-grid-weapons');
     const mapGrid = document.getElementById('map-grid'), uiHint = document.getElementById('ui-hint'), storeCoinsDisplay = document.getElementById('store-coins');
     const promoStatus = document.getElementById('promo-status'), promoInput = document.getElementById('promo-input'), promoPanel = document.getElementById('promo-panel'), promoToggleBtn = document.getElementById('promo-toggle-btn');
+    const rewardSection = document.getElementById('reward-section'), rewardText = document.getElementById('reward-text'), claimBtn = document.getElementById('claim-btn');
+    const rewardNotification = document.getElementById('reward-notification');
 
     const PLAYER_SIZE = 30, BASE_PLAYER_SPEED = 4.5, MAX_HP = 50, BASE_FIRE_COOLDOWN = 150;
     let gameMode = null, selectedDifficulty = 'medium', selectedMap = 0, gameActive = false, isPaused = false;
     let playerSpeed = BASE_PLAYER_SPEED, bulletSpeed = 8, blocks = [], botHP = 40;
     let mouseX = 0, mouseY = 0, isMouseDown = false;
     let coins = 0, purchasedSkins = new Array(SKINS.length).fill(false), purchasedWeapons = new Array(WEAPONS.length).fill(false);
-    purchasedSkins[0] = true; 
-    purchasedWeapons[0] = true; // Пистолет по умолчанию
-    // Секретное оружие можно купить за 400 монет
+    purchasedSkins[0] = true;
+    purchasedWeapons[0] = true;
+    
+    let secretSkinPurchased = false;
     let secretWeaponPurchased = false;
     
     let p1SkinId = 0, p1WeaponId = 0, p2SkinId = 1, p2WeaponId = 0;
@@ -832,6 +900,9 @@
     let powerups = [], powerupTimer = 0, POWERUP_INTERVAL = 5000, MAX_POWERUPS = 3;
     let p1ShieldUntil = 0, p2ShieldUntil = 0, p1DamageBoostUntil = 0, p2DamageBoostUntil = 0;
     let p1DamageBoostMult = 1.5, p2DamageBoostMult = 1.5;
+    
+    let pendingReward = 0;
+    let rewardClaimed = false;
 
     startMenuMusic();
 
@@ -846,7 +917,6 @@
         const rawCode = promoInput.value.trim(), code = rawCode.replace(/\s+/g, ' ').toLowerCase(), statusEl = promoStatus;
         if (!code) { statusEl.textContent = 'Введите код'; statusEl.className = 'error'; return; }
         
-        // Новые промокоды
         if (code === 'pro') {
             coins += 200;
             statusEl.textContent = 'Код введен! +200 монет'; 
@@ -860,7 +930,6 @@
             updateCoinsDisplay();
         }
         else if (code === 'bob') {
-            // Даём секретное оружие бесплатно
             if (!secretWeaponPurchased) {
                 secretWeaponPurchased = true;
                 purchasedWeapons[SECRET_WEAPON_INDEX] = true;
@@ -872,8 +941,20 @@
                 statusEl.className = 'error';
             }
         }
+        else if (code === 'nada123') {
+            if (!secretSkinPurchased) {
+                secretSkinPurchased = true;
+                purchasedSkins[SECRET_SKIN_INDEX] = true;
+                statusEl.textContent = 'Код введен! Получен секретный скин 🌊'; 
+                statusEl.className = 'success';
+                if (storeScreen.style.display === 'flex') switchStoreTab('skins');
+            } else {
+                statusEl.textContent = 'У вас уже есть этот скин'; 
+                statusEl.className = 'error';
+            }
+        }
         else if (code === 'skins 2' || code === 'skins2') { 
-            for (let i = 0; i < SKINS.length; i++) purchasedSkins[i] = true; 
+            for (let i = 0; i < BASE_SKINS.length; i++) purchasedSkins[i] = true; 
             statusEl.textContent = 'Код введен'; 
             statusEl.className = 'success'; 
             if (storeScreen.style.display === 'flex') switchStoreTab('skins'); 
@@ -913,11 +994,48 @@
         }
     }
 
-    function selectMode(count) { gameMode = count; modeSelect.style.display = 'none'; difficultySelect.style.display = 'flex'; promoToggleBtn.style.display = 'none'; promoPanel.style.display = 'none'; }
-    function goBackMode() { modeSelect.style.display = 'flex'; difficultySelect.style.display = 'none'; mapSelect.style.display = 'none'; storeScreen.style.display = 'none'; promoToggleBtn.style.display = 'block'; promoPanel.style.display = 'none'; }
-    function goBackDifficulty() { difficultySelect.style.display = 'flex'; mapSelect.style.display = 'none'; }
-    function openStore() { modeSelect.style.display = 'none'; storeScreen.style.display = 'flex'; updateCoinsDisplay(); switchStoreTab('skins'); promoToggleBtn.style.display = 'none'; promoPanel.style.display = 'none'; }
-    function closeStore() { storeScreen.style.display = 'none'; modeSelect.style.display = 'flex'; promoToggleBtn.style.display = 'block'; promoPanel.style.display = 'none'; }
+    function selectMode(count) { 
+        gameMode = count; 
+        modeSelect.style.display = 'none'; 
+        difficultySelect.style.display = 'flex'; 
+        promoToggleBtn.style.display = 'none'; 
+        promoPanel.style.display = 'none';
+        isInGame = false;
+    }
+    function goBackMode() { 
+        modeSelect.style.display = 'flex'; 
+        difficultySelect.style.display = 'none'; 
+        mapSelect.style.display = 'none'; 
+        storeScreen.style.display = 'none'; 
+        promoToggleBtn.style.display = 'block'; 
+        promoPanel.style.display = 'none';
+        isInGame = false;
+        startMenuMusic();
+    }
+    function goBackDifficulty() { 
+        difficultySelect.style.display = 'flex'; 
+        mapSelect.style.display = 'none';
+        isInGame = false;
+        startMenuMusic();
+    }
+    function openStore() { 
+        modeSelect.style.display = 'none'; 
+        storeScreen.style.display = 'flex'; 
+        updateCoinsDisplay(); 
+        switchStoreTab('skins'); 
+        promoToggleBtn.style.display = 'none'; 
+        promoPanel.style.display = 'none';
+        isInGame = false;
+        startMenuMusic();
+    }
+    function closeStore() { 
+        storeScreen.style.display = 'none'; 
+        modeSelect.style.display = 'flex'; 
+        promoToggleBtn.style.display = 'block'; 
+        promoPanel.style.display = 'none';
+        isInGame = false;
+        startMenuMusic();
+    }
 
     function switchStoreTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -934,11 +1052,25 @@
             const isOwned = (type === 'skin' ? purchasedSkins[index] : purchasedWeapons[index]);
             const isSelected = (index === selectedId);
             const isSecret = item.secret === true;
+            const isPromoOnly = item.promoOnly === true;
+            
+            if (isPromoOnly && !isOwned) {
+                div.style.display = 'none';
+                div.className = 'store-item hidden-item';
+                container.appendChild(div);
+                return;
+            }
             
             div.className = 'store-item' + (isSelected ? ' selected' : '');
             
             if (type === 'skin') {
-                div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
+                if (isSecret) {
+                    div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
+                    div.style.boxShadow = '0 0 30px rgba(30, 150, 200, 0.3)';
+                    div.style.borderColor = '#44aacc';
+                } else {
+                    div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
+                }
             } else {
                 div.style.background = `radial-gradient(circle at 50% 50%, ${item.color} 30%, #2a2a2a 70%)`;
                 if (isSecret) {
@@ -952,24 +1084,23 @@
             nameSpan.textContent = item.emoji ? `${item.emoji} ${item.name}` : item.name; 
             div.appendChild(nameSpan);
             
-            // Секретное оружие - особая цена
-            const price = isSecret ? 400 : 100;
-            
-            if (isSecret) {
+            if (isSecret && isOwned) {
                 const secretBadge = document.createElement('div');
                 secretBadge.className = 'secret-badge';
                 secretBadge.textContent = '⭐ СЕКРЕТНО';
                 div.appendChild(secretBadge);
             }
             
-            if ((index !== 0 && !isSecret) || (isSecret && !isOwned)) {
+            const price = 100;
+            
+            if (!isPromoOnly && ((index !== 0 && !isSecret) || (isSecret && !isOwned))) {
                 const priceTag = document.createElement('div');
                 priceTag.className = 'price-tag';
                 priceTag.textContent = price;
                 div.appendChild(priceTag);
             }
             
-            if (!isOwned) {
+            if (!isOwned && !isPromoOnly) {
                 const lock = document.createElement('div');
                 lock.className = 'lock-icon';
                 lock.textContent = '🔒';
@@ -978,6 +1109,17 @@
             
             div.onclick = () => {
                 playButtonClick();
+                
+                if (isPromoOnly) {
+                    if (isOwned) {
+                        document.querySelectorAll(`#${container.id} .store-item`).forEach(el => el.classList.remove('selected'));
+                        div.classList.add('selected');
+                        if (type === 'skin') p1SkinId = index;
+                        else if (type === 'weapon') p1WeaponId = index;
+                    }
+                    return;
+                }
+                
                 if (isOwned) {
                     document.querySelectorAll(`#${container.id} .store-item`).forEach(el => el.classList.remove('selected'));
                     div.classList.add('selected');
@@ -987,10 +1129,7 @@
                     if (coins >= price) {
                         coins -= price;
                         if (type === 'skin') purchasedSkins[index] = true;
-                        else if (type === 'weapon') {
-                            purchasedWeapons[index] = true;
-                            if (isSecret) secretWeaponPurchased = true;
-                        }
+                        else if (type === 'weapon') purchasedWeapons[index] = true;
                         updateCoinsDisplay();
                         renderStoreItems(container, items, selectedId, type);
                     } else {
@@ -1003,7 +1142,14 @@
     }
 
     function updateCoinsDisplay() { storeCoinsDisplay.textContent = 'Монет: ' + coins; }
-    function openMapSelect(difficulty) { selectedDifficulty = difficulty; difficultySelect.style.display = 'none'; mapSelect.style.display = 'flex'; renderMapOptions(); }
+    function openMapSelect(difficulty) { 
+        selectedDifficulty = difficulty; 
+        difficultySelect.style.display = 'none'; 
+        mapSelect.style.display = 'flex'; 
+        renderMapOptions();
+        isInGame = false;
+        startMenuMusic();
+    }
 
     function renderMapOptions() {
         mapGrid.innerHTML = '';
@@ -1110,7 +1256,6 @@
         ctx.fillStyle=skin.secondary;ctx.beginPath();ctx.ellipse(x-r*0.8,y-2,4,7,-0.2,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+r*0.8,y-2,4,7,0.2,0,Math.PI*2);ctx.fill();
         if(weapon){
             const wx=x+dirX*(r+6),wy=y+dirY*(r+4);
-            // Секретное оружие имеет свечение
             if (weapon.secret) {
                 ctx.shadowColor='#aa44ff';ctx.shadowBlur=40;
                 ctx.beginPath();ctx.arc(wx,wy,12,0,Math.PI*2);
@@ -1158,15 +1303,117 @@
         if(isMouseDown&&gameActive&&!isPaused){const now=Date.now(),weapon=WEAPONS[p1WeaponId],wfd=weapon.fireRate||1.0;if(now-player1.lastShot>=BASE_FIRE_COOLDOWN*wfd)shoot(player1,weapon);}
     }
 
-    function endGame(wm){gameActive=false;isPaused=false;pauseScreen.style.display='none';winnerText.textContent=wm;winnerSubtext.textContent="в лесу всегда остается один....";gameOverScreen.style.display='flex';stopForestAmbience();startMenuMusic();if(gameMode===1&&player2.hp<=0){let reward=0;switch(selectedDifficulty){case'easy':reward=20;break;case'medium':reward=50;break;case'hard':reward=100;break;case'impossible':reward=200;break;}coins+=reward*getCoinMultiplier();updateCoinsDisplay();}}
+    // ========== REWARD SYSTEM ==========
+    function claimReward() {
+        if (rewardClaimed) return;
+        if (pendingReward <= 0) return;
+        
+        rewardClaimed = true;
+        claimBtn.disabled = true;
+        claimBtn.textContent = '⏳ ...';
+        
+        const rewardAmount = pendingReward;
+        const coinEl = document.createElement('div');
+        coinEl.className = 'coin-fly';
+        coinEl.textContent = '🪙 +' + rewardAmount;
+        
+        const rect = claimBtn.getBoundingClientRect();
+        coinEl.style.left = rect.left + rect.width/2 - 30 + 'px';
+        coinEl.style.top = rect.top - 10 + 'px';
+        coinEl.style.fontSize = '32px';
+        document.body.appendChild(coinEl);
+        
+        setTimeout(() => {
+            coinEl.style.left = 'calc(100% - 120px)';
+            coinEl.style.top = '20px';
+            coinEl.style.fontSize = '20px';
+            coinEl.style.opacity = '0.7';
+        }, 100);
+        
+        coins += rewardAmount;
+        updateCoinsDisplay();
+        
+        setTimeout(() => {
+            coinEl.remove();
+            claimBtn.textContent = '✅ Получено!';
+            claimBtn.style.opacity = '0.6';
+            rewardText.textContent = '💰 +' + rewardAmount + ' монет (получено)';
+            
+            // Показываем уведомление в меню над заголовком
+            showMenuNotification(rewardAmount);
+        }, 1000);
+    }
+    
+    function showMenuNotification(amount) {
+        rewardNotification.textContent = '🪙 +' + amount + ' монет получено!';
+        rewardNotification.style.display = 'block';
+        rewardNotification.className = 'reward-notification';
+        
+        // Убираем через 3 секунды
+        setTimeout(() => {
+            rewardNotification.className = 'reward-notification fade-out';
+            setTimeout(() => {
+                rewardNotification.style.display = 'none';
+                rewardNotification.className = 'reward-notification';
+            }, 600);
+        }, 3000);
+    }
+
+    function endGame(wm) {
+        gameActive = false;
+        isPaused = false;
+        pauseScreen.style.display = 'none';
+        winnerText.textContent = wm;
+        winnerSubtext.textContent = "в лесу всегда остается один....";
+        gameOverScreen.style.display = 'flex';
+        
+        if (gameMode === 1 && player2.hp <= 0) {
+            let reward = 0;
+            switch(selectedDifficulty) {
+                case 'easy': reward = 20; break;
+                case 'medium': reward = 50; break;
+                case 'hard': reward = 100; break;
+                case 'impossible': reward = 200; break;
+            }
+            reward *= getCoinMultiplier();
+            pendingReward = reward;
+            rewardClaimed = false;
+            
+            rewardSection.style.display = 'flex';
+            rewardText.textContent = '💰 +' + reward + ' монет';
+            claimBtn.disabled = false;
+            claimBtn.textContent = 'Забрать монеты';
+            claimBtn.style.opacity = '1';
+            winnerSubtext.textContent = 'Поздравляем! Нажмите "Забрать монеты"';
+        } else {
+            rewardSection.style.display = 'none';
+            if (gameMode === 2) {
+                winnerSubtext.textContent = 'Игроки, отличный бой!';
+            } else {
+                winnerSubtext.textContent = 'Попробуйте снова!';
+            }
+        }
+        
+        isInGame = false;
+        startMenuMusic();
+    }
 
     function resetGameState(){
         blocks=MAPS[selectedMap].blocks.map(b=>({...b}));player1.hp=MAX_HP;player1.maxHp=MAX_HP;player1.lastDamageTime=Date.now();player1.regenActive=false;player1.lastRegenTime=0;
         if(gameMode===1){player2.hp=botHP;player2.maxHp=botHP;}else{player2.hp=MAX_HP;player2.maxHp=MAX_HP;}player2.lastDamageTime=Date.now();player2.regenActive=false;player2.lastRegenTime=0;
-        p2SkinId=Math.floor(Math.random()*SKINS.length);while(p2SkinId===p1SkinId&&SKINS.length>1)p2SkinId=Math.floor(Math.random()*SKINS.length);
-        // Бот может использовать секретное оружие только если оно куплено
+        
+        let availableSkins = [];
+        for (let i = 0; i < BASE_SKINS.length; i++) {
+            if (purchasedSkins[i]) availableSkins.push(i);
+        }
+        if (availableSkins.length === 0) availableSkins = [0];
+        p2SkinId = availableSkins[Math.floor(Math.random() * availableSkins.length)];
+        while (p2SkinId === p1SkinId && availableSkins.length > 1) {
+            p2SkinId = availableSkins[Math.floor(Math.random() * availableSkins.length)];
+        }
+        
         let availableWeapons = [0];
-        for (let i = 0; i < WEAPONS.length; i++) {
+        for (let i = 0; i < BASE_WEAPONS.length; i++) {
             if (purchasedWeapons[i]) availableWeapons.push(i);
         }
         p2WeaponId = availableWeapons[Math.floor(Math.random() * availableWeapons.length)] || 0;
@@ -1176,10 +1423,32 @@
         player1.x=sx1;player1.y=sy1;player2.x=sx2;player2.y=sy2;player1.direction={dx:0,dy:-1};player2.direction={dx:0,dy:-1};player1.lastShot=0;player2.lastShot=0;bullets=[];particles=[];gameActive=true;isPaused=false;pauseScreen.style.display='none';updateUI();
     }
 
-    function launchGame(){gameActive=false;isPaused=false;pauseScreen.style.display='none';bullets=[];particles=[];menuScreen.style.display='none';gameOverScreen.style.display='none';applyDifficulty(selectedDifficulty);if(gameMode===1)uiHint.textContent="Наведи мышь и стреляй ЛКМ!";else uiHint.textContent="Синий: ЛКМ по курсору. Красный: 0.";stopMenuMusic();startForestAmbience();resetGameState();setTimeout(()=>{gameActive=true;},100);accumulator=0;lastTimestamp=performance.now();}
+    function launchGame(){
+        isInGame = true;
+        stopMenuMusic();
+        
+        rewardSection.style.display = 'none';
+        pendingReward = 0;
+        rewardClaimed = false;
+        
+        // Скрываем уведомление в меню
+        rewardNotification.style.display = 'none';
+        rewardNotification.className = 'reward-notification';
+        
+        gameActive=false;isPaused=false;pauseScreen.style.display='none';bullets=[];particles=[];menuScreen.style.display='none';gameOverScreen.style.display='none';applyDifficulty(selectedDifficulty);if(gameMode===1)uiHint.textContent="Наведи мышь и стреляй ЛКМ!";else uiHint.textContent="Синий: ЛКМ по курсору. Красный: 0.";resetGameState();setTimeout(()=>{gameActive=true;},100);accumulator=0;lastTimestamp=performance.now();
+    }
     function applyDifficulty(d){if(d==='easy'){bulletSpeed=10;botSpeedModifier=0.6;botFireCooldown=200;botHP=60;}else if(d==='medium'){bulletSpeed=12;botSpeedModifier=0.8;botFireCooldown=160;botHP=80;}else if(d==='hard'){bulletSpeed=16;botSpeedModifier=0.9;botFireCooldown=120;botHP=100;}else if(d==='impossible'){bulletSpeed=20;botSpeedModifier=1.0;botFireCooldown=80;botHP=150;}}
 
-    function backToMenu(){gameActive=false;isPaused=false;pauseScreen.style.display='none';gameMode=null;selectedDifficulty='medium';selectedMap=0;botHP=40;botSpeedModifier=0.85;botFireCooldown=150;player1.hp=MAX_HP;player2.hp=MAX_HP;player1.x=100;player1.y=250;player2.x=770;player2.y=250;player1.direction={dx:0,dy:-1};player2.direction={dx:0,dy:-1};updateUI();gameOverScreen.style.display='none';menuScreen.style.display='flex';modeSelect.style.display='flex';difficultySelect.style.display='none';mapSelect.style.display='none';storeScreen.style.display='none';accumulator=0;lastTimestamp=performance.now();promoToggleBtn.style.display='block';promoPanel.style.display='none';promoStatus.textContent='';promoStatus.className='';powerups=[];powerupTimer=0;p1ShieldUntil=0;p2ShieldUntil=0;p1DamageBoostUntil=0;p2DamageBoostUntil=0;p1DamageBoostMult=1.5;p2DamageBoostMult=1.5;stopForestAmbience();startMenuMusic();}
+    function backToMenu(){
+        isInGame = false;
+        gameActive=false;isPaused=false;pauseScreen.style.display='none';gameMode=null;selectedDifficulty='medium';selectedMap=0;botHP=40;botSpeedModifier=0.85;botFireCooldown=150;player1.hp=MAX_HP;player2.hp=MAX_HP;player1.x=100;player1.y=250;player2.x=770;player2.y=250;player1.direction={dx:0,dy:-1};player2.direction={dx:0,dy:-1};updateUI();gameOverScreen.style.display='none';menuScreen.style.display='flex';modeSelect.style.display='flex';difficultySelect.style.display='none';mapSelect.style.display='none';storeScreen.style.display='none';accumulator=0;lastTimestamp=performance.now();promoToggleBtn.style.display='block';promoPanel.style.display='none';promoStatus.textContent='';promoStatus.className='';powerups=[];powerupTimer=0;p1ShieldUntil=0;p2ShieldUntil=0;p1DamageBoostUntil=0;p2DamageBoostUntil=0;p1DamageBoostMult=1.5;p2DamageBoostMult=1.5;
+        rewardSection.style.display = 'none';
+        pendingReward = 0;
+        rewardClaimed = false;
+        rewardNotification.style.display = 'none';
+        rewardNotification.className = 'reward-notification';
+        startMenuMusic();
+    }
 
     // ========== GAME LOOP ==========
     function gameLoop(timestamp) {
