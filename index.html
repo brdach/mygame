@@ -130,6 +130,20 @@
             letter-spacing: 1px;
             min-width: 120px;
             touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+        #start-screen .mode-btn:active { transform: scale(0.95); }
+        #start-screen .mode-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
         }
         #start-screen .mode-btn.selected { border-color: #d4b07a; background: rgba(120, 90, 50, 0.5); }
         #start-screen .mode-btn .icon { font-size: 1.2rem; display: block; }
@@ -286,6 +300,16 @@
             border-color: #7a6a4a;
             touch-action: manipulation;
             text-align: center;
+            overflow: hidden;
+        }
+        .menu-btn:active { transform: scale(0.96); }
+        .menu-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out forwards;
+            pointer-events: none;
         }
         .menu-btn:hover { transform: scale(1.03) translateY(-2px); background: rgba(80, 65, 45, 0.8); border-color: #c8a86a; }
         .menu-btn.back-btn { background: rgba(40, 35, 25, 0.7); border-color: #5a4a3a; color: #b8a48a; }
@@ -302,6 +326,7 @@
             position: absolute; top: 10px; left: 10px; z-index: 25; background: rgba(50, 45, 35, 0.6); border: 2px solid #7a6a4a; color: #ecd8b4;
             padding: 6px 14px; border-radius: 30px; font-family: 'Special Elite', cursive; font-size: clamp(0.5rem, 1vw, 0.7rem); cursor: pointer; transition: all 0.25s ease; backdrop-filter: blur(4px);
         }
+        #promo-toggle-btn:active { transform: scale(0.95); }
         #promo-toggle-btn:hover { background: rgba(80, 65, 45, 0.8); border-color: #c8a86a; }
         #promo-panel {
             position: absolute; top: 60px; left: 10px; z-index: 25; background: rgba(30, 25, 18, 0.95); border: 2px solid #8a7a5a; padding: 16px 20px; border-radius: 24px; box-shadow: 4px 4px 0px rgba(0,0,0,0.3); display: none; flex-direction: column; gap: 8px; min-width: 200px; max-width: 280px; backdrop-filter: blur(8px);
@@ -312,6 +337,8 @@
         #promo-status { font-size: clamp(0.5rem, 0.8vw, 0.7rem); min-height: 1.2em; color: #b8a48a; font-family: 'Special Elite', cursive; }
         #promo-status.success { color: #a8d08a; } #promo-status.error { color: #d08a6a; }
         .promo-btn { background: rgba(70, 60, 45, 0.5); border: 2px solid #7a6a4a; border-radius: 16px; padding: 6px 16px; color: #ecd8b4; font-family: 'Special Elite', cursive; font-size: clamp(0.5rem, 0.8vw, 0.7rem); cursor: pointer; transition: all 0.2s ease; width: 100%; }
+        .promo-btn:active { transform: scale(0.95); }
+        .promo-btn:hover { background: rgba(100, 80, 60, 0.6); border-color: #c8a86a; }
 
         /* MAPS */
         #map-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0; max-width: 100%; }
@@ -332,6 +359,7 @@
             font-size: clamp(0.4rem, 0.7vw, 0.55rem);
             font-weight: 600;
         }
+        .map-option:active { transform: scale(0.93); }
         .map-option:hover { border-color: #c8a86a; transform: scale(1.05); }
         .map-option.selected { border-color: #d4b07a; background: rgba(120, 90, 50, 0.5); }
         .map-option span { font-size: clamp(1.2rem, 2.5vw, 1.6rem); margin-bottom: 2px; }
@@ -351,6 +379,17 @@
             font-size: clamp(0.6rem, 1.2vw, 0.75rem);
             cursor: pointer;
             transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn:active { transform: scale(0.95); }
+        .tab-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out forwards;
+            pointer-events: none;
         }
         .tab-btn:hover { border-color: #c8a86a; }
         .tab-btn.active { border-color: #d4b07a; color: #ecd8b4; background: rgba(120, 90, 50, 0.4); }
@@ -381,6 +420,7 @@
             background: rgba(60, 50, 40, 0.4);
             flex-shrink: 0;
         }
+        .store-item:active { transform: scale(0.92); }
         .store-item:hover { transform: scale(1.06); border-color: #c8a86a; }
         .store-item.selected { border-color: #d4b07a; box-shadow: 4px 4px 0px rgba(200, 160, 80, 0.15); }
         .store-item .item-name {
@@ -416,6 +456,94 @@
             white-space: nowrap;
         }
         .store-item .hidden-item { display: none; }
+        .store-item .chest-rarity {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(0.4rem, 0.7vw, 0.55rem);
+            background: rgba(0,0,0,0.8);
+            padding: 1px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(200,170,120,0.3);
+            color: #ecd8b4;
+            white-space: nowrap;
+        }
+
+        /* CHEST OPEN ANIMATION */
+        .chest-open-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            animation: chestOverlayIn 0.3s ease-out;
+        }
+        @keyframes chestOverlayIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .chest-open-content {
+            background: rgba(20, 18, 16, 0.95);
+            border: 2px solid rgba(200, 170, 120, 0.3);
+            border-radius: 30px;
+            padding: 30px 40px;
+            max-width: 90%;
+            max-height: 80vh;
+            text-align: center;
+            color: #ecd8b4;
+            font-family: 'Special Elite', cursive;
+            position: relative;
+            animation: chestContentPop 0.5s ease-out;
+            overflow-y: auto;
+        }
+        @keyframes chestContentPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .chest-open-content h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 8px;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255,215,0,0.2);
+        }
+        .chest-open-content .chest-result {
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            margin: 12px 0;
+            padding: 16px;
+            background: rgba(60, 50, 40, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(200, 170, 120, 0.1);
+        }
+        .chest-open-content .chest-result .item-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 10px auto;
+            border: 3px solid rgba(200,170,120,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+        .chest-open-content .chest-close-btn {
+            margin-top: 16px;
+            padding: 10px 30px;
+            border: 2px solid #8a7a5a;
+            border-radius: 30px;
+            background: rgba(50,45,35,0.7);
+            color: #ecd8b4;
+            font-family: 'Special Elite', cursive;
+            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .chest-open-content .chest-close-btn:hover { background: rgba(80,65,45,0.8); border-color: #c8a86a; }
+        .chest-open-content .chest-close-btn:active { transform: scale(0.95); }
+        .chest-open-content .rarity-common { color: #a8a8a8; }
+        .chest-open-content .rarity-uncommon { color: #4caf50; }
+        .chest-open-content .rarity-rare { color: #2196f3; }
+        .chest-open-content .rarity-secret { color: #ff6b6b; text-shadow: 0 0 30px rgba(255,100,100,0.3); }
 
         /* GAME OVER */
         #game-over-screen {
@@ -428,10 +556,12 @@
         #game-over-screen h1 { color: #ecd8b4; font-size: clamp(1.8rem, 5vw, 3.4rem); margin-bottom: 4px; text-align: center; }
         #game-over-screen p { color: rgba(200, 190, 170, 0.5); font-size: clamp(0.7rem, 1.5vw, 1rem); margin-bottom: 16px; text-align: center; }
         button.restart-btn { border: none; border-radius: 40px; padding: 10px 30px; font-size: clamp(0.8rem, 1.8vw, 1rem); font-family: inherit; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(145deg, rgba(80, 60, 40, 0.9), rgba(140, 100, 60, 0.6)); color: #ecd8b4; box-shadow: 0 4px 20px rgba(80, 60, 40, 0.3); letter-spacing: 1px; }
+        button.restart-btn:active { transform: scale(0.95); }
         button.restart-btn:hover { transform: scale(1.03); }
         #game-over-screen .reward-row { display: flex; align-items: center; gap: 12px; margin: 6px 0 12px 0; flex-wrap: wrap; justify-content: center; }
         #game-over-screen .reward-text { color: #ecd8b4; font-size: clamp(1rem, 2.5vw, 1.4rem); font-family: 'Special Elite', cursive; }
         #game-over-screen .reward-btn { background: rgba(200, 180, 80, 0.25); border: 2px solid #d4b07a; color: #ecd8b4; padding: 8px 24px; border-radius: 30px; font-family: 'Special Elite', cursive; font-size: clamp(0.7rem, 1.5vw, 1rem); cursor: pointer; transition: all 0.3s ease; }
+        #game-over-screen .reward-btn:active { transform: scale(0.95); }
         #game-over-screen .reward-btn:hover { background: rgba(200, 180, 80, 0.4); transform: scale(1.05); }
         #game-over-screen .reward-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
@@ -445,6 +575,7 @@
         @keyframes pauseFade { 0% { opacity: 0; } 100% { opacity: 1; } }
         #pause-screen h2 { color: #ecd8b4; font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 14px; text-shadow: 0 0 40px rgba(200, 160, 100, 0.05); text-align: center; }
         .pause-btn { margin: 5px; width: 100%; max-width: 200px; padding: 12px 20px; border: none; border-radius: 40px; font-size: clamp(0.7rem, 1.5vw, 1rem); font-family: inherit; cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(145deg, rgba(80, 60, 40, 0.9), rgba(140, 100, 60, 0.6)); color: #ecd8b4; box-shadow: 0 4px 20px rgba(80, 60, 40, 0.2); }
+        .pause-btn:active { transform: scale(0.95); }
         .pause-btn:hover { transform: scale(1.03); }
         .pause-btn.back-btn { background: linear-gradient(145deg, rgba(40, 35, 25, 0.8), rgba(60, 50, 40, 0.6)); }
 
@@ -460,6 +591,7 @@
         .settings-row input[type="range"] { width: 100px; background: #3a322a; height: 4px; border-radius: 8px; -webkit-appearance: none; flex-shrink: 0; }
         .settings-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #d4b07a; cursor: pointer; }
         .settings-row .toggle-btn { background: rgba(50, 45, 35, 0.6); border: 2px solid #6a5a4a; color: #ecd8b4; padding: 4px 16px; border-radius: 20px; cursor: pointer; font-family: 'Special Elite', cursive; font-size: clamp(0.5rem, 0.9vw, 0.75rem); transition: all 0.2s; }
+        .settings-row .toggle-btn:active { transform: scale(0.93); }
         .settings-row .toggle-btn:hover { border-color: #c8a86a; }
         .settings-row .toggle-btn.active { border-color: #7ab88a; background: rgba(70, 120, 80, 0.3); }
         #settings-screen .menu-btn { width: 100%; max-width: 180px; margin-top: 12px; }
@@ -471,7 +603,9 @@
             transition: all 0.3s ease !important;
             position: relative;
             overflow: hidden;
+            cursor: pointer !important;
         }
+        .install-btn:active { transform: scale(0.95) !important; }
         .install-btn:hover { 
             background: rgba(70, 180, 100, 0.4) !important; 
             border-color: #7ad08a !important; 
@@ -514,11 +648,13 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         #fs-btn { position: absolute; top: 8px; right: 8px; z-index: 6; background: rgba(20, 18, 16, 0.4); border: 1px solid rgba(160, 130, 90, 0.1); color: rgba(200, 190, 170, 0.3); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: clamp(0.4rem, 0.7vw, 0.6rem); transition: all 0.25s ease; }
+        #fs-btn:active { transform: scale(0.9); }
         #fs-btn:hover { background: rgba(50, 45, 35, 0.3); border-color: rgba(200, 180, 150, 0.2); }
         #settings-btn-menu {
             position: absolute; top: 10px; right: 10px; z-index: 25; background: rgba(50, 45, 35, 0.6); border: 2px solid #7a6a4a; color: #ecd8b4;
             padding: 6px 14px; border-radius: 30px; font-family: 'Special Elite', cursive; font-size: clamp(0.5rem, 1vw, 0.7rem); cursor: pointer; transition: all 0.25s ease; backdrop-filter: blur(4px);
         }
+        #settings-btn-menu:active { transform: scale(0.93); }
         #settings-btn-menu:hover { background: rgba(80, 65, 45, 0.8); border-color: #c8a86a; }
 
         .coin-fly { position: fixed; font-size: 24px; pointer-events: none; z-index: 100; font-weight: bold; color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
@@ -582,11 +718,6 @@
             opacity: 0.5;
         }
 
-        /* Убираем старую кнопку выстрела, теперь стрельба по тапу экрана */
-        #shoot-btn {
-            display: none !important;
-        }
-
         #touch-pause-btn {
             position: absolute;
             top: 10px;
@@ -610,8 +741,8 @@
             user-select: none;
             -webkit-user-select: none;
         }
-        #touch-pause-btn.active { display: flex; }
         #touch-pause-btn:active { transform: scale(0.85); background: rgba(50, 40, 30, 0.7); }
+        #touch-pause-btn.active { display: flex; }
 
         #touch-aim-indicator {
             position: absolute;
@@ -675,6 +806,7 @@
             .store-item { width: 44px; height: 44px; }
             .map-option { width: 48px; height: 44px; font-size: 0.4rem; }
             .map-option span { font-size: 1rem; }
+            .chest-open-content { padding: 20px; }
         }
         @media (orientation: portrait) and (max-width: 768px) {
             #ui-header { min-height: 38px; }
@@ -711,6 +843,9 @@
             #fs-btn { font-size: 0.4rem; padding: 2px 8px; top: 4px; right: 4px; }
             .install-btn { font-size: 0.6rem !important; padding: 6px 12px !important; max-width: 140px !important; }
             .install-btn .install-status { font-size: 0.4rem; }
+            .chest-open-content { padding: 12px 16px; }
+            .chest-open-content h2 { font-size: 1.2rem; }
+            .chest-open-content .chest-result { font-size: 0.8rem; padding: 10px; }
         }
     </style>
 </head>
@@ -721,12 +856,12 @@
     <div id="start-screen">
         <h1>⚔️ УПРАВЛЕНИЕ</h1>
         <div class="mode-selector">
-            <button class="mode-btn" id="mode-pc" onclick="selectControlMode('pc')">
+            <button class="mode-btn" id="mode-pc" onclick="selectControlMode('pc', event)">
                 <span class="icon">🖥️</span>
                 Компьютер
                 <span class="label">Клавиатура + Мышь</span>
             </button>
-            <button class="mode-btn" id="mode-touch" onclick="selectControlMode('touch')">
+            <button class="mode-btn" id="mode-touch" onclick="selectControlMode('touch', event)">
                 <span class="icon">📱</span>
                 Телефон
                 <span class="label">Сенсорный джойстик</span>
@@ -771,18 +906,18 @@
                 <div id="reward-notification" class="reward-notification" style="display:none;"></div>
                 <h1>METEL: Дуэль</h1>
                 <p>⚔️ Выберите режим</p>
-                <button class="menu-btn" onclick="playButtonClick(); selectMode(1)">1 Игрок (Против Бота)</button>
-                <button class="menu-btn" onclick="playButtonClick(); selectMode(2)">2 Игрока (PvP)</button>
+                <button class="menu-btn" onclick="playButtonClick(); selectMode(1, event)">1 Игрок (Против Бота)</button>
+                <button class="menu-btn" onclick="playButtonClick(); selectMode(2, event)">2 Игрока (PvP)</button>
                 <button class="menu-btn store-btn" onclick="playButtonClick(); openStore()">🛒 Магазин</button>
                 <button class="menu-btn fullscreen-btn" onclick="playButtonClick(); toggleFullscreen()">🖥️ Полный экран</button>
             </div>
             <div id="difficulty-select">
                 <h1 style="font-size: clamp(1.4rem, 3.5vw, 2.2rem);">Уровень сложности</h1>
                 <p>Наведите курсор на кнопку, чтобы увидеть награду</p>
-                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('easy')">Легкий 🟢 <span class="bonus-badge">+20</span><span class="tooltip">💰 Награда: 20 монет</span></button>
-                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('medium')">Средний 🟡 <span class="bonus-badge">+50</span><span class="tooltip">💰 Награда: 50 монет</span></button>
-                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('hard')">Сложный 🔴 <span class="bonus-badge">+100</span><span class="tooltip">💰 Награда: 100 монет</span></button>
-                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('impossible')">Невозможный 💀 <span class="bonus-badge">+200</span><span class="tooltip">💰 Награда: 200 монет</span></button>
+                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('easy', event)">Легкий 🟢 <span class="bonus-badge">+20</span><span class="tooltip">💰 Награда: 20 монет</span></button>
+                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('medium', event)">Средний 🟡 <span class="bonus-badge">+50</span><span class="tooltip">💰 Награда: 50 монет</span></button>
+                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('hard', event)">Сложный 🔴 <span class="bonus-badge">+100</span><span class="tooltip">💰 Награда: 100 монет</span></button>
+                <button class="menu-btn" onclick="playButtonClick(); openMapSelect('impossible', event)">Невозможный 💀 <span class="bonus-badge">+200</span><span class="tooltip">💰 Награда: 200 монет</span></button>
                 <button class="menu-btn back-btn" onclick="playButtonClick(); goBackMode()">Назад</button>
             </div>
             <div id="map-select">
@@ -795,13 +930,28 @@
                 <h2>🛒 Магазин</h2>
                 <p id="store-coins">Монет: 0</p>
                 <div class="store-tabs">
-                    <button class="tab-btn active" id="tab-skins" onclick="playButtonClick(); switchStoreTab('skins')">Скины</button>
-                    <button class="tab-btn" id="tab-weapons" onclick="playButtonClick(); switchStoreTab('weapons')">Оружие</button>
+                    <button class="tab-btn active" id="tab-skins" onclick="playButtonClick(); switchStoreTab('skins', event)">Скины</button>
+                    <button class="tab-btn" id="tab-weapons" onclick="playButtonClick(); switchStoreTab('weapons', event)">Оружие</button>
+                    <button class="tab-btn" id="tab-chests" onclick="playButtonClick(); switchStoreTab('chests', event)">🎁 Сундуки</button>
                 </div>
                 <div id="store-grid-skins" class="store-grid-container active"></div>
                 <div id="store-grid-weapons" class="store-grid-container"></div>
+                <div id="store-grid-chests" class="store-grid-container"></div>
                 <button class="menu-btn back-btn" onclick="playButtonClick(); closeStore()">Назад</button>
             </div>
+        </div>
+    </div>
+
+    <!-- CHEST OPEN OVERLAY -->
+    <div class="chest-open-overlay" id="chest-overlay">
+        <div class="chest-open-content">
+            <h2>🎁 Сундук открыт!</h2>
+            <div id="chest-result" class="chest-result">
+                <div class="item-preview" id="chest-item-preview">✨</div>
+                <div id="chest-item-name">Предмет</div>
+                <div id="chest-item-rarity" style="font-size:0.8rem;margin-top:4px;">Обычный</div>
+            </div>
+            <button class="chest-close-btn" onclick="closeChest()">Закрыть</button>
         </div>
     </div>
 
@@ -863,7 +1013,6 @@
                 <span class="dir-label right">►</span>
                 <div id="joystick-knob"></div>
             </div>
-            <!-- Кнопка выстрела скрыта, стрельба по тапу экрана -->
         </div>
 
         <div id="game-over-screen">
@@ -889,20 +1038,34 @@
 </div>
 
 <script>
+    // ========== RIPPLE EFFECT ==========
+    function createRipple(e, element) {
+        const rect = element.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        const clientX = e.clientX || e.touches?.[0]?.clientX || rect.left + rect.width/2;
+        const clientY = e.clientY || e.touches?.[0]?.clientY || rect.top + rect.height/2;
+        ripple.style.left = (clientX - rect.left - size/2) + 'px';
+        ripple.style.top = (clientY - rect.top - size/2) + 'px';
+        element.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
     // ========== PWA INSTALL ==========
     let deferredPrompt = null;
     let isPWAInstalled = false;
-    let isInstallPromptShown = false;
 
+    // Проверяем, установлено ли уже приложение
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
         isPWAInstalled = true;
     }
 
+    // Слушаем событие beforeinstallprompt (для Chrome, Edge, Samsung Internet)
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        isInstallPromptShown = false;
-        
         const btn = document.getElementById('install-btn');
         if (btn && !isPWAInstalled) {
             btn.style.display = 'flex';
@@ -917,6 +1080,7 @@
         }
     });
 
+    // Слушаем событие appinstalled
     window.addEventListener('appinstalled', () => {
         isPWAInstalled = true;
         const btn = document.getElementById('install-btn');
@@ -933,12 +1097,14 @@
         showInstallNotification('✅ Приложение успешно установлено!');
     });
 
+    // Функция для PWA установки
     function installPWA() {
         if (isPWAInstalled) {
             showInstallNotification('✅ Приложение уже установлено');
             return;
         }
-        
+
+        // Для Chrome/Edge/Samsung Internet
         if (deferredPrompt) {
             const btn = document.getElementById('install-btn');
             if (btn) {
@@ -949,11 +1115,9 @@
                 `;
                 btn.style.pointerEvents = 'none';
             }
-            
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
-                    console.log('PWA установлено');
                     isPWAInstalled = true;
                     const btn2 = document.getElementById('install-btn');
                     if (btn2) {
@@ -968,7 +1132,6 @@
                     }
                     showInstallNotification('✅ Приложение успешно установлено на ваш рабочий стол!');
                 } else {
-                    console.log('Установка отменена');
                     const btn3 = document.getElementById('install-btn');
                     if (btn3) {
                         btn3.classList.remove('pulse');
@@ -978,23 +1141,46 @@
                             <span class="install-status">PWA — на рабочий стол</span>
                         `;
                         btn3.style.pointerEvents = 'auto';
-                        setTimeout(() => {
-                            btn3.classList.add('pulse');
-                        }, 500);
+                        setTimeout(() => { btn3.classList.add('pulse'); }, 500);
                     }
                 }
                 deferredPrompt = null;
-                isInstallPromptShown = true;
             });
-        } else {
-            showInstallNotification('ℹ️ Ваш браузер не поддерживает установку PWA. Используйте Chrome, Edge или Samsung Internet на мобильных устройствах.');
-            
-            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-                showInstallNotification('📱 Нажмите "Поделиться" → "На экран «Домой»" для установки');
-            }
+            return;
         }
+
+        // Для iOS (Safari) — инструкция по добавлению на экран Домой
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            showInstallNotification('📱 Нажмите "Поделиться" → "На экран «Домой»" для установки');
+            return;
+        }
+
+        // Для Firefox и других браузеров, не поддерживающих PWA
+        if (window.navigator && window.navigator.userAgent.match(/Firefox/i)) {
+            showInstallNotification('ℹ️ Firefox не поддерживает установку PWA. Используйте Chrome, Edge или Safari.');
+            return;
+        }
+
+        // Fallback: предлагаем скачать HTML файл
+        downloadGame();
     }
 
+    // Функция для скачивания игры (запасной вариант)
+    function downloadGame() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob(['<!DOCTYPE html>\n' + htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'metel_duel.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showInstallNotification('📥 Скачивание игры началось!');
+    }
+
+    // Уведомление для пользователя
     function showInstallNotification(message) {
         const notification = document.createElement('div');
         notification.style.cssText = `
@@ -1019,29 +1205,21 @@
         `;
         notification.textContent = message;
         document.body.appendChild(notification);
-
+        
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes fadeInUp {
-                0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-                100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            }
-            @keyframes fadeOutDown {
-                0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-                100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            }
+            @keyframes fadeInUp { 0% { opacity: 0; transform: translateX(-50%) translateY(20px); } 100% { opacity: 1; transform: translateX(-50%) translateY(0); } }
+            @keyframes fadeOutDown { 0% { opacity: 1; transform: translateX(-50%) translateY(0); } 100% { opacity: 0; transform: translateX(-50%) translateY(20px); } }
         `;
         document.head.appendChild(style);
-
+        
         setTimeout(() => {
             notification.style.animation = 'fadeOutDown 0.4s ease-in forwards';
-            setTimeout(() => {
-                notification.remove();
-                style.remove();
-            }, 400);
+            setTimeout(() => { notification.remove(); style.remove(); }, 400);
         }, 3500);
     }
 
+    // Проверяем статус PWA при загрузке
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
         isPWAInstalled = true;
         const btn = document.getElementById('install-btn');
@@ -1073,11 +1251,9 @@
         if (!container) return;
         const rect = container.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) return;
-        
         const aspectRatio = 16 / 9;
         let w = rect.width;
         let h = rect.height;
-        
         if (w / h > aspectRatio) {
             canvasHeight = h;
             canvasWidth = h * aspectRatio;
@@ -1085,16 +1261,12 @@
             canvasWidth = w;
             canvasHeight = w / aspectRatio;
         }
-        
         canvas.width = Math.round(Math.max(canvasWidth, 1));
         canvas.height = Math.round(Math.max(canvasHeight, 1));
-        
         menuBgCanvas.width = canvas.width;
         menuBgCanvas.height = canvas.height;
-        
         scaleFactor = canvas.width / 960;
         isCanvasReady = true;
-        
         if (player1) {
             player1.w = PLAYER_SIZE_BASE * scaleFactor;
             player1.h = PLAYER_SIZE_BASE * scaleFactor;
@@ -1103,7 +1275,6 @@
             player2.w = PLAYER_SIZE_BASE * scaleFactor;
             player2.h = PLAYER_SIZE_BASE * scaleFactor;
         }
-        
         if (gameActive) {
             blocks = scaleBlocks(MAPS_DATA[selectedMap].blocks);
         }
@@ -1123,7 +1294,6 @@
     window.addEventListener('orientationchange', () => {
         setTimeout(debouncedResize, 400);
     });
-    
     setTimeout(resizeCanvas, 50);
 
     function scaleBlocks(blocks) {
@@ -1140,21 +1310,19 @@
     let touchJoystick = { x: 0, y: 0, active: false, angle: 0, distance: 0 };
     let touchAimX = 0, touchAimY = 0;
     let touchAimActive = false;
-    let touchIsShooting = false;
 
-    function selectControlMode(mode) {
+    function selectControlMode(mode, e) {
+        if (e) createRipple(e, e.currentTarget);
         controlMode = mode;
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
         const btn = document.getElementById('mode-' + mode);
         if (btn) btn.classList.add('selected');
-        
         const pcControls = document.getElementById('pc-controls');
         const touchControls = document.getElementById('touch-controls-info');
         const touchControlsUI = document.getElementById('touch-controls');
         const touchPauseBtn = document.getElementById('touch-pause-btn');
         const aimIndicator = document.getElementById('touch-aim-indicator');
         const uiHint = document.getElementById('ui-hint');
-        
         if (mode === 'pc') {
             if (pcControls) pcControls.style.display = 'block';
             if (touchControls) touchControls.style.display = 'none';
@@ -1182,10 +1350,8 @@
         selectControlMode(isTouch ? 'touch' : 'pc');
     }
 
-    // ========== TOUCH EVENTS FOR CANVAS (AIM + SHOOT) ==========
-    let touchStartTime = 0;
+    // ========== TOUCH EVENTS ==========
     let touchStartPos = { x: 0, y: 0 };
-    let isTouchShooting = false;
 
     function onTouchStart(e) {
         e.preventDefault();
@@ -1194,31 +1360,21 @@
         if (touch) {
             const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
             const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
-            
-            // Запоминаем позицию для определения движения
             touchStartPos.x = touchX;
             touchStartPos.y = touchY;
-            touchStartTime = Date.now();
-            
-            // Обновляем прицел
             touchAimX = touchX;
             touchAimY = touchY;
             touchAimActive = true;
             mouseX = touchAimX;
             mouseY = touchAimY;
-            
             const indicator = document.getElementById('touch-aim-indicator');
             if (indicator) {
                 indicator.classList.add('active');
                 indicator.style.left = (touch.clientX - rect.left - 20) + 'px';
                 indicator.style.top = (touch.clientY - rect.top - 20) + 'px';
             }
-            
-            // Сразу стреляем по тапу (для быстрой реакции)
             if (gameActive && !isPaused) {
-                // Проверяем, что это не пауза и не меню
                 shoot(player1, WEAPONS[p1WeaponId]);
-                isTouchShooting = true;
             }
         }
     }
@@ -1230,21 +1386,17 @@
         if (touch) {
             const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
             const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
-            
             touchAimX = touchX;
             touchAimY = touchY;
             touchAimActive = true;
             mouseX = touchAimX;
             mouseY = touchAimY;
-            
             const indicator = document.getElementById('touch-aim-indicator');
             if (indicator) {
                 indicator.classList.add('active');
                 indicator.style.left = (touch.clientX - rect.left - 20) + 'px';
                 indicator.style.top = (touch.clientY - rect.top - 20) + 'px';
             }
-            
-            // Если палец сильно переместился — стреляем еще раз (для автоматической стрельбы при движении)
             const dx = touchX - touchStartPos.x;
             const dy = touchY - touchStartPos.y;
             const dist = Math.sqrt(dx*dx + dy*dy);
@@ -1259,12 +1411,11 @@
     function onTouchEnd(e) {
         e.preventDefault();
         touchAimActive = false;
-        isTouchShooting = false;
         const indicator = document.getElementById('touch-aim-indicator');
         if (indicator) indicator.classList.remove('active');
     }
 
-    // ========== JOYSTICK TOUCH EVENTS ==========
+    // ========== JOYSTICK ==========
     const joystickArea = document.getElementById('joystick-area');
     const joystickKnob = document.getElementById('joystick-knob');
     let joystickTouchId = null;
@@ -1278,7 +1429,6 @@
             joystickTouchId = touch.identifier;
             updateJoystick(touch);
         }, { passive: false });
-
         joystickArea.addEventListener('touchmove', (e) => {
             e.preventDefault();
             for (let touch of e.changedTouches) {
@@ -1287,7 +1437,6 @@
                 }
             }
         }, { passive: false });
-
         joystickArea.addEventListener('touchend', (e) => {
             e.preventDefault();
             for (let touch of e.changedTouches) {
@@ -1297,12 +1446,10 @@
                 }
             }
         }, { passive: false });
-
         joystickArea.addEventListener('touchcancel', (e) => {
             joystickTouchId = null;
             resetJoystick();
         });
-
         updateJoystickRadius();
     }
 
@@ -1321,37 +1468,29 @@
         let dy = touch.clientY - centerY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const maxDist = joystickMaxRadius || 30;
-        
         if (dist > maxDist && dist > 0) {
             dx = dx / dist * maxDist;
             dy = dy / dist * maxDist;
         }
-        
         const normX = maxDist > 0 ? dx / maxDist : 0;
         const normY = maxDist > 0 ? dy / maxDist : 0;
-        
         touchJoystick.x = Math.max(-1, Math.min(1, normX));
         touchJoystick.y = Math.max(-1, Math.min(1, normY));
         touchJoystick.active = dist > 10;
-        
         if (touchJoystick.active) {
             touchJoystick.angle = Math.atan2(touchJoystick.y, touchJoystick.x);
             touchJoystick.distance = Math.sqrt(touchJoystick.x * touchJoystick.x + touchJoystick.y * touchJoystick.y);
         }
-        
         if (joystickKnob) {
             joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         }
-        
         const deadZone = 0.15;
         const moveX = Math.abs(touchJoystick.x) > deadZone ? touchJoystick.x : 0;
         const moveY = Math.abs(touchJoystick.y) > deadZone ? touchJoystick.y : 0;
-        
         keys['w'] = moveY < -0.2;
         keys['s'] = moveY > 0.2;
         keys['a'] = moveX < -0.2;
         keys['d'] = moveX > 0.2;
-        
         if (touchJoystick.active && (Math.abs(moveX) > 0.15 || Math.abs(moveY) > 0.15)) {
             const angle = Math.atan2(moveY, moveX);
             const aimDist = 60 * scaleFactor;
@@ -1359,10 +1498,8 @@
             const centerYCanvas = player1.y + player1.h / 2;
             const aimX = centerXCanvas + Math.cos(angle) * aimDist;
             const aimY = centerYCanvas + Math.sin(angle) * aimDist;
-            
             mouseX = Math.max(0, Math.min(canvas.width, aimX));
             mouseY = Math.max(0, Math.min(canvas.height, aimY));
-            
             const indicator = document.getElementById('touch-aim-indicator');
             if (indicator) {
                 indicator.classList.add('active');
@@ -1418,7 +1555,7 @@
         if (menuScreen) menuScreen.classList.add('visible');
         canvas.style.background = '#12100e';
         startMenuMusic();
-        
+        // Проверяем PWA статус после загрузки меню
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
             isPWAInstalled = true;
             const btn = document.getElementById('install-btn');
@@ -1560,7 +1697,7 @@
         menuMusicActive = true;
         try {
             menuMusicGain = audioCtx.createGain();
-            menuMusicGain.gain.setValueAtTime(0.12 * (volumePercent / 100), audioCtx.currentTime);
+            menuMusicGain.gain.setValueAtTime(0.72 * (volumePercent / 100), audioCtx.currentTime);
             menuMusicGain.connect(masterGain || audioCtx.destination);
 
             const sadNotes = [0, 3, 5, 6, 8, 10, 12, 15];
@@ -1578,13 +1715,12 @@
                     const freq = baseFreq * Math.pow(2, sadNotes[noteIndex % sadNotes.length] / 12);
                     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
                     noteGain.gain.setValueAtTime(0, audioCtx.currentTime);
-                    noteGain.gain.linearRampToValueAtTime(0.06 * (volumePercent / 100), audioCtx.currentTime + 0.1);
+                    noteGain.gain.linearRampToValueAtTime(0.36 * (volumePercent / 100), audioCtx.currentTime + 0.1);
                     noteGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + beatDuration * 0.9);
                     osc.connect(noteGain);
                     noteGain.connect(menuMusicGain);
                     osc.start(audioCtx.currentTime);
                     osc.stop(audioCtx.currentTime + beatDuration * 0.95);
-                    
                     if (noteIndex % 2 === 0) {
                         const osc2 = audioCtx.createOscillator();
                         const gain2 = audioCtx.createGain();
@@ -1592,7 +1728,7 @@
                         const freq2 = baseFreq * Math.pow(2, (sadNotes[noteIndex % sadNotes.length] + 7) / 12);
                         osc2.frequency.setValueAtTime(freq2, audioCtx.currentTime);
                         gain2.gain.setValueAtTime(0, audioCtx.currentTime);
-                        gain2.gain.linearRampToValueAtTime(0.02 * (volumePercent / 100), audioCtx.currentTime + 0.2);
+                        gain2.gain.linearRampToValueAtTime(0.12 * (volumePercent / 100), audioCtx.currentTime + 0.2);
                         gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + beatDuration * 0.8);
                         osc2.connect(gain2);
                         gain2.connect(menuMusicGain);
@@ -1618,7 +1754,7 @@
                         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
                         const delay = idx * 0.15;
                         gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
-                        gain.gain.linearRampToValueAtTime(0.02 * (volumePercent / 100), audioCtx.currentTime + delay + 0.3);
+                        gain.gain.linearRampToValueAtTime(0.12 * (volumePercent / 100), audioCtx.currentTime + delay + 0.3);
                         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + 4.5);
                         osc.connect(gain);
                         gain.connect(menuMusicGain);
@@ -1837,6 +1973,264 @@
         }
     }
 
+    // ========== CHEST SYSTEM ==========
+    const chestSkins = {
+        common: [
+            { name: 'Песчаный', primary: '#d4b896', secondary: '#b89a7a', eye: '#e8dcc8', pupil: '#6a5a3a' },
+            { name: 'Глиняный', primary: '#c49a6a', secondary: '#a0784a', eye: '#e8d0b0', pupil: '#5a3a1a' },
+            { name: 'Серый', primary: '#8a8a8a', secondary: '#6a6a6a', eye: '#d0d0d0', pupil: '#3a3a3a' },
+            { name: 'Бурый', primary: '#8a6a4a', secondary: '#6a4a2a', eye: '#d8c8b0', pupil: '#3a2a0a' },
+            { name: 'Оловянный', primary: '#a8a8b0', secondary: '#7a7a82', eye: '#d8d8e0', pupil: '#3a3a42' },
+            { name: 'Меловой', primary: '#e8e4d8', secondary: '#c8c4b8', eye: '#f8f4e8', pupil: '#5a5a4a' },
+            { name: 'Дымчатый', primary: '#9a9a9a', secondary: '#7a7a7a', eye: '#d0d0c8', pupil: '#4a4a4a' },
+            { name: 'Пепельный', primary: '#b8b0a8', secondary: '#8a827a', eye: '#e0d8d0', pupil: '#4a423a' },
+            { name: 'Ивовый', primary: '#8aaa7a', secondary: '#5a7a4a', eye: '#d0e0c0', pupil: '#2a4a1a' },
+            { name: 'Кленовый', primary: '#c8a86a', secondary: '#a8884a', eye: '#e8d8b0', pupil: '#5a3a0a' },
+            { name: 'Березовый', primary: '#d8d0b8', secondary: '#b8b098', eye: '#f0e8d0', pupil: '#5a4a2a' },
+            { name: 'Дубовый', primary: '#a8886a', secondary: '#7a5a3a', eye: '#e0d0b8', pupil: '#4a2a0a' },
+            { name: 'Сосновый', primary: '#6a8a5a', secondary: '#4a6a3a', eye: '#c8d8b8', pupil: '#2a3a1a' },
+            { name: 'Еловый', primary: '#5a7a4a', secondary: '#3a5a2a', eye: '#c0d0b0', pupil: '#1a2a0a' },
+            { name: 'Тополиный', primary: '#b8c8a8', secondary: '#8aa87a', eye: '#e0e8d0', pupil: '#3a4a2a' },
+            { name: 'Ясеневый', primary: '#c8c0b0', secondary: '#a09888', eye: '#e8e0d0', pupil: '#4a4232' },
+            { name: 'Вязовый', primary: '#b8a888', secondary: '#8a7a5a', eye: '#e0d0b8', pupil: '#4a3a1a' },
+            { name: 'Ольховый', primary: '#a8a088', secondary: '#7a7260', eye: '#d8d0c0', pupil: '#3a3220' },
+            { name: 'Липовый', primary: '#d8d0b0', secondary: '#b8b090', eye: '#f0e8d0', pupil: '#4a3a1a' },
+            { name: 'Рябиновый', primary: '#c8a86a', secondary: '#a8884a', eye: '#e8d8b0', pupil: '#5a3a0a' }
+        ],
+        uncommon: [
+            { name: 'Медный', primary: '#d4884a', secondary: '#b0682a', eye: '#f0d8b0', pupil: '#6a2a0a' },
+            { name: 'Бронзовый', primary: '#c8a06a', secondary: '#a8804a', eye: '#e8d8b8', pupil: '#5a3a1a' },
+            { name: 'Серебряный', primary: '#c8c8d0', secondary: '#a8a8b0', eye: '#e8e8f0', pupil: '#3a3a4a' },
+            { name: 'Янтарный', primary: '#e8b84a', secondary: '#c8982a', eye: '#f8e8b0', pupil: '#6a4a0a' },
+            { name: 'Коралловый', primary: '#e88a7a', secondary: '#c86a5a', eye: '#f8d0c8', pupil: '#6a2a1a' },
+            { name: 'Изумрудный', primary: '#4aaa6a', secondary: '#2a8a4a', eye: '#b0e8c8', pupil: '#0a3a1a' },
+            { name: 'Бирюзовый', primary: '#4ac8c8', secondary: '#2aa8a8', eye: '#b0f0f0', pupil: '#0a4a4a' },
+            { name: 'Лазурный', primary: '#4a8ac8', secondary: '#2a6aa8', eye: '#b0d8f0', pupil: '#0a2a5a' },
+            { name: 'Аметистовый', primary: '#b07ac8', secondary: '#8a5aa8', eye: '#e0c8f0', pupil: '#3a1a5a' },
+            { name: 'Рубиновый', primary: '#d04a4a', secondary: '#b02a2a', eye: '#f0b0b0', pupil: '#5a0a0a' },
+            { name: 'Ониксовый', primary: '#3a3a3a', secondary: '#1a1a1a', eye: '#c0c0c0', pupil: '#0a0a0a' },
+            { name: 'Яшмовый', primary: '#c88a4a', secondary: '#a86a2a', eye: '#f0d8b0', pupil: '#5a2a0a' },
+            { name: 'Малахитовый', primary: '#4a9a5a', secondary: '#2a7a3a', eye: '#b0e8c0', pupil: '#0a3a1a' },
+            { name: 'Агатовый', primary: '#8a8a7a', secondary: '#6a6a5a', eye: '#d0d0c0', pupil: '#2a2a1a' },
+            { name: 'Опаловый', primary: '#e8d8c8', secondary: '#c8b8a8', eye: '#f8f0e8', pupil: '#4a3a2a' },
+            { name: 'Гранатовый', primary: '#c84a4a', secondary: '#a82a2a', eye: '#f0b0b0', pupil: '#5a0a0a' },
+            { name: 'Турмалиновый', primary: '#c86a8a', secondary: '#a84a6a', eye: '#f0c0d0', pupil: '#5a1a3a' },
+            { name: 'Цирконовый', primary: '#8ac8c8', secondary: '#6aa8a8', eye: '#c0f0f0', pupil: '#1a4a4a' },
+            { name: 'Топазовый', primary: '#e8c84a', secondary: '#c8a82a', eye: '#f8f0b0', pupil: '#5a3a0a' },
+            { name: 'Сапфировый', primary: '#3a6ac8', secondary: '#1a4aa8', eye: '#b0c8f0', pupil: '#0a1a5a' }
+        ],
+        rare: [
+            { name: 'Золотой', primary: '#f0d84a', secondary: '#d0b82a', eye: '#fff8c0', pupil: '#6a4a0a' },
+            { name: 'Платиновый', primary: '#e8e8f0', secondary: '#c8c8d0', eye: '#f8f8ff', pupil: '#3a3a4a' },
+            { name: 'Алмазный', primary: '#d0e8f8', secondary: '#b0c8e0', eye: '#f0f8ff', pupil: '#1a2a4a' },
+            { name: 'Радужный', primary: '#e8d84a', secondary: '#c8b82a', eye: '#f8f0c0', pupil: '#4a3a0a' },
+            { name: 'Лунный', primary: '#d0d8e8', secondary: '#b0b8d0', eye: '#f0f0f8', pupil: '#1a2a3a' },
+            { name: 'Солнечный', primary: '#f0d84a', secondary: '#d0b82a', eye: '#fff8b0', pupil: '#6a4a0a' },
+            { name: 'Звездный', primary: '#e8e8f0', secondary: '#c8c8d8', eye: '#f8f8ff', pupil: '#1a1a3a' },
+            { name: 'Космический', primary: '#4a3a6a', secondary: '#2a1a4a', eye: '#c8b8e8', pupil: '#0a0a2a' },
+            { name: 'Вулканический', primary: '#c84a2a', secondary: '#a82a0a', eye: '#f0c0b0', pupil: '#5a0a0a' },
+            { name: 'Ледяной', primary: '#a0e0f0', secondary: '#80c0e0', eye: '#e0f8ff', pupil: '#0a3a5a' },
+            { name: 'Электрический', primary: '#4ac8f0', secondary: '#2aa8d0', eye: '#b0f0ff', pupil: '#0a3a5a' },
+            { name: 'Теневой', primary: '#4a4a5a', secondary: '#2a2a3a', eye: '#c0c0d0', pupil: '#0a0a1a' },
+            { name: 'Световой', primary: '#f0f0e8', secondary: '#d0d0c8', eye: '#ffffff', pupil: '#4a4a3a' },
+            { name: 'Призрачный', primary: '#c8d0e8', secondary: '#a8b0d0', eye: '#f0f0ff', pupil: '#1a2a4a' },
+            { name: 'Мифический', primary: '#e8a84a', secondary: '#c8882a', eye: '#f8e8c0', pupil: '#6a3a0a' },
+            { name: 'Легендарный', primary: '#d4b07a', secondary: '#b08a4a', eye: '#f8f0d0', pupil: '#4a3a1a' },
+            { name: 'Эпический', primary: '#c88ac8', secondary: '#a86aa8', eye: '#f0d8f0', pupil: '#4a1a4a' },
+            { name: 'Божественный', primary: '#f0e8d8', secondary: '#d0c8b8', eye: '#ffffff', pupil: '#4a3a2a' },
+            { name: 'Демонический', primary: '#8a2a2a', secondary: '#6a0a0a', eye: '#e0b0b0', pupil: '#3a0a0a' },
+            { name: 'Драконий', primary: '#c84a2a', secondary: '#a82a0a', eye: '#f0c8b0', pupil: '#5a0a0a' }
+        ],
+        secret: [
+            { name: 'Эфирный', primary: '#e8d0f0', secondary: '#c8b0d8', eye: '#f8f0ff', pupil: '#3a2a4a' },
+            { name: 'Хаотичный', primary: '#f0d84a', secondary: '#d0b82a', eye: '#fff8b0', pupil: '#6a4a0a' },
+            { name: 'Квантовый', primary: '#4ac8f0', secondary: '#2aa8d0', eye: '#b0f0ff', pupil: '#0a3a5a' },
+            { name: 'Галактический', primary: '#6a4a8a', secondary: '#4a2a6a', eye: '#d8c8f0', pupil: '#1a0a3a' },
+            { name: 'Вневременной', primary: '#d0d8e8', secondary: '#b0b8d0', eye: '#f0f0f8', pupil: '#1a2a3a' },
+            { name: 'Бесконечный', primary: '#f0f0f0', secondary: '#d0d0d0', eye: '#ffffff', pupil: '#3a3a3a' },
+            { name: 'Астральный', primary: '#c8b0e8', secondary: '#a890c8', eye: '#f0e8ff', pupil: '#2a1a4a' },
+            { name: 'Энергетический', primary: '#4af0d8', secondary: '#2ad0b8', eye: '#b0fff0', pupil: '#0a4a3a' },
+            { name: 'Фантомный', primary: '#d8d0e8', secondary: '#b8b0d0', eye: '#f0f0ff', pupil: '#1a1a3a' },
+            { name: 'Некротический', primary: '#6a4a4a', secondary: '#4a2a2a', eye: '#d0c0c0', pupil: '#2a0a0a' },
+            { name: 'Ангельский', primary: '#f0f0f8', secondary: '#d0d0e0', eye: '#ffffff', pupil: '#2a2a4a' },
+            { name: 'Архангельский', primary: '#f8f0e8', secondary: '#e0d8d0', eye: '#ffffff', pupil: '#4a3a2a' },
+            { name: 'Древний', primary: '#8a7a5a', secondary: '#6a5a3a', eye: '#e0d8c0', pupil: '#3a2a0a' },
+            { name: 'Первобытный', primary: '#6a8a4a', secondary: '#4a6a2a', eye: '#d0e8c0', pupil: '#1a3a0a' },
+            { name: 'Космический', primary: '#4a3a7a', secondary: '#2a1a5a', eye: '#c8b8e8', pupil: '#0a0a3a' },
+            { name: 'Трансцендентный', primary: '#f0e8f0', secondary: '#d0c8d0', eye: '#ffffff', pupil: '#3a2a3a' },
+            { name: 'Абсолютный', primary: '#f0f0f0', secondary: '#e0e0e0', eye: '#ffffff', pupil: '#2a2a2a' },
+            { name: 'Нулевой', primary: '#2a2a2a', secondary: '#0a0a0a', eye: '#c0c0c0', pupil: '#000000' },
+            { name: 'Изначальный', primary: '#f0d84a', secondary: '#d0b82a', eye: '#fff8b0', pupil: '#6a4a0a' },
+            { name: 'Запредельный', primary: '#f0f0f0', secondary: '#d0d0d0', eye: '#ffffff', pupil: '#3a3a3a' }
+        ]
+    };
+
+    const CHEST_TYPES = {
+        common: { name: 'Обычный', price: 200, rarity: 'common', color: '#a8a8a8', emoji: '📦' },
+        uncommon: { name: 'Необычный', price: 400, rarity: 'uncommon', color: '#4caf50', emoji: '📦' },
+        rare: { name: 'Редкий', price: 600, rarity: 'rare', color: '#2196f3', emoji: '🎁' },
+        secret: { name: 'Секретный', price: 1000, rarity: 'secret', color: '#ff6b6b', emoji: '💎' }
+    };
+
+    let chestSkinsOwned = { common: [], uncommon: [], rare: [], secret: [] };
+    let chestSkinsEquipped = { common: null, uncommon: null, rare: null, secret: null };
+
+    function openChest(type) {
+        const chest = CHEST_TYPES[type];
+        if (!chest) return;
+        if (coins < chest.price) {
+            alert(`Недостаточно монет! Нужно ${chest.price} монет.`);
+            return;
+        }
+        coins -= chest.price;
+        updateCoinsDisplay();
+        
+        const skins = chestSkins[type];
+        const index = Math.floor(Math.random() * skins.length);
+        const skin = skins[index];
+        
+        if (!chestSkinsOwned[type].includes(index)) {
+            chestSkinsOwned[type].push(index);
+        }
+        chestSkinsEquipped[type] = index;
+        
+        showChestResult(chest, skin);
+    }
+
+    function showChestResult(chest, skin) {
+        const overlay = document.getElementById('chest-overlay');
+        const result = document.getElementById('chest-result');
+        const preview = document.getElementById('chest-item-preview');
+        const nameEl = document.getElementById('chest-item-name');
+        const rarityEl = document.getElementById('chest-item-rarity');
+        
+        overlay.style.display = 'flex';
+        preview.style.background = `radial-gradient(circle at 35% 35%, ${skin.primary}, ${skin.secondary})`;
+        preview.textContent = '🌟';
+        preview.style.borderColor = chest.color;
+        
+        nameEl.textContent = skin.name;
+        const rarityNames = { common: 'Обычный', uncommon: 'Необычный', rare: 'Редкий', secret: 'Секретный' };
+        rarityEl.textContent = `⭐ ${rarityNames[chest.rarity]}`;
+        rarityEl.className = `rarity-${chest.rarity}`;
+        
+        const existingSkin = SKINS.find(s => s.name === skin.name && s.fromChest === true);
+        if (!existingSkin) {
+            SKINS.push({ ...skin, fromChest: true, chestRarity: chest.rarity });
+            purchasedSkins.push(false);
+            purchasedSkins[purchasedSkins.length - 1] = true;
+        }
+        
+        if (document.getElementById('store-screen').style.display === 'flex') {
+            renderStoreItems(storeGridSkins, SKINS, p1SkinId, 'skin');
+        }
+    }
+
+    function closeChest() {
+        document.getElementById('chest-overlay').style.display = 'none';
+    }
+
+    // ========== PROMO SYSTEM ==========
+    let usedPromoCodes = [];
+
+    function applyPromo() {
+        if (!promoInput || !promoStatus) return;
+        const rawCode = promoInput.value.trim();
+        const code = rawCode.replace(/\s+/g, ' ').toLowerCase();
+        const statusEl = promoStatus;
+        
+        if (!code) { 
+            statusEl.textContent = 'Введите код'; 
+            statusEl.className = 'error'; 
+            return; 
+        }
+        
+        if (usedPromoCodes.includes(code)) {
+            statusEl.textContent = '❌ Этот код уже был использован!';
+            statusEl.className = 'error';
+            promoInput.value = '';
+            return;
+        }
+        
+        let success = false;
+        let message = '';
+        
+        if (code === 'pro') { 
+            coins += 200; 
+            message = '✅ Код введен! +200 монет';
+            success = true;
+        }
+        else if (code === 'noob') { 
+            coins += 300; 
+            message = '✅ Код введен! +300 монет';
+            success = true;
+        }
+        else if (code === 'bob') {
+            if (!secretWeaponPurchased) {
+                secretWeaponPurchased = true;
+                purchasedWeapons[SECRET_WEAPON_INDEX] = true;
+                message = '✅ Код введен! Получено секретное оружие 🔮';
+                success = true;
+                if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('weapons');
+            } else { 
+                message = '❌ У вас уже есть это оружие';
+                success = false;
+            }
+        }
+        else if (code === 'nada123') {
+            if (!secretSkinPurchased) {
+                secretSkinPurchased = true;
+                purchasedSkins[SECRET_SKIN_INDEX] = true;
+                message = '✅ Код введен! Получен секретный скин 🌊';
+                success = true;
+                if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('skins');
+            } else { 
+                message = '❌ У вас уже есть этот скин';
+                success = false;
+            }
+        }
+        else if (code === 'skins 2' || code === 'skins2') { 
+            for (let i = 0; i < BASE_SKINS.length; i++) purchasedSkins[i] = true; 
+            message = '✅ Код введен';
+            success = true;
+            if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('skins');
+        }
+        else if (code === 'guns 1' || code === 'guns1') { 
+            for (let i = 0; i < 10; i++) purchasedWeapons[i] = true; 
+            message = '✅ Код введен';
+            success = true;
+            if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('weapons');
+        }
+        else if (code === 'bg2' || code === 'bg4') { 
+            doubleCoinsActive = true; 
+            doubleCoinsUntil = Date.now() + 10 * 60 * 1000; 
+            message = '✅ Код введен';
+            success = true;
+        }
+        else if (code === 'skil5') { 
+            p1DamageBoostMult = 1.5; 
+            p1DamageBoostUntil = Date.now() + 5 * 60 * 1000; 
+            message = '✅ Код введен! +1.5 урона на 5 мин';
+            success = true;
+        }
+        else { 
+            message = '❌ Неверный код';
+            success = false;
+        }
+        
+        if (success) {
+            usedPromoCodes.push(code);
+            statusEl.textContent = message;
+            statusEl.className = 'success';
+            updateCoinsDisplay();
+        } else {
+            statusEl.textContent = message;
+            statusEl.className = 'error';
+        }
+        
+        promoInput.value = '';
+    }
+
     // ========== GAME DATA ==========
     const SECRET_WEAPON = { 
         name: 'Командный блок', damage: 8, color: '#aa44ff', speed: 1.8, fireRate: 1.2, size: 14,
@@ -1847,6 +2241,30 @@
         name: 'Море', primary: '#1a6a8a', secondary: '#0a3a5a', eye: '#80d0e0', pupil: '#0a2a3a',
         secret: true, promoOnly: true, emoji: '🌊'
     };
+
+    const secretWeapons = [];
+    const secretWeaponNames = [
+        'Теневая стрела', 'Ледяной шип', 'Огненный шар', 'Молния', 'Вихрь',
+        'Кристалл', 'Некротический жезл', 'Ангельское перо', 'Демонический клинок', 'Звездный осколок',
+        'Временной разрыв', 'Квантовый луч', 'Гравитационная сфера', 'Фантомный кинжал', 'Космический ветер',
+        'Изначальный огонь', 'Бездонный мрак', 'Свет надежды', 'Древний артефакт', 'Запредельная сила'
+    ];
+    const secretWeaponColors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#fd79a8', '#6c5ce7', '#00b894', '#e17055', '#0984e3', '#fdcb6e', '#e84393', '#00cec9', '#6ab04c', '#eb4d4b', '#f9ca24', '#30336b', '#be2edd', '#22a6b3', '#ff7979', '#badc58'];
+    const secretWeaponEmojis = ['🗡️', '❄️', '🔥', '⚡', '🌀', '💎', '💀', '🕊️', '👿', '⭐', '⌛', '🔮', '🌌', '👻', '🌪️', '🔥', '🌑', '✨', '🏛️', '∞'];
+
+    for (let i = 0; i < 20; i++) {
+        secretWeapons.push({
+            name: secretWeaponNames[i],
+            damage: 4 + Math.floor(Math.random() * 5),
+            color: secretWeaponColors[i % secretWeaponColors.length],
+            speed: 1.2 + Math.random() * 1.2,
+            fireRate: 0.8 + Math.random() * 1.5,
+            size: 8 + Math.floor(Math.random() * 8),
+            secret: true,
+            promoOnly: true,
+            emoji: secretWeaponEmojis[i % secretWeaponEmojis.length]
+        });
+    }
 
     const BASE_SKINS = [
         { name: 'Лесной', primary: '#3d6b4f', secondary: '#2a4a36', eye: '#e8d8b0', pupil: '#2a3a2a' },
@@ -1870,7 +2288,7 @@
     const SECRET_SKIN_INDEX = SKINS.length;
     SKINS.push({ ...SECRET_SKIN });
 
-    const BASE_WEAPONS = [
+    let WEAPONS = [
         { name: 'Пистолет', damage: 1, color: '#c8b06a', speed: 1.0, fireRate: 1.0, size: 6 },
         { name: 'Магнум', damage: 3, color: '#b85a3a', speed: 1.2, fireRate: 1.5, size: 8 },
         { name: 'Дробовик', damage: 1, color: '#c8a06a', speed: 0.9, fireRate: 1.2, size: 4, bulletCount: 3, spread: 0.25 },
@@ -1882,10 +2300,14 @@
         { name: 'Ракетница', damage: 6, color: '#c86a2a', speed: 0.6, fireRate: 3.0, size: 14 },
         { name: 'Лазерный нож', damage: 3, color: '#6ac8c8', speed: 1.5, fireRate: 1.5, size: 10 }
     ];
-
-    let WEAPONS = [...BASE_WEAPONS];
     const SECRET_WEAPON_INDEX = WEAPONS.length;
     WEAPONS.push({ ...SECRET_WEAPON });
+    
+    const SECRET_WEAPONS_START = WEAPONS.length;
+    secretWeapons.forEach(w => {
+        WEAPONS.push({ ...w });
+    });
+    const SECRET_WEAPONS_END = WEAPONS.length;
 
     // ========== MAPS ==========
     const MAPS_DATA = [
@@ -1927,7 +2349,7 @@
     const gameOverScreen = document.getElementById('game-over-screen'), winnerText = document.getElementById('winner-text'), winnerSubtext = document.getElementById('winner-subtext');
     const pauseScreen = document.getElementById('pause-screen'), menuScreen = document.getElementById('menu-screen');
     const modeSelect = document.getElementById('mode-select'), difficultySelect = document.getElementById('difficulty-select'), mapSelect = document.getElementById('map-select'), storeScreen = document.getElementById('store-screen');
-    const storeGridSkins = document.getElementById('store-grid-skins'), storeGridWeapons = document.getElementById('store-grid-weapons');
+    const storeGridSkins = document.getElementById('store-grid-skins'), storeGridWeapons = document.getElementById('store-grid-weapons'), storeGridChests = document.getElementById('store-grid-chests');
     const mapGrid = document.getElementById('map-grid'), uiHint = document.getElementById('ui-hint'), storeCoinsDisplay = document.getElementById('store-coins');
     const promoStatus = document.getElementById('promo-status'), promoInput = document.getElementById('promo-input'), promoPanel = document.getElementById('promo-panel'), promoToggleBtn = document.getElementById('promo-toggle-btn');
     const rewardSection = document.getElementById('reward-section'), rewardText = document.getElementById('reward-text'), claimBtn = document.getElementById('claim-btn');
@@ -1944,7 +2366,9 @@
     let blocks = [];
     let botHP = 40;
     let mouseX = 0, mouseY = 0, isMouseDown = false;
-    let coins = 0, purchasedSkins = new Array(SKINS.length).fill(false), purchasedWeapons = new Array(WEAPONS.length).fill(false);
+    let coins = 0;
+    let purchasedSkins = new Array(SKINS.length).fill(false);
+    let purchasedWeapons = new Array(WEAPONS.length).fill(false);
     purchasedSkins[0] = true;
     purchasedWeapons[0] = true;
     
@@ -1976,37 +2400,6 @@
         }
     }
 
-    function applyPromo() {
-        if (!promoInput || !promoStatus) return;
-        const rawCode = promoInput.value.trim(), code = rawCode.replace(/\s+/g, ' ').toLowerCase(), statusEl = promoStatus;
-        if (!code) { statusEl.textContent = 'Введите код'; statusEl.className = 'error'; return; }
-        
-        if (code === 'pro') { coins += 200; statusEl.textContent = 'Код введен! +200 монет'; statusEl.className = 'success'; updateCoinsDisplay(); }
-        else if (code === 'noob') { coins += 300; statusEl.textContent = 'Код введен! +300 монет'; statusEl.className = 'success'; updateCoinsDisplay(); }
-        else if (code === 'bob') {
-            if (!secretWeaponPurchased) {
-                secretWeaponPurchased = true;
-                purchasedWeapons[SECRET_WEAPON_INDEX] = true;
-                statusEl.textContent = 'Код введен! Получено секретное оружие 🔮'; statusEl.className = 'success';
-                if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('weapons');
-            } else { statusEl.textContent = 'У вас уже есть это оружие'; statusEl.className = 'error'; }
-        }
-        else if (code === 'nada123') {
-            if (!secretSkinPurchased) {
-                secretSkinPurchased = true;
-                purchasedSkins[SECRET_SKIN_INDEX] = true;
-                statusEl.textContent = 'Код введен! Получен секретный скин 🌊'; statusEl.className = 'success';
-                if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('skins');
-            } else { statusEl.textContent = 'У вас уже есть этот скин'; statusEl.className = 'error'; }
-        }
-        else if (code === 'skins 2' || code === 'skins2') { for (let i = 0; i < BASE_SKINS.length; i++) purchasedSkins[i] = true; statusEl.textContent = 'Код введен'; statusEl.className = 'success'; if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('skins'); }
-        else if (code === 'guns 1' || code === 'guns1') { for (let i = 0; i < BASE_WEAPONS.length; i++) purchasedWeapons[i] = true; statusEl.textContent = 'Код введен'; statusEl.className = 'success'; if (storeScreen && storeScreen.style.display === 'flex') switchStoreTab('weapons'); }
-        else if (code === 'bg2' || code === 'bg4') { doubleCoinsActive = true; doubleCoinsUntil = Date.now() + 10 * 60 * 1000; statusEl.textContent = 'Код введен'; statusEl.className = 'success'; }
-        else if (code === 'skil5') { p1DamageBoostMult = 1.5; p1DamageBoostUntil = Date.now() + 5 * 60 * 1000; statusEl.textContent = 'Код введен! +1.5 урона на 5 мин'; statusEl.className = 'success'; }
-        else { statusEl.textContent = 'Неверный код'; statusEl.className = 'error'; }
-        promoInput.value = '';
-    }
-
     function getCoinMultiplier() { if (doubleCoinsActive && Date.now() < doubleCoinsUntil) return 2; doubleCoinsActive = false; return 1; }
 
     function addParticles(x, y, color, count = 20) {
@@ -2018,7 +2411,8 @@
         }
     }
 
-    function selectMode(count) { 
+    function selectMode(count, e) {
+        if (e) createRipple(e, e.currentTarget);
         gameMode = count; 
         if (modeSelect) modeSelect.style.display = 'none'; 
         if (difficultySelect) difficultySelect.style.display = 'flex'; 
@@ -2061,40 +2455,67 @@
         startMenuMusic();
     }
 
-    function switchStoreTab(tab) {
+    function switchStoreTab(tab, e) {
+        if (e) createRipple(e, e.currentTarget);
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         const tabBtn = document.getElementById('tab-' + tab);
         if (tabBtn) tabBtn.classList.add('active');
         if (storeGridSkins) storeGridSkins.classList.remove('active');
         if (storeGridWeapons) storeGridWeapons.classList.remove('active');
-        if (tab === 'skins' && storeGridSkins) { storeGridSkins.classList.add('active'); renderStoreItems(storeGridSkins, SKINS, p1SkinId, 'skin'); }
-        else if (tab === 'weapons' && storeGridWeapons) { storeGridWeapons.classList.add('active'); renderStoreItems(storeGridWeapons, WEAPONS, p1WeaponId, 'weapon'); }
+        if (storeGridChests) storeGridChests.classList.remove('active');
+        if (tab === 'skins') { storeGridSkins.classList.add('active'); renderStoreItems(storeGridSkins, SKINS, p1SkinId, 'skin'); }
+        else if (tab === 'weapons') { storeGridWeapons.classList.add('active'); renderStoreItems(storeGridWeapons, WEAPONS, p1WeaponId, 'weapon'); }
+        else if (tab === 'chests') { storeGridChests.classList.add('active'); renderChests(); }
+    }
+
+    function renderChests() {
+        if (!storeGridChests) return;
+        storeGridChests.innerHTML = '';
+        for (let [type, chest] of Object.entries(CHEST_TYPES)) {
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            div.style.background = `radial-gradient(circle at 40% 35%, ${chest.color}33, #2a2a2a)`;
+            div.style.borderColor = chest.color;
+            div.innerHTML = `
+                <span style="font-size:1.8rem;">${chest.emoji}</span>
+                <span class="item-name">${chest.name}</span>
+                <span class="price-tag">${chest.price}</span>
+                <span class="chest-rarity" style="border-color:${chest.color};">${chest.rarity.toUpperCase()}</span>
+            `;
+            div.onclick = (e) => {
+                playButtonClick();
+                createRipple(e, div);
+                openChest(type);
+            };
+            storeGridChests.appendChild(div);
+        }
     }
 
     function renderStoreItems(container, items, selectedId, type) {
         if (!container) return;
         container.innerHTML = '';
         items.forEach((item, index) => {
+            if (item.fromChest && !purchasedSkins[index]) {
+                return;
+            }
+            if (item.secret && item.promoOnly && !purchasedWeapons[index]) {
+                return;
+            }
+            
             const div = document.createElement('div');
             const isOwned = (type === 'skin' ? purchasedSkins[index] : purchasedWeapons[index]);
             const isSelected = (index === selectedId);
             const isSecret = item.secret === true;
             const isPromoOnly = item.promoOnly === true;
-            
-            if (isPromoOnly && !isOwned) {
-                div.style.display = 'none';
-                div.className = 'store-item hidden-item';
-                container.appendChild(div);
-                return;
-            }
+            const isFromChest = item.fromChest === true;
             
             div.className = 'store-item' + (isSelected ? ' selected' : '');
             
             if (type === 'skin') {
-                if (isSecret) {
+                if (isSecret || isFromChest) {
                     div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
-                    div.style.boxShadow = '0 0 30px rgba(30, 150, 200, 0.3)';
-                    div.style.borderColor = '#44aacc';
+                    div.style.boxShadow = isSecret ? '0 0 30px rgba(30, 150, 200, 0.3)' : '0 0 20px rgba(200,170,120,0.15)';
+                    div.style.borderColor = isSecret ? '#44aacc' : '#8a7a5a';
                 } else {
                     div.style.background = `radial-gradient(circle at 35% 35%, ${item.primary}, ${item.secondary})`;
                 }
@@ -2118,26 +2539,36 @@
                 div.appendChild(secretBadge);
             }
             
+            if (isFromChest && isOwned) {
+                const secretBadge = document.createElement('div');
+                secretBadge.className = 'secret-badge';
+                const rarityNames = { common: 'Обычный', uncommon: 'Необычный', rare: 'Редкий', secret: 'Секретный' };
+                secretBadge.textContent = `📦 ${rarityNames[item.chestRarity] || ''}`;
+                secretBadge.style.color = item.chestRarity === 'secret' ? '#ff6b6b' : item.chestRarity === 'rare' ? '#2196f3' : item.chestRarity === 'uncommon' ? '#4caf50' : '#a8a8a8';
+                div.appendChild(secretBadge);
+            }
+            
             const price = 100;
             
-            if (!isPromoOnly && ((index !== 0 && !isSecret) || (isSecret && !isOwned))) {
+            if (!isPromoOnly && !isFromChest && ((index !== 0 && !isSecret) || (isSecret && !isOwned))) {
                 const priceTag = document.createElement('div');
                 priceTag.className = 'price-tag';
                 priceTag.textContent = price;
                 div.appendChild(priceTag);
             }
             
-            if (!isOwned && !isPromoOnly) {
+            if (!isOwned && !isPromoOnly && !isFromChest) {
                 const lock = document.createElement('div');
                 lock.className = 'lock-icon';
                 lock.textContent = '🔒';
                 div.appendChild(lock);
             }
             
-            div.onclick = () => {
+            div.onclick = (e) => {
                 playButtonClick();
+                createRipple(e, div);
                 
-                if (isPromoOnly) {
+                if (isPromoOnly || isFromChest) {
                     if (isOwned) {
                         document.querySelectorAll(`#${container.id} .store-item`).forEach(el => el.classList.remove('selected'));
                         div.classList.add('selected');
@@ -2169,7 +2600,8 @@
     }
 
     function updateCoinsDisplay() { if (storeCoinsDisplay) storeCoinsDisplay.textContent = 'Монет: ' + coins; }
-    function openMapSelect(difficulty) { 
+    function openMapSelect(difficulty, e) { 
+        if (e) createRipple(e, e.currentTarget);
         selectedDifficulty = difficulty; 
         if (difficultySelect) difficultySelect.style.display = 'none'; 
         if (mapSelect) mapSelect.style.display = 'flex'; 
@@ -2185,7 +2617,14 @@
             const div = document.createElement('div'); 
             div.className = 'map-option' + (index === selectedMap ? ' selected' : ''); 
             div.innerHTML = `<span>${map.emoji}</span>${map.name}`;
-            div.onclick = () => { playButtonClick(); document.querySelectorAll('.map-option').forEach(el => el.classList.remove('selected')); div.classList.add('selected'); selectedMap = index; launchGame(); };
+            div.onclick = (e) => { 
+                playButtonClick(); 
+                createRipple(e, div);
+                document.querySelectorAll('.map-option').forEach(el => el.classList.remove('selected')); 
+                div.classList.add('selected'); 
+                selectedMap = index; 
+                launchGame(); 
+            };
             mapGrid.appendChild(div);
         });
     }
@@ -2244,11 +2683,8 @@
         const weaponFireDelay = weapon.fireRate || 1.0, currentCooldown = BASE_FIRE_COOLDOWN * weaponFireDelay, now = Date.now();
         if (now - player.lastShot < currentCooldown) return;
         player.lastShot = now;
-        
         if (pingMs > 0) {
-            setTimeout(() => {
-                executeShot(player, weapon);
-            }, pingMs);
+            setTimeout(() => { executeShot(player, weapon); }, pingMs);
         } else {
             executeShot(player, weapon);
         }
@@ -2538,12 +2974,9 @@
         const rd=5000, ri=2000, rp=0.1; [player1,player2].forEach(p=>{ if(p.hp>0&&p.hp<p.maxHp){ if(!p.regenActive&&Date.now()-p.lastDamageTime>rd){ p.regenActive=true; p.lastRegenTime=Date.now(); } if(p.regenActive&&Date.now()-p.lastRegenTime>=ri){ p.hp=Math.min(p.maxHp, p.hp+p.maxHp*rp); p.lastRegenTime=Date.now(); updateUI(); if(p.hp>=p.maxHp) p.regenActive=false; } } else p.regenActive=false; });
         checkPowerupPickup();
         
-        // Для touch режима стрельба происходит по тапу экрана (в onTouchStart и onTouchMove)
-        // Дополнительно проверяем, если палец удерживается на экране - стреляем с задержкой
         if (controlMode === 'touch' && touchAimActive && gameActive && !isPaused) {
             const now = Date.now(), weapon = WEAPONS[p1WeaponId], wfd = weapon.fireRate || 1.0;
             if (now - player1.lastShot >= BASE_FIRE_COOLDOWN * wfd * 0.8) {
-                // Стреляем при активном касании (для автоматической стрельбы при удержании)
                 shoot(player1, weapon);
             }
         }
@@ -2672,6 +3105,19 @@
         for (let i = 0; i < BASE_SKINS.length; i++) {
             if (purchasedSkins[i]) availableSkins.push(i);
         }
+        for (let type of ['common', 'uncommon', 'rare', 'secret']) {
+            for (let idx of chestSkinsOwned[type]) {
+                const skin = chestSkins[type][idx];
+                const globalIdx = SKINS.findIndex(s => s.name === skin.name && s.fromChest === true);
+                if (globalIdx !== -1 && purchasedSkins[globalIdx]) {
+                    availableSkins.push(globalIdx);
+                }
+            }
+        }
+        if (purchasedSkins[SECRET_SKIN_INDEX]) {
+            availableSkins.push(SECRET_SKIN_INDEX);
+        }
+        
         if (availableSkins.length === 0) availableSkins = [0];
         p2SkinId = availableSkins[Math.floor(Math.random() * availableSkins.length)];
         while (p2SkinId === p1SkinId && availableSkins.length > 1) {
@@ -2679,7 +3125,10 @@
         }
         
         let availableWeapons = [0];
-        for (let i = 0; i < BASE_WEAPONS.length; i++) {
+        for (let i = 0; i < 10; i++) {
+            if (purchasedWeapons[i]) availableWeapons.push(i);
+        }
+        for (let i = SECRET_WEAPON_INDEX; i < SECRET_WEAPONS_END; i++) {
             if (purchasedWeapons[i]) availableWeapons.push(i);
         }
         p2WeaponId = availableWeapons[Math.floor(Math.random() * availableWeapons.length)] || 0;
@@ -2768,7 +3217,6 @@
     }
 
     // ========== GAME LOOP ==========
-    let frameCount = 0;
     function gameLoop(timestamp) {
         if (!lastTimestamp) lastTimestamp = timestamp;
         const delta = Math.min(timestamp - lastTimestamp, 50);
@@ -2783,7 +3231,6 @@
             }
         }
         draw();
-        frameCount++;
         requestAnimationFrame(gameLoop);
     }
     requestAnimationFrame(gameLoop);
