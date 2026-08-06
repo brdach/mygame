@@ -464,11 +464,54 @@
         .settings-row .toggle-btn.active { border-color: #7ab88a; background: rgba(70, 120, 80, 0.3); }
         #settings-screen .menu-btn { width: 100%; max-width: 180px; margin-top: 12px; }
         .settings-row .fps-value { min-width: 30px; text-align: center; color: #ecd8b4; font-size: 0.8rem; }
-        .install-btn { background: rgba(70, 180, 100, 0.3) !important; border-color: #5aaa6a !important; color: #7ad08a !important; }
-        .install-btn:hover { background: rgba(70, 180, 100, 0.5) !important; border-color: #7ad08a !important; }
-        .install-btn .install-icon { font-size: 1rem; margin-right: 6px; }
-        .install-btn .install-status { font-size: 0.5rem; opacity: 0.7; display: block; font-weight: 300; }
-        .install-btn.installed { background: rgba(100, 200, 120, 0.15) !important; border-color: #5aaa6a !important; opacity: 0.6; cursor: default; }
+        .install-btn {
+            background: rgba(70, 180, 100, 0.25) !important;
+            border-color: #5aaa6a !important;
+            color: #7ad08a !important;
+            transition: all 0.3s ease !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .install-btn:hover { 
+            background: rgba(70, 180, 100, 0.4) !important; 
+            border-color: #7ad08a !important; 
+            transform: scale(1.02);
+        }
+        .install-btn .install-icon { font-size: 1.2rem; margin-right: 6px; }
+        .install-btn .install-status { 
+            font-size: 0.5rem; 
+            opacity: 0.7; 
+            display: block; 
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .install-btn.installed { 
+            background: rgba(100, 200, 120, 0.15) !important; 
+            border-color: #5aaa6a !important; 
+            opacity: 0.7;
+            cursor: default;
+            pointer-events: none;
+        }
+        .install-btn.installed:hover { transform: none; }
+        .install-btn .pulse {
+            animation: pulseBtn 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseBtn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(70, 180, 100, 0.2); }
+            50% { box-shadow: 0 0 20px 5px rgba(70, 180, 100, 0.1); }
+        }
+        .install-btn .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top-color: #7ad08a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         #fs-btn { position: absolute; top: 8px; right: 8px; z-index: 6; background: rgba(20, 18, 16, 0.4); border: 1px solid rgba(160, 130, 90, 0.1); color: rgba(200, 190, 170, 0.3); padding: 4px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: clamp(0.4rem, 0.7vw, 0.6rem); transition: all 0.25s ease; }
         #fs-btn:hover { background: rgba(50, 45, 35, 0.3); border-color: rgba(200, 180, 150, 0.2); }
@@ -538,32 +581,11 @@
             font-size: clamp(0.6rem, 1.2vw, 1rem);
             opacity: 0.5;
         }
+
+        /* Убираем старую кнопку выстрела, теперь стрельба по тапу экрана */
         #shoot-btn {
-            position: absolute;
-            bottom: clamp(14px, 3vh, 20px);
-            right: clamp(12px, 2.5vw, 20px);
-            width: clamp(56px, 10vw, 70px);
-            height: clamp(56px, 10vw, 70px);
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, rgba(200, 50, 50, 0.5), rgba(120, 20, 20, 0.3));
-            border: 2px solid rgba(200, 80, 80, 0.2);
-            color: #ecd8b4;
-            font-family: 'Special Elite', cursive;
-            font-size: clamp(0.4rem, 0.9vw, 0.7rem);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            touch-action: none;
-            pointer-events: auto;
-            box-shadow: 0 0 30px rgba(200, 50, 50, 0.05);
-            letter-spacing: 1px;
-            text-shadow: 0 0 20px rgba(200, 50, 50, 0.1);
-            user-select: none;
-            -webkit-user-select: none;
+            display: none !important;
         }
-        #shoot-btn:active { transform: scale(0.9); background: radial-gradient(circle at 40% 35%, rgba(200, 50, 50, 0.7), rgba(120, 20, 20, 0.5)); }
-        #shoot-btn .sub { font-size: clamp(0.25rem, 0.5vw, 0.4rem); opacity: 0.4; display: block; margin-top: 1px; }
 
         #touch-pause-btn {
             position: absolute;
@@ -649,7 +671,6 @@
             #touch-controls { height: 120px; bottom: 6px; }
             #joystick-area { width: 80px; height: 80px; left: 8px; bottom: 8px; }
             #joystick-knob { width: 30px; height: 30px; }
-            #shoot-btn { width: 50px; height: 50px; right: 10px; bottom: 12px; font-size: 0.5rem; }
             #touch-pause-btn { width: 28px; height: 28px; top: 6px; left: 6px; font-size: 0.7rem; }
             .store-item { width: 44px; height: 44px; }
             .map-option { width: 48px; height: 44px; font-size: 0.4rem; }
@@ -659,7 +680,8 @@
             #ui-header { min-height: 38px; }
             #touch-controls { height: 130px; bottom: 6px; }
             #joystick-area { width: 90px; height: 90px; left: 10px; bottom: 8px; }
-            #shoot-btn { width: 56px; height: 56px; right: 12px; bottom: 14px; font-size: 0.6rem; }
+            #joystick-knob { width: 34px; height: 34px; }
+            #touch-pause-btn { width: 32px; height: 32px; }
             .menu-content { max-width: 100%; padding: 14px 16px; }
             .store-item { width: 50px; height: 50px; }
         }
@@ -684,10 +706,11 @@
             #touch-controls { height: 100px; bottom: 4px; }
             #joystick-area { width: 70px; height: 70px; left: 8px; bottom: 6px; }
             #joystick-knob { width: 26px; height: 26px; }
-            #shoot-btn { width: 44px; height: 44px; right: 8px; bottom: 10px; font-size: 0.45rem; }
             #touch-pause-btn { width: 24px; height: 24px; top: 4px; left: 4px; font-size: 0.6rem; }
             .controls-info { font-size: 0.35rem; bottom: 2px; }
             #fs-btn { font-size: 0.4rem; padding: 2px 8px; top: 4px; right: 4px; }
+            .install-btn { font-size: 0.6rem !important; padding: 6px 12px !important; max-width: 140px !important; }
+            .install-btn .install-status { font-size: 0.4rem; }
         }
     </style>
 </head>
@@ -722,7 +745,7 @@
             <div id="touch-controls-info" style="display:none;">
                 <div class="player-label green">🌿 ЛЕСНОЙ (Синий)</div>
                 <div class="key-row"><span class="touch-text">🕹️ Левый джойстик</span> — движение и прицел</div>
-                <div class="key-row"><span class="touch-text">🔴 Правая кнопка</span> — выстрел</div>
+                <div class="key-row"><span class="touch-text">👆 Тап по экрану</span> — выстрел</div>
                 <div class="key-row"><span class="touch-text">⏸️ Кнопка паузы</span> — в левом верхнем углу</div>
                 <div class="player-label" style="margin-top:6px;">🍂 РЫЖИЙ (Красный)</div>
                 <div class="key-row"><span class="touch-text">🤖 ИИ управляет</span> — в режиме 1 игрока</div>
@@ -807,9 +830,9 @@
         <div class="settings-row" style="border-top: 1px solid rgba(200, 170, 120, 0.1); padding-top: 12px; margin-top: 4px;">
             <span style="display: flex; align-items: center; gap: 6px; font-size: clamp(0.6rem, 1vw, 0.8rem);">📱 Установить приложение</span>
             <button class="menu-btn install-btn" id="install-btn" onclick="playButtonClick(); installPWA()">
-                <span class="install-icon">⬇️</span>
+                <span class="install-icon">📲</span>
                 Установить
-                <span class="install-status">PWA</span>
+                <span class="install-status">PWA — на рабочий стол</span>
             </button>
         </div>
         <button class="menu-btn back-btn" onclick="playButtonClick(); closeSettings()">Назад</button>
@@ -840,7 +863,7 @@
                 <span class="dir-label right">►</span>
                 <div id="joystick-knob"></div>
             </div>
-            <button id="shoot-btn">⚔️<br><span class="sub">ВЫСТРЕЛ</span></button>
+            <!-- Кнопка выстрела скрыта, стрельба по тапу экрана -->
         </div>
 
         <div id="game-over-screen">
@@ -869,15 +892,28 @@
     // ========== PWA INSTALL ==========
     let deferredPrompt = null;
     let isPWAInstalled = false;
+    let isInstallPromptShown = false;
+
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        isPWAInstalled = true;
+    }
 
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
+        isInstallPromptShown = false;
+        
         const btn = document.getElementById('install-btn');
         if (btn && !isPWAInstalled) {
             btn.style.display = 'flex';
             btn.classList.remove('installed');
-            btn.innerHTML = `<span class="install-icon">⬇️</span>Установить<span class="install-status">PWA</span>`;
+            btn.classList.add('pulse');
+            btn.innerHTML = `
+                <span class="install-icon">📲</span>
+                Установить
+                <span class="install-status">PWA — на рабочий стол</span>
+            `;
+            btn.style.pointerEvents = 'auto';
         }
     });
 
@@ -886,27 +922,138 @@
         const btn = document.getElementById('install-btn');
         if (btn) {
             btn.classList.add('installed');
-            btn.innerHTML = `<span class="install-icon">✅</span>Установлено<span class="install-status">Готово</span>`;
+            btn.classList.remove('pulse');
+            btn.innerHTML = `
+                <span class="install-icon">✅</span>
+                Установлено
+                <span class="install-status">Приложение готово</span>
+            `;
             btn.style.pointerEvents = 'none';
         }
+        showInstallNotification('✅ Приложение успешно установлено!');
     });
 
     function installPWA() {
-        if (isPWAInstalled) return;
+        if (isPWAInstalled) {
+            showInstallNotification('✅ Приложение уже установлено');
+            return;
+        }
+        
         if (deferredPrompt) {
+            const btn = document.getElementById('install-btn');
+            if (btn) {
+                btn.innerHTML = `
+                    <span class="spinner"></span>
+                    Установка...
+                    <span class="install-status">Подождите...</span>
+                `;
+                btn.style.pointerEvents = 'none';
+            }
+            
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
+                    console.log('PWA установлено');
                     isPWAInstalled = true;
-                    const btn = document.getElementById('install-btn');
-                    if (btn) {
-                        btn.classList.add('installed');
-                        btn.innerHTML = `<span class="install-icon">✅</span>Установлено<span class="install-status">Готово</span>`;
-                        btn.style.pointerEvents = 'none';
+                    const btn2 = document.getElementById('install-btn');
+                    if (btn2) {
+                        btn2.classList.add('installed');
+                        btn2.classList.remove('pulse');
+                        btn2.innerHTML = `
+                            <span class="install-icon">✅</span>
+                            Установлено
+                            <span class="install-status">Приложение готово</span>
+                        `;
+                        btn2.style.pointerEvents = 'none';
+                    }
+                    showInstallNotification('✅ Приложение успешно установлено на ваш рабочий стол!');
+                } else {
+                    console.log('Установка отменена');
+                    const btn3 = document.getElementById('install-btn');
+                    if (btn3) {
+                        btn3.classList.remove('pulse');
+                        btn3.innerHTML = `
+                            <span class="install-icon">📲</span>
+                            Установить
+                            <span class="install-status">PWA — на рабочий стол</span>
+                        `;
+                        btn3.style.pointerEvents = 'auto';
+                        setTimeout(() => {
+                            btn3.classList.add('pulse');
+                        }, 500);
                     }
                 }
                 deferredPrompt = null;
+                isInstallPromptShown = true;
             });
+        } else {
+            showInstallNotification('ℹ️ Ваш браузер не поддерживает установку PWA. Используйте Chrome, Edge или Samsung Internet на мобильных устройствах.');
+            
+            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                showInstallNotification('📱 Нажмите "Поделиться" → "На экран «Домой»" для установки');
+            }
+        }
+    }
+
+    function showInstallNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 18, 16, 0.95);
+            border: 2px solid rgba(200, 170, 120, 0.2);
+            border-radius: 20px;
+            padding: 14px 24px;
+            color: #ecd8b4;
+            font-family: 'Special Elite', cursive;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            z-index: 200;
+            max-width: 90%;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            animation: fadeInUp 0.4s ease-out;
+            pointer-events: none;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            @keyframes fadeOutDown {
+                0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        setTimeout(() => {
+            notification.style.animation = 'fadeOutDown 0.4s ease-in forwards';
+            setTimeout(() => {
+                notification.remove();
+                style.remove();
+            }, 400);
+        }, 3500);
+    }
+
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        isPWAInstalled = true;
+        const btn = document.getElementById('install-btn');
+        if (btn) {
+            btn.classList.add('installed');
+            btn.classList.remove('pulse');
+            btn.innerHTML = `
+                <span class="install-icon">✅</span>
+                Установлено
+                <span class="install-status">Приложение готово</span>
+            `;
+            btn.style.pointerEvents = 'none';
         }
     }
 
@@ -948,7 +1095,6 @@
         scaleFactor = canvas.width / 960;
         isCanvasReady = true;
         
-        // Обновляем размеры игроков
         if (player1) {
             player1.w = PLAYER_SIZE_BASE * scaleFactor;
             player1.h = PLAYER_SIZE_BASE * scaleFactor;
@@ -963,7 +1109,6 @@
         }
     }
     
-    // Один resize с задержкой для оптимизации
     let resizeTimeout = null;
     function debouncedResize() {
         if (resizeTimeout) clearTimeout(resizeTimeout);
@@ -979,7 +1124,6 @@
         setTimeout(debouncedResize, 400);
     });
     
-    // Первоначальный resize
     setTimeout(resizeCanvas, 50);
 
     function scaleBlocks(blocks) {
@@ -994,9 +1138,9 @@
     // ========== CONTROL MODE ==========
     let controlMode = 'pc';
     let touchJoystick = { x: 0, y: 0, active: false, angle: 0, distance: 0 };
-    let touchShootPressed = false;
     let touchAimX = 0, touchAimY = 0;
     let touchAimActive = false;
+    let touchIsShooting = false;
 
     function selectControlMode(mode) {
         controlMode = mode;
@@ -1026,7 +1170,7 @@
             if (touchControls) touchControls.style.display = 'block';
             if (touchControlsUI) touchControlsUI.classList.add('active');
             if (touchPauseBtn) touchPauseBtn.classList.add('active');
-            if (uiHint) uiHint.textContent = '🕹️ Джойстик — движение и прицел | 🔴 Кнопка — выстрел';
+            if (uiHint) uiHint.textContent = '🕹️ Джойстик — движение и прицел | 👆 Тап по экрану — выстрел';
             canvas.addEventListener('touchstart', onTouchStart, { passive: false });
             canvas.addEventListener('touchmove', onTouchMove, { passive: false });
             canvas.addEventListener('touchend', onTouchEnd, { passive: false });
@@ -1038,22 +1182,43 @@
         selectControlMode(isTouch ? 'touch' : 'pc');
     }
 
-    // ========== TOUCH EVENTS FOR CANVAS (AIM) ==========
+    // ========== TOUCH EVENTS FOR CANVAS (AIM + SHOOT) ==========
+    let touchStartTime = 0;
+    let touchStartPos = { x: 0, y: 0 };
+    let isTouchShooting = false;
+
     function onTouchStart(e) {
         e.preventDefault();
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches[0];
         if (touch) {
-            touchAimX = (touch.clientX - rect.left) * (canvas.width / rect.width);
-            touchAimY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            
+            // Запоминаем позицию для определения движения
+            touchStartPos.x = touchX;
+            touchStartPos.y = touchY;
+            touchStartTime = Date.now();
+            
+            // Обновляем прицел
+            touchAimX = touchX;
+            touchAimY = touchY;
             touchAimActive = true;
             mouseX = touchAimX;
             mouseY = touchAimY;
+            
             const indicator = document.getElementById('touch-aim-indicator');
             if (indicator) {
                 indicator.classList.add('active');
                 indicator.style.left = (touch.clientX - rect.left - 20) + 'px';
                 indicator.style.top = (touch.clientY - rect.top - 20) + 'px';
+            }
+            
+            // Сразу стреляем по тапу (для быстрой реакции)
+            if (gameActive && !isPaused) {
+                // Проверяем, что это не пауза и не меню
+                shoot(player1, WEAPONS[p1WeaponId]);
+                isTouchShooting = true;
             }
         }
     }
@@ -1063,16 +1228,30 @@
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches[0];
         if (touch) {
-            touchAimX = (touch.clientX - rect.left) * (canvas.width / rect.width);
-            touchAimY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            
+            touchAimX = touchX;
+            touchAimY = touchY;
             touchAimActive = true;
             mouseX = touchAimX;
             mouseY = touchAimY;
+            
             const indicator = document.getElementById('touch-aim-indicator');
             if (indicator) {
                 indicator.classList.add('active');
                 indicator.style.left = (touch.clientX - rect.left - 20) + 'px';
                 indicator.style.top = (touch.clientY - rect.top - 20) + 'px';
+            }
+            
+            // Если палец сильно переместился — стреляем еще раз (для автоматической стрельбы при движении)
+            const dx = touchX - touchStartPos.x;
+            const dy = touchY - touchStartPos.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist > 15 && gameActive && !isPaused) {
+                shoot(player1, WEAPONS[p1WeaponId]);
+                touchStartPos.x = touchX;
+                touchStartPos.y = touchY;
             }
         }
     }
@@ -1080,6 +1259,7 @@
     function onTouchEnd(e) {
         e.preventDefault();
         touchAimActive = false;
+        isTouchShooting = false;
         const indicator = document.getElementById('touch-aim-indicator');
         if (indicator) indicator.classList.remove('active');
     }
@@ -1213,27 +1393,6 @@
         if (indicator) indicator.classList.remove('active');
     }
 
-    // ========== SHOOT BUTTON ==========
-    const shootBtn = document.getElementById('shoot-btn');
-    if (shootBtn) {
-        shootBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            touchShootPressed = true;
-            if (gameActive && !isPaused) {
-                shoot(player1, WEAPONS[p1WeaponId]);
-            }
-        }, { passive: false });
-        
-        shootBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            touchShootPressed = false;
-        }, { passive: false });
-        
-        shootBtn.addEventListener('touchcancel', (e) => {
-            touchShootPressed = false;
-        });
-    }
-
     // ========== TOGGLE PAUSE ==========
     function togglePause() {
         if (!gameActive) return;
@@ -1260,12 +1419,17 @@
         canvas.style.background = '#12100e';
         startMenuMusic();
         
-        if (window.matchMedia('(display-mode: standalone)').matches) {
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
             isPWAInstalled = true;
             const btn = document.getElementById('install-btn');
             if (btn) {
                 btn.classList.add('installed');
-                btn.innerHTML = `<span class="install-icon">✅</span>Установлено<span class="install-status">Готово</span>`;
+                btn.classList.remove('pulse');
+                btn.innerHTML = `
+                    <span class="install-icon">✅</span>
+                    Установлено
+                    <span class="install-status">Приложение готово</span>
+                `;
                 btn.style.pointerEvents = 'none';
             }
         }
@@ -2373,12 +2537,17 @@
         for(let i=bullets.length-1;i>=0;i--){ let b=bullets[i]; b.x+=b.dx*b.speed; b.y+=b.dy*b.speed; if(b.x<-20*scaleFactor||b.x>canvas.width+20*scaleFactor||b.y<-20*scaleFactor||b.y>canvas.height+20*scaleFactor){ bullets.splice(i,1); continue; } if(bulletCollidesWithBlocks(b)){ bullets.splice(i,1); continue; } let hit=false; if(b.owner==='p2'&&rectCollide(b,player1)){ if(Date.now()<p1ShieldUntil){ hit=true; addParticles(b.x+b.w/2, b.y+b.h/2, '#44aaff', 12); } else { player1.hp-=b.damage; player1.lastDamageTime=Date.now(); player1.regenActive=false; hit=true; addParticles(b.x+b.w/2, b.y+b.h/2, '#d06a4a', 18); updateUI(); if(player1.hp<=0){ endGame('🍂 Рыжий победил!'); return; } } } if(b.owner==='p1'&&rectCollide(b,player2)){ if(Date.now()<p2ShieldUntil){ hit=true; addParticles(b.x+b.w/2, b.y+b.h/2, '#44aaff', 12); } else { player2.hp-=b.damage; player2.lastDamageTime=Date.now(); player2.regenActive=false; hit=true; addParticles(b.x+b.w/2, b.y+b.h/2, '#7ab88a', 18); updateUI(); if(player2.hp<=0){ endGame('🌿 Лесной победил!'); return; } } } if(hit) bullets.splice(i,1); }
         const rd=5000, ri=2000, rp=0.1; [player1,player2].forEach(p=>{ if(p.hp>0&&p.hp<p.maxHp){ if(!p.regenActive&&Date.now()-p.lastDamageTime>rd){ p.regenActive=true; p.lastRegenTime=Date.now(); } if(p.regenActive&&Date.now()-p.lastRegenTime>=ri){ p.hp=Math.min(p.maxHp, p.hp+p.maxHp*rp); p.lastRegenTime=Date.now(); updateUI(); if(p.hp>=p.maxHp) p.regenActive=false; } } else p.regenActive=false; });
         checkPowerupPickup();
-        if (controlMode === 'touch' && touchShootPressed && gameActive && !isPaused) {
+        
+        // Для touch режима стрельба происходит по тапу экрана (в onTouchStart и onTouchMove)
+        // Дополнительно проверяем, если палец удерживается на экране - стреляем с задержкой
+        if (controlMode === 'touch' && touchAimActive && gameActive && !isPaused) {
             const now = Date.now(), weapon = WEAPONS[p1WeaponId], wfd = weapon.fireRate || 1.0;
-            if (now - player1.lastShot >= BASE_FIRE_COOLDOWN * wfd) {
+            if (now - player1.lastShot >= BASE_FIRE_COOLDOWN * wfd * 0.8) {
+                // Стреляем при активном касании (для автоматической стрельбы при удержании)
                 shoot(player1, weapon);
             }
         }
+        
         if (controlMode === 'pc' && isMouseDown && gameActive && !isPaused){ const now=Date.now(), weapon=WEAPONS[p1WeaponId], wfd=weapon.fireRate||1.0; if(now-player1.lastShot>=BASE_FIRE_COOLDOWN*wfd) shoot(player1,weapon); }
     }
 
@@ -2554,7 +2723,7 @@
         if (controlMode === 'pc') {
             if (uiHint) uiHint.textContent = "Наведи мышь и стреляй ЛКМ!";
         } else {
-            if (uiHint) uiHint.textContent = "🕹️ Джойстик — движение и прицел | 🔴 Кнопка — выстрел";
+            if (uiHint) uiHint.textContent = "🕹️ Джойстик — движение и прицел | 👆 Тап по экрану — выстрел";
         }
         
         resetGameState(); 
