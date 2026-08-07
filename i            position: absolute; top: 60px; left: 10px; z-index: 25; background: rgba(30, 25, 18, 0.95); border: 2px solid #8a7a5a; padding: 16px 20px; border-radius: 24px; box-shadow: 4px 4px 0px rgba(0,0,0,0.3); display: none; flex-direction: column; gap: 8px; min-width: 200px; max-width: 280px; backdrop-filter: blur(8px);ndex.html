@@ -1097,15 +1097,14 @@
         showInstallNotification('✅ Приложение успешно установлено!');
     });
 
-    // Главная функция установки PWA
+    // Функция для PWA установки
     function installPWA() {
-        // Если уже установлено
         if (isPWAInstalled) {
             showInstallNotification('✅ Приложение уже установлено');
             return;
         }
 
-        // Для Chrome/Edge/Samsung Internet — используем стандартный промпт
+        // Для Chrome/Edge/Samsung Internet
         if (deferredPrompt) {
             const btn = document.getElementById('install-btn');
             if (btn) {
@@ -1116,31 +1115,33 @@
                 `;
                 btn.style.pointerEvents = 'none';
             }
-            
-            // Показываем диалог установки
             deferredPrompt.prompt();
-            
-            // Ждем выбор пользователя
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
-                    // Пользователь согласился установить
-                    console.log('PWA установка принята');
-                    // appinstalled событие сработает автоматически
-                } else {
-                    // Пользователь отменил установку
-                    console.log('PWA установка отменена');
+                    isPWAInstalled = true;
                     const btn2 = document.getElementById('install-btn');
                     if (btn2) {
+                        btn2.classList.add('installed');
                         btn2.classList.remove('pulse');
                         btn2.innerHTML = `
+                            <span class="install-icon">✅</span>
+                            Установлено
+                            <span class="install-status">Приложение готово</span>
+                        `;
+                        btn2.style.pointerEvents = 'none';
+                    }
+                    showInstallNotification('✅ Приложение успешно установлено на ваш рабочий стол!');
+                } else {
+                    const btn3 = document.getElementById('install-btn');
+                    if (btn3) {
+                        btn3.classList.remove('pulse');
+                        btn3.innerHTML = `
                             <span class="install-icon">📲</span>
                             Установить
                             <span class="install-status">PWA — на рабочий стол</span>
                         `;
-                        btn2.style.pointerEvents = 'auto';
-                        setTimeout(() => { 
-                            if (!isPWAInstalled) btn2.classList.add('pulse'); 
-                        }, 1000);
+                        btn3.style.pointerEvents = 'auto';
+                        setTimeout(() => { btn3.classList.add('pulse'); }, 500);
                     }
                 }
                 deferredPrompt = null;
@@ -1154,15 +1155,29 @@
             return;
         }
 
-        // Для Firefox и других браузеров, которые не поддерживают PWA
+        // Для Firefox и других браузеров, не поддерживающих PWA
         if (window.navigator && window.navigator.userAgent.match(/Firefox/i)) {
             showInstallNotification('ℹ️ Firefox не поддерживает установку PWA. Используйте Chrome, Edge или Safari.');
             return;
         }
 
-        // Если браузер не поддерживает PWA, но поддерживает установку через манифест
-        // Пробуем показать инструкцию
-        showInstallNotification('ℹ️ Нажмите меню браузера → "Установить приложение" или "Добавить на экран Домой"');
+        // Fallback: предлагаем скачать HTML файл
+        downloadGame();
+    }
+
+    // Функция для скачивания игры (запасной вариант)
+    function downloadGame() {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob(['<!DOCTYPE html>\n' + htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'metel_duel.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showInstallNotification('📥 Скачивание игры началось!');
     }
 
     // Уведомление для пользователя
